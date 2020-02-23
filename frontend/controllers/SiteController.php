@@ -28,7 +28,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup','index'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -36,7 +36,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout','index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -45,7 +45,7 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    ///'logout' => ['post'],
                 ],
             ],
         ];
@@ -74,8 +74,17 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $this->layout = 'adminlte';
-        return $this->render('index');
+
+        $employee = $this->actionGetemployee();
+
+        print '<pre>';
+        print_r($employee);
+
+        print '<br><hr>';
+        exit;
+
+
+        //return $this->render('index');
     }
 
     /**
@@ -260,5 +269,19 @@ class SiteController extends Controller
         return $this->render('resendVerificationEmail', [
             'model' => $model
         ]);
+    }
+
+    public function actionGetemployee(){
+        $service = Yii::$app->params['ServiceName']['employeeCard'];
+        $filter = [
+            'No' => 'AAS-069'
+        ];
+        $employee = \Yii::$app->navhelper->getData($service,$filter);
+
+
+
+
+
+        return $employee;
     }
 }

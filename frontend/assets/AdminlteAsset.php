@@ -23,6 +23,8 @@ class AdminlteAsset extends AssetBundle
         'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css',
         'plugins/icheck-bootstrap/icheck-bootstrap.min.css',
         'plugins/jqvmap/jqvmap.min.css',
+        'plugins/datatables-bs4/css/dataTables.bootstrap4.css',
+        'https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css',
         'dist/css/adminlte.min.css',
         'plugins/overlayScrollbars/css/OverlayScrollbars.min.css',
         'plugins/daterangepicker/daterangepicker.css',
@@ -31,9 +33,10 @@ class AdminlteAsset extends AssetBundle
         'plugins/js/datatables/fixedHeader.bootstrap.min.css',
         'plugins/js/datatables/responsive.bootstrap.min.css',
         'plugins/js/datatables/scroller.bootstrap.min.css',
-        //'https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css',
         'css/plugins/timepicker/bootstrap-timepicker.css',
-        'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css'
+        'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css',
+
     ];
     public $js = [
 
@@ -66,7 +69,10 @@ class AdminlteAsset extends AssetBundle
         'dist/js/adminlte.min.js',
         'dist/js/pages/dashboard2.js',
         'plugins/bootstrap/js/bootstrap.bundle.min.js',
-        'dist/js/demo.js'
+        'dist/js/demo.js',
+        //'plugins/datatables/jquery.dataTables.js',
+        'https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js',
+        'https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js ',
 
     ];
     public $depends = [
