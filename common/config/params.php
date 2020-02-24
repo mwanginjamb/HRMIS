@@ -18,9 +18,12 @@ return [
         'purchaseDocumentLines'=>'purchaseDocumentLines',//6405
 
         'employeeCard' => 'employeeCard', //70335
+        'employees' => 'employees', //70312
 
         'leaveApplicationList' => 'leaveApplicationList', // 71053
         'leaveApplicationCard' => 'leaveApplicationCard', //71075
+        'leaveBalance' => 'leaveBalance',//71153
+        'leaveTypes' => 'leaveTypes', //70045
 
         'Approvals' => 'Approvals', //654
     ],

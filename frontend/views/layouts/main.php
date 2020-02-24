@@ -209,7 +209,7 @@ AdminlteAsset::register($this);
                              with font-awesome or any other icon font library -->
                         <li class="nav-item has-treeview menu-open">
                             <a href="#" class="nav-link active">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <i class="nav-icon fas fa-paper-plane"></i>
                                 <p>
                                     Leave Management
                                     <i class="right fas fa-angle-left"></i>
@@ -217,13 +217,13 @@ AdminlteAsset::register($this);
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="../leave/" class="nav-link active">
+                                    <a href="../leave/" class="nav-link ">
                                         <i class="fa fa-door-open nav-icon"></i>
                                         <p>Leave List</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="./index2.html" class="nav-link">
+                                    <a href="../leave/leavebalances" class="nav-link">
                                         <i class="fa fa-balance-scale nav-icon"></i>
                                         <p>Leave Balances</p>
                                     </a>
@@ -763,6 +763,7 @@ AdminlteAsset::register($this);
                 </div><!-- /.container-fluid -->
             </section>
             <!-- /.content -->
+
         </div>
         <!-- /.content-wrapper -->
 
@@ -778,15 +779,16 @@ AdminlteAsset::register($this);
     </div>
 
 
-</body>
-<footer class="footer">
-    <strong>Copyright &copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-        <b><?= Yii::powered() ?></b>
-    </div>
+    <footer class="footer">
+        <strong>Copyright &copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?>.</strong>
+        All rights reserved.
+        <div class="float-right d-none d-sm-inline-block">
+            <b><?= Yii::powered() ?></b>
+        </div>
 
-</footer>
+    </footer>
+</body>
+
 
 <?php $this->endBody() ?>
 </body>

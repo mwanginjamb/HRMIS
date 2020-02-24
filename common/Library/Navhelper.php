@@ -93,7 +93,7 @@ class Navhelper extends Component{
         return $lv[$service];*/
     }
     //update data   -->post data
-    public    function updateData($service,$data){
+    public function updateData($service,$data){
         $identity = \Yii::$app->user->identity;
         $username = Yii::$app->params['NavisionUsername'];
         $password = Yii::$app->params['NavisionPassword'];

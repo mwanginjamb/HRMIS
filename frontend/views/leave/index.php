@@ -17,6 +17,29 @@ $this->title = 'HRMIS - AAS';
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">My Leave History List</h3>
+
+
+                <?php
+                if(Yii::$app->session->hasFlash('success')){
+                    print ' <div class="alert alert-success alert-dismissable">
+                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                 <h4><i class="icon fa fa-check"></i>Saved!</h4>';
+                    echo Yii::$app->session->getFlash('success');
+                    print '</div>';
+                }else if(Yii::$app->session->hasFlash('error')){
+                    print ' <div class="alert alert-danger alert-dismissable">
+                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                 <h4><i class="icon fa fa-check"></i>Error!</h4>';
+                    echo Yii::$app->session->getFlash('success');
+                    print '</div>';
+                }
+                ?>
+
+                    <?= \yii\helpers\Html::a('New Leave',['create','create'=> 1],['class' => 'btn btn-warning btn-xs btn-flat push-right', 'data' => [
+                        'confirm' => 'Are you sure you want to create a new leave request?',
+                        'method' => 'post',
+                    ],]) ?>
+
             </div>
             <div class="card-body">
                 <table class="table table-bordered dt-responsive table-hover" id="leaves">
@@ -33,6 +56,8 @@ $script = <<<JS
 
     $(function(){
          /*Data Tables*/
+         
+         $.fn.dataTable.ext.errMode = 'throw';
     
           $('#leaves').DataTable({
            
@@ -47,7 +72,10 @@ $script = <<<JS
                 { title: 'Application Date' ,data: 'Application_Date'},
                 { title: 'Approval Status' ,data: 'Approval_Status'},
                
-            ]                   
+            ] ,                              
+           language: {
+                "zeroRecords": "No leave history to display"
+            }
            
        });
     

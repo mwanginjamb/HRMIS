@@ -75,16 +75,13 @@ class SiteController extends Controller
     public function actionIndex()
     {
 
-        $employee = $this->actionGetemployee();
+        $employee = $this->actionGetemployee()[0];
+        $supervisor = $this->getSupervisor($employee->Supervisor_Code);
 
-        print '<pre>';
-        print_r($employee);
-
-        print '<br><hr>';
-        exit;
-
-
-        //return $this->render('index');
+        return $this->render('index',[
+            'employee' => $employee,
+            'supervisor' => $supervisor
+            ]);
     }
 
     /**
@@ -283,5 +280,14 @@ class SiteController extends Controller
 
 
         return $employee;
+    }
+
+    public function getSupervisor($userID){
+        $service = Yii::$app->params['ServiceName']['employeeCard'];
+        $filter = [
+            'User_ID' => $userID
+        ];
+        $supervisor = \Yii::$app->navhelper->getData($service,$filter);
+        return $supervisor[0];
     }
 }
