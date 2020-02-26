@@ -292,7 +292,7 @@ class Navhelper extends Component{
 
         }
 
-        $results = Yii::$app->navision->CancelLeaveApprovalRequest($creds, $soapWsdl,$entry);
+        $results = Yii::$app->navision->CancelLeaveRequestApproval($creds, $soapWsdl,$entry);
 
         if(is_object($results)){
             $lv =(array)$results;

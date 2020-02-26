@@ -86,7 +86,10 @@ $script = <<<JS
             ] ,                              
            language: {
                 "zeroRecords": "No leave history to display"
-            }
+            },
+            
+            order : [[ 2, "desc" ]]
+            
            
        });
         

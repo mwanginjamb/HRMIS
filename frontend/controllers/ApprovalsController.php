@@ -218,18 +218,22 @@ class ApprovalsController extends Controller
 
 
 
-                $Approvelink = Html::a('Approve Request',['approve-request','app'=> $app->Document_No ],['class'=>'btn btn-success btn-xs','data' => [
-                    'confirm' => 'Are you sure you want to Approve this request?',
-                    'method' => 'post',
-                ]]);
-                $Rejectlink = Html::a('Reject Request',['reject-request','app'=> $app->Document_No ],['class'=>'btn btn-warning btn-xs','data' => [
-                    'confirm' => 'Are you sure you want to reject this leave request?',
-                    'method' => 'post',
-                ]]);
+                    $Approvelink = ($app->Status == 'Open')? Html::a('Approve Request',['approve-request','app'=> $app->Document_No ],['class'=>'btn btn-success btn-xs','data' => [
+                        'confirm' => 'Are you sure you want to Approve this request?',
+                        'method' => 'post',
+                    ]]):'';
+                    $Rejectlink = ($app->Status == 'Open')? Html::a('Reject Request',['reject-request','app'=> $app->Document_No ],['class'=>'btn btn-warning btn-xs','data' => [
+                        'confirm' => 'Are you sure you want to reject this leave request?',
+                        'method' => 'post',
+                    ]]): "";
+
+                    $detailsLink = Html::a('Request Details',['leave/view','ApplicationNo'=> $app->Document_No ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
+
+
 
                 $result['data'][] = [
                     'Key' => $app->Key,
-                    'ToApprove' => $app->ToApprove,
+                    //'ToApprove' => $app->ToApprove,
                     'Details' => $app->Details,
                     'Comment' => $app->Comment,
                     'Sender_ID' => $app->Sender_ID,
@@ -238,6 +242,7 @@ class ApprovalsController extends Controller
                     'Document_No' => $app->Document_No,
                     'Approvelink' => $Approvelink,
                     'Rejectlink' => $Rejectlink,
+                    'details' => $detailsLink
 
                 ];
             }
@@ -255,9 +260,13 @@ class ApprovalsController extends Controller
 
         $request = Yii::$app->navhelper->ApproveLeaveRequest($service, $data);
 
-        print '<pre>';
-        print_r($request);
-        return;
+        if(is_array($request)){
+            Yii::$app->session->setFlash('success','Leave Request Approved Successfully',true);
+            return $this->redirect(['index']);
+        }else{
+            Yii::$app->session->setFlash('error','Error Approving Leave Request : '.$request,true);
+            return $this->redirect(['index']);
+        }
     }
 
     public function actionRejectRequest($app){
@@ -265,9 +274,13 @@ class ApprovalsController extends Controller
         $data = ['applicationNo' => $app];
         $request = Yii::$app->navhelper->RejectLeaveRequest($service, $data);
 
-        print '<pre>';
-        print_r($request);
-        return;
+        if(is_array($request)){
+            Yii::$app->session->setFlash('success','Leave Request Rejected Successfully',true);
+            return $this->redirect(['index']);
+        }else{
+            Yii::$app->session->setFlash('error','Error Rejecting Leave Request : '.$request,true);
+            return $this->redirect(['index']);
+        }
     }
 
 

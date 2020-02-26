@@ -19,6 +19,7 @@ use yii\web\BadRequestHttpException;
 
 use frontend\models\Leave;
 use yii\web\Response;
+use kartik\mpdf\Pdf;
 
 class LeaveController extends Controller
 {
@@ -191,9 +192,28 @@ class LeaveController extends Controller
 
         $request = Yii::$app->navhelper->SendLeaveApprovalRequest($service, $data);
 
-        print '<pre>';
-        print_r($request);
-        return;
+        if(is_array($request)){
+            Yii::$app->session->setFlash('success','Leave request sent for approval Successfully',true);
+            return $this->redirect(['index']);
+        }else{
+            Yii::$app->session->setFlash('error','Error sending leave request for approval',true);
+            return $this->redirect(['index']);
+        }
+    }
+
+    public function actionCancelRequest($app){
+        $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
+        $data = ['applicationNo' => $app];
+
+        $request = Yii::$app->navhelper->CancelLeaveApprovalRequest($service, $data);
+
+        if(is_array($request)){
+            Yii::$app->session->setFlash('success','Leave Approval Request Cancelled Successfully',true);
+            return $this->redirect(['index']);
+        }else{
+            Yii::$app->session->setFlash('error','Error Cancelling Leave Approval: '.$request,true);
+            return $this->redirect(['index']);
+        }
     }
 
     /*Data access functions */
@@ -216,11 +236,11 @@ class LeaveController extends Controller
 
             $link = $updateLink =  '';
             $Viewlink = Html::a('Details',['view','ApplicationNo'=> $leave->Application_No ],['class'=>'btn btn-outline-primary btn-xs']);
-            if($leave->Leave_Status == 'Open' ){
+            if($leave->Approval_Status == 'New' ){
                 $link = Html::a('Send Approval Request',['approval-request','app'=> $leave->Application_No ],['class'=>'btn btn-primary btn-xs']);
                 $updateLink = Html::a('Update Leave',['update','ApplicationNo'=> $leave->Application_No ],['class'=>'btn btn-info btn-xs']);
-            }else if($leave->Leave_Status == 'Submitted'){
-                $link = Html::a('Send Approval Request',['cancel-request','app'=> $leave->Application_No ],['class'=>'btn btn-warning btn-xs']);
+            }else if($leave->Approval_Status == 'Approval_Pending'){
+                $link = Html::a('Cancel Approval Request',['cancel-request','app'=> $leave->Application_No ],['class'=>'btn btn-warning btn-xs']);
             }
 
 
@@ -241,6 +261,35 @@ class LeaveController extends Controller
         }
 
         return $result;
+    }
+
+    public function actionReport(){
+        $service = Yii::$app->params['ServiceName']['leaveApplicationList'];
+        $leaves = \Yii::$app->navhelper->getData($service);
+        krsort( $leaves);
+        $content = $this->renderPartial('_historyreport',[
+            'leaves' => $leaves
+        ]);
+
+
+
+
+        //return $content;
+        $pdf = \Yii::$app->pdf;
+        $pdf->content = $content;
+        $pdf->orientation = Pdf::ORIENT_PORTRAIT;
+
+        //The trick to returning binary content
+        $content = $pdf->render('', 'S');
+        $content = chunk_split(base64_encode($content));
+
+        return $content;
+    }
+
+    public function actionReportview(){
+        return $this->render('_viewreport',[
+            'content'=>$this->actionReport()
+        ]);
     }
 
     public function Getleavebalance(){

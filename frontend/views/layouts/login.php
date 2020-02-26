@@ -58,7 +58,7 @@ $this->title = 'HRMIS';
 
 
 </body>
-<footer class="footer">
+<footer class="footer" style="color: #fff3cd">
     <strong>Copyright &copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?>.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
@@ -70,4 +70,6 @@ $this->title = 'HRMIS';
 <?php $this->endBody() ?>
 </body>
 </html>
-<?php $this->endPage() ?>
+<?php $this->endPage(); ?>
+
+

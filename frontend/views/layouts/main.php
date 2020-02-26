@@ -186,12 +186,12 @@ $employee = Yii::$app->user->identity->employee[0];
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #003971!important;">
             <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
-                <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+            <a href="<?= $absoluteUrl ?>site" class="brand-link">
+                <img src="<?= $webroot ?>/images/Logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                      style="opacity: .8">
-                <span class="brand-text font-weight-light">AdminLTE 3</span>
+                <span class="brand-text font-weight-light">AAS</span>
             </a>
 
             <!-- Sidebar -->
@@ -230,6 +230,13 @@ $employee = Yii::$app->user->identity->employee[0];
                                     <a href="<?= $absoluteUrl ?>leave/leavebalances" class="nav-link">
                                         <i class="fa fa-balance-scale nav-icon"></i>
                                         <p>Leave Balances</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>leave/reportview" class="nav-link">
+                                        <i class="fa fa-file-pdf nav-icon"></i>
+                                        <p>Leave History Report</p>
                                     </a>
                                 </li>
 
