@@ -98,8 +98,12 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
+
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
             return $this->goBack();
+
         } else {
             $model->password = '';
 
@@ -271,14 +275,10 @@ class SiteController extends Controller
     public function actionGetemployee(){
         $service = Yii::$app->params['ServiceName']['employeeCard'];
         $filter = [
-            'No' => 'AAS-069'
+            'No' => Yii::$app->user->identity->{'Employee No_'},
         ];
+
         $employee = \Yii::$app->navhelper->getData($service,$filter);
-
-
-
-
-
         return $employee;
     }
 

@@ -18,21 +18,19 @@ use yii\widgets\ActiveForm;
 
 
 
-                <h3 class="card-title">Leave Application : <?= $leave->Application_No?></h3>
+                <h3 class="card-title">Leave Application : <?= $model->Application_No?></h3>
 
 
 
                 <?php
                     if(Yii::$app->session->hasFlash('success')){
                         print ' <div class="alert alert-success alert-dismissable">
-                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                                 <h4><i class="icon fa fa-check"></i>Saved!</h4>';
+                                 ';
                                     echo Yii::$app->session->getFlash('success');
                         print '</div>';
                     }else if(Yii::$app->session->hasFlash('error')){
                         print ' <div class="alert alert-danger alert-dismissable">
-                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                                 <h4><i class="icon fa fa-check"></i>Error!</h4>';
+                                 ';
                         echo Yii::$app->session->getFlash('success');
                         print '</div>';
                     }
@@ -41,10 +39,43 @@ use yii\widgets\ActiveForm;
             <div class="card-body">
 
 
-                <?php
-                    print '<pre>';
-                    print_r($leave);
-                ?>
+               <?php $form = ActiveForm::begin(['action'=> ['leave/create']]); ?>
+
+
+               <div class="row">
+                   <div class=" row col-md-12">
+                       <div class="col-md-6">
+                           <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'Application_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'Application_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'User_ID')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'Leave_Code')->dropDownList($leaveTypes,['readonly'=> true,'disabled'=>true,'prompt' => 'Select Leave Type']) ?>
+                           <?= $form->field($model, 'Start_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'End_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'Days_Applied')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'Leave_balance')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                       </div>
+                       <div class="col-md-6">
+                           <?= $form->field($model, 'Total_No_Of_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'Holidays')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'Weekend_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'Balance_After')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'Leave_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'Comments')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'Supervisor_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'Reporting_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                           <?= $form->field($model, 'Reliever')->dropDownList($relievers,['readonly'=> true,'disabled'=>true,'prompt' => 'Select Reliever']) ?>
+                           <?= $form->field($model, 'Approval_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+
+
+                       </div>
+                   </div>
+               </div>
+
+
+
+               <?php ActiveForm::end(); ?>
 
 
 

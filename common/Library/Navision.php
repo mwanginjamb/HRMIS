@@ -532,6 +532,69 @@ class Navision extends Component
         }
     }
 
+
+
+    //IANSOFT LEAVE MGT
+
+    public function SendLeaveRequestApproval($credentials, $soapWsdl, $Entry)
+    {
+        //$result =  $client->Create([$EntryID => $Entry]);
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanSendLeaveApplicationForApproval($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    public function CancelLeaveRequestApproval($credentials, $soapWsdl, $Entry)
+    {
+        //$result =  $client->Create([$EntryID => $Entry]);
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanCancelLeaveApplicationForApproval($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    public function IanApproveLeaveApplication($credentials, $soapWsdl, $Entry)
+    {
+        //$result =  $client->Create([$EntryID => $Entry]);
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanApproveLeaveApplication($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    public function IanRejectLeaveApplication($credentials, $soapWsdl, $Entry)
+    {
+        //$result =  $client->Create([$EntryID => $Entry]);
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanRejectLeaveApplication($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+
+
+
+
+
+
+
     //Navision Critical Functions
 
     private function createClient($credentials, $soapWsdl)

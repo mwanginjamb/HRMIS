@@ -19,9 +19,9 @@ return [
         ],
         'nav' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'sqlsrv:server=FRANCIS\FRANC;database=KPS',
-            'username' => 'mwangi',
-            'password' => 'serverError()',
+            'dsn' => 'sqlsrv:server=FRANCIS\FRANC;database=Africa academy of sciences',
+            'username' => 'Njambi',
+            'password' => 'njambi123',
             'charset' => 'utf8',
         ],
         'assetManager' => [

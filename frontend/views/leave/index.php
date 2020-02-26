@@ -15,30 +15,36 @@ $this->title = 'HRMIS - AAS';
 <div class="row">
     <div class="col-md-12">
         <div class="card">
+            <div class="card-body">
+        <?= \yii\helpers\Html::a('New Leave',['create','create'=> 1],['class' => 'btn btn-outline-warning push-right', 'data' => [
+            'confirm' => 'Are you sure you want to create a new leave request?',
+            'method' => 'post',
+        ],]) ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
             <div class="card-header">
                 <h3 class="card-title">My Leave History List</h3>
 
 
                 <?php
                 if(Yii::$app->session->hasFlash('success')){
-                    print ' <div class="alert alert-success alert-dismissable">
-                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                                 <h4><i class="icon fa fa-check"></i>Saved!</h4>';
+                    print ' <div class="alert alert-success alert-dismissable">';
                     echo Yii::$app->session->getFlash('success');
                     print '</div>';
                 }else if(Yii::$app->session->hasFlash('error')){
                     print ' <div class="alert alert-danger alert-dismissable">
-                                 <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                                 <h4><i class="icon fa fa-check"></i>Error!</h4>';
-                    echo Yii::$app->session->getFlash('success');
+                                ';
+                    echo Yii::$app->session->getFlash('error');
                     print '</div>';
                 }
                 ?>
 
-                    <?= \yii\helpers\Html::a('New Leave',['create','create'=> 1],['class' => 'btn btn-warning btn-xs btn-flat push-right', 'data' => [
-                        'confirm' => 'Are you sure you want to create a new leave request?',
-                        'method' => 'post',
-                    ],]) ?>
+
 
             </div>
             <div class="card-body">
@@ -58,6 +64,7 @@ $script = <<<JS
          /*Data Tables*/
          
          $.fn.dataTable.ext.errMode = 'throw';
+        
     
           $('#leaves').DataTable({
            
@@ -71,6 +78,10 @@ $script = <<<JS
                 { title: 'Days Applied' ,data: 'Days_Applied'},
                 { title: 'Application Date' ,data: 'Application_Date'},
                 { title: 'Approval Status' ,data: 'Approval_Status'},
+                { title: 'Leave Status' ,data: 'Leave_Status'},
+                { title: 'Action', data: 'Action' },
+                { title: 'Update Action', data: 'Update_Action' },
+                { title: 'Details', data: 'view' },
                
             ] ,                              
            language: {
@@ -78,8 +89,15 @@ $script = <<<JS
             }
            
        });
+        
+       //Hidding some 
+       var table = $('#leaves').DataTable();
+       table.columns([0,6]).visible(false);
     
     /*End Data tables*/
+        $('#leaves').on('click','tr', function(){
+            
+        });
     });
         
 JS;

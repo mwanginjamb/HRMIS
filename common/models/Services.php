@@ -79,7 +79,7 @@ class Services
         if($this->getServer() && $this->getPort() && $this->getServiceName() && $this->getCompanyName() && $this->getServiceName() && $this->getServerInstance())
         {
             $this->url='http://'.$this->Server.':'.$this->Port.'/'.$this->ServerInstance.'/WS/'.$this->CompanyName.'/Page/'.$this->ServiceName;
-            if($this->id=='codeunit' || $this->id =='codeunit_factory' || $this->id == 'RBSSInvoice')//consider strcmp codeunits >3
+            if($this->id=='codeunit' || $this->id =='codeunit_factory' || $this->id == 'RBSSInvoice' || $this->id == 'Portal_Workflows')//consider strcmp codeunits >3
             {
                 $this->url='http://'.$this->Server.':'.$this->Port.'/'.$this->ServerInstance.'/WS/'.$this->CompanyName.'/Codeunit/'.$this->ServiceName;
             }

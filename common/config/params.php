@@ -9,10 +9,15 @@ return [
     'NavisionUsername'=>'HP ELITEBOOK 840 G5',
     'NavisionPassword'=>'@francis123#',
 
+
+    'NavTestApprover' => 'Approver',
+    'NavTestApproverPassword' => '@Approver123',
+
     'server'=>'FRANCIS',//'app-svr-dev.rbss.com',//Navision Server
     'WebServicePort'=>'6047',//Nav server Port
     'ServerInstance'=>'DynamicsNAV90',//Nav Server Instance
     'CompanyName'=>'AAS%20HR%20test',//Nav Company,
+    'CompanyNameStripped' => 'AAS HR test$',
     'ldPrefix'=>'francis',//aCTIVE DIRECTORY prefix
     'ServiceName'=>[
         'purchaseDocumentLines'=>'purchaseDocumentLines',//6405
@@ -26,5 +31,13 @@ return [
         'leaveTypes' => 'leaveTypes', //70045
 
         'Approvals' => 'Approvals', //654
+
+
+
+        //Approval code unit
+        'Portal_Workflows' => 'Portal_Workflows', //50019
+
+        /* Request to Approve */
+        'RequeststoApprove' => 'RequeststoApprove', //654
     ],
 ];

@@ -3,6 +3,11 @@
 /* @var $this yii\web\View */
 
 $this->title = 'HRMIS - AAS';
+
+/*print '<pre>';
+print_r(Yii::$app->user->identity->employee);
+exit;*/
+
 ?>
 
 <section class="content">

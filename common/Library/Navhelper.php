@@ -9,8 +9,11 @@ class Navhelper extends Component{
     public function getData($service,$params=[]){
         # return true; //comment after dev or after testing outside Navision scope env
         $identity = \Yii::$app->user->identity;
-        $username = Yii::$app->params['NavisionUsername'];
-        $password = Yii::$app->params['NavisionPassword'];
+        $username = (!Yii::$app->user->isGuest)? Yii::$app->user->identity->{'User ID'} : Yii::$app->params['NavisionUsername'];
+        $password = Yii::$app->session->has('IdentityPassword')? Yii::$app->session->get('IdentityPassword'):Yii::$app->params['NavisionPassword'];
+
+        //$username = Yii::$app->params['NavTestApprover'];
+        //$password = Yii::$app->params['NavTestApproverPassword'];
 
 
         $creds = (object)[];
@@ -51,8 +54,8 @@ class Navhelper extends Component{
     //create record(s)-----> post data
     public function postData($service,$data){
         $identity = \Yii::$app->user->identity;
-        $username = Yii::$app->params['NavisionUsername'];
-        $password = Yii::$app->params['NavisionPassword'];
+        $username = (!Yii::$app->user->isGuest)? Yii::$app->user->identity->{'User ID'} : Yii::$app->params['NavisionUsername'];
+        $password = Yii::$app->session->has('IdentityPassword')? Yii::$app->session->get('IdentityPassword'):Yii::$app->params['NavisionPassword'];
         $post = Yii::$app->request->post();
 
         $creds = (object)[];
@@ -95,8 +98,8 @@ class Navhelper extends Component{
     //update data   -->post data
     public function updateData($service,$data){
         $identity = \Yii::$app->user->identity;
-        $username = Yii::$app->params['NavisionUsername'];
-        $password = Yii::$app->params['NavisionPassword'];
+        $username = (!Yii::$app->user->isGuest)? Yii::$app->user->identity->{'User ID'} : Yii::$app->params['NavisionUsername'];
+        $password = Yii::$app->session->has('IdentityPassword')? Yii::$app->session->get('IdentityPassword'):Yii::$app->params['NavisionPassword'];
         $post = Yii::$app->request->post();
 
         $creds = (object)[];
@@ -134,8 +137,8 @@ class Navhelper extends Component{
     //purge data --> pass key as get param
     public function deleteData($service,$key){
         $identity = \Yii::$app->user->identity;
-        $username = Yii::$app->params['NavisionUsername'];
-        $password = Yii::$app->params['NavisionPassword'];
+        $username = (!Yii::$app->user->isGuest)? Yii::$app->user->identity->{'User ID'} : Yii::$app->params['NavisionUsername'];
+        $password = Yii::$app->session->has('IdentityPassword')? Yii::$app->session->get('IdentityPassword'):Yii::$app->params['NavisionPassword'];
         $url = new Services($service);
         $creds = (object)[];
         $creds->UserName = $username;
@@ -212,6 +215,164 @@ class Navhelper extends Component{
         }
 
         $results = Yii::$app->navision->CreateCustomer($creds, $soapWsdl,$entry);
+
+        if(is_object($results)){
+            $lv =(array)$results;
+            return $lv;
+        }
+        else{
+            return $results;
+        }
+
+    }
+
+    //Leave Mgt
+
+    public function SendLeaveApprovalRequest($service,$data){
+        $identity = \Yii::$app->user->identity;
+        $username = (!Yii::$app->user->isGuest)? Yii::$app->user->identity->{'User ID'} : Yii::$app->params['NavisionUsername'];
+        $password = Yii::$app->session->has('IdentityPassword')? Yii::$app->session->get('IdentityPassword'):Yii::$app->params['NavisionPassword'];
+
+        $creds = (object)[];
+        $creds->UserName = $username;
+        $creds->PassWord = $password;
+        $url = new Services($service);
+        $soapWsdl=$url->getUrl();
+
+        $entry = (object)[];
+
+        foreach($data as $key => $value){
+            if($key !=='_csrf-frontend'){
+                $entry->$key = $value;
+            }
+
+        }
+
+        if(!Yii::$app->navision->isUp($soapWsdl,$creds)) {
+            throw new \yii\web\HttpException(503, 'Service unavailable');
+
+        }
+
+        $results = Yii::$app->navision->SendLeaveRequestApproval($creds, $soapWsdl,$entry);
+
+        if(is_object($results)){
+            $lv =(array)$results;
+            return $lv;
+        }
+        else{
+            return $results;
+        }
+
+    }
+
+    //Cancel leave approval request
+
+    public function CancelLeaveApprovalRequest($service,$data){
+        $identity = \Yii::$app->user->identity;
+        $username = (!Yii::$app->user->isGuest)? Yii::$app->user->identity->{'User ID'} : Yii::$app->params['NavisionUsername'];
+        $password = Yii::$app->session->has('IdentityPassword')? Yii::$app->session->get('IdentityPassword'):Yii::$app->params['NavisionPassword'];
+
+        $creds = (object)[];
+        $creds->UserName = $username;
+        $creds->PassWord = $password;
+        $url = new Services($service);
+        $soapWsdl=$url->getUrl();
+
+        $entry = (object)[];
+
+        foreach($data as $key => $value){
+            if($key !=='_csrf-frontend'){
+                $entry->$key = $value;
+            }
+
+        }
+
+        if(!Yii::$app->navision->isUp($soapWsdl,$creds)) {
+            throw new \yii\web\HttpException(503, 'Service unavailable');
+
+        }
+
+        $results = Yii::$app->navision->CancelLeaveApprovalRequest($creds, $soapWsdl,$entry);
+
+        if(is_object($results)){
+            $lv =(array)$results;
+            return $lv;
+        }
+        else{
+            return $results;
+        }
+
+    }
+
+    //Approve Leave Request
+
+    public function ApproveLeaveRequest($service,$data){
+        $identity = \Yii::$app->user->identity;
+        $username = (!Yii::$app->user->isGuest)? Yii::$app->user->identity->{'User ID'} : Yii::$app->params['NavisionUsername'];
+        $password = Yii::$app->session->has('IdentityPassword')? Yii::$app->session->get('IdentityPassword'):Yii::$app->params['NavisionPassword'];
+
+        $creds = (object)[];
+        $creds->UserName = $username;
+        $creds->PassWord = $password;
+        $url = new Services($service);
+        $soapWsdl=$url->getUrl();
+
+        $entry = (object)[];
+
+        foreach($data as $key => $value){
+            if($key !=='_csrf-frontend'){
+                $entry->$key = $value;
+            }
+
+        }
+
+        if(!Yii::$app->navision->isUp($soapWsdl,$creds)) {
+            throw new \yii\web\HttpException(503, 'Service unavailable');
+
+        }
+
+        $results = Yii::$app->navision->IanApproveLeaveApplication($creds, $soapWsdl,$entry);
+
+        if(is_object($results)){
+            $lv =(array)$results;
+            return $lv;
+        }
+        else{
+            return $results;
+        }
+
+    }
+
+
+
+    //Reject Leave Application
+
+    public function RejectLeaveRequest($service,$data){
+        $identity = \Yii::$app->user->identity;
+        $username = (!Yii::$app->user->isGuest)? Yii::$app->user->identity->{'User ID'} : Yii::$app->params['NavisionUsername'];
+        $password = Yii::$app->session->has('IdentityPassword')? Yii::$app->session->get('IdentityPassword'):Yii::$app->params['NavisionPassword'];
+
+        $creds = (object)[];
+        $creds->UserName = $username;
+        $creds->PassWord = $password;
+        $url = new Services($service);
+        $soapWsdl=$url->getUrl();
+
+        $entry = (object)[];
+
+        foreach($data as $key => $value){
+            if($key !=='_csrf-frontend'){
+                $entry->$key = $value;
+            }
+
+        }
+
+        if(!Yii::$app->navision->isUp($soapWsdl,$creds)) {
+            throw new \yii\web\HttpException(503, 'Service unavailable');
+
+        }
+
+        $results = Yii::$app->navision->IanRejectLeaveApplication($creds, $soapWsdl,$entry);
 
         if(is_object($results)){
             $lv =(array)$results;

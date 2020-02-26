@@ -2,9 +2,10 @@
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
- * Date: 2/22/2020
- * Time: 2:53 PM
+ * Date: 2/25/2020
+ * Time: 3:55 PM
  */
+
 
 namespace frontend\controllers;
 
@@ -20,7 +21,7 @@ use yii\web\BadRequestHttpException;
 use frontend\models\Leave;
 use yii\web\Response;
 
-class LeaveController extends Controller
+class ApprovalsController extends Controller
 {
 
     public function behaviors()
@@ -50,7 +51,7 @@ class LeaveController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getleaves'],
+                'only' => ['getapprovals'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -158,13 +159,11 @@ class LeaveController extends Controller
             'model' => $model,
             'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
             'relievers' => ArrayHelper::map($employees,'No','Full_Name')
-            ]);
+        ]);
     }
 
     public function actionView($ApplicationNo){
         $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
-        $leaveTypes = $this->getLeaveTypes();
-        $employees = $this->getEmployees();
 
         $filter = [
             'Application_No' => $ApplicationNo
@@ -172,15 +171,9 @@ class LeaveController extends Controller
 
         $leave = Yii::$app->navhelper->getData($service, $filter);
 
-        //load nav result to model
-        $leaveModel = new Leave();
-        $model = $this->loadtomodel($leave[0],$leaveModel);
-
 
         return $this->render('view',[
-            'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name'),
+            'leave' => $leave[0],
         ]);
     }
 
@@ -206,90 +199,79 @@ class LeaveController extends Controller
 
     }
 
-    public function actionGetleaves(){
-        $service = Yii::$app->params['ServiceName']['leaveApplicationList'];
-        $leaves = \Yii::$app->navhelper->getData($service);
+    public function actionGetapprovals(){
+        $service = Yii::$app->params['ServiceName']['RequeststoApprove'];
 
-        $result = [];
-        foreach($leaves as $leave){
-
-
-            $link = $updateLink =  '';
-            $Viewlink = Html::a('Details',['view','ApplicationNo'=> $leave->Application_No ],['class'=>'btn btn-outline-primary btn-xs']);
-            if($leave->Leave_Status == 'Open' ){
-                $link = Html::a('Send Approval Request',['approval-request','app'=> $leave->Application_No ],['class'=>'btn btn-primary btn-xs']);
-                $updateLink = Html::a('Update Leave',['update','ApplicationNo'=> $leave->Application_No ],['class'=>'btn btn-info btn-xs']);
-            }else if($leave->Leave_Status == 'Submitted'){
-                $link = Html::a('Send Approval Request',['cancel-request','app'=> $leave->Application_No ],['class'=>'btn btn-warning btn-xs']);
-            }
-
-
-
-            $result['data'][] = [
-                'Key' => $leave->Key,
-                'Employee_No' => $leave->Employee_No,
-                'Employee_Name' => $leave->Employee_Name,
-                'Application_No' => $leave->Application_No,
-                'Days_Applied' => $leave->Days_Applied,
-                'Application_Date' => $leave->Application_Date,
-                'Approval_Status' => $leave->Approval_Status,
-                'Leave_Status' => $leave->Leave_Status,
-                'Action' => $link,
-                'Update_Action' => $updateLink,
-                'view' => $Viewlink
-            ];
-        }
-
-        return $result;
-    }
-
-    public function Getleavebalance(){
-        $service = Yii::$app->params['ServiceName']['leaveBalance'];
         $filter = [
-            'No' => Yii::$app->user->identity->{'Employee No_'},
+            'Approver_ID' => Yii::$app->user->identity->{'User ID'},
         ];
-
-        $balances = \Yii::$app->navhelper->getData($service,$filter);
-        $result = [];
+        $approvals = \Yii::$app->navhelper->getData($service,$filter);
 
         //print '<pre>';
-       // print_r($balances);exit;
+       //print_r($approvals ); exit;
 
-        foreach($balances as $b){
-            $result = [
-               'Key' => $b->Key,
-                'Annual_Leave_Bal' => $b->Annual_Leave_Bal,
-                'Maternity_Leave_Bal' => $b->Maternity_Leave_Bal,
-                'Paternity' => $b->Paternity,
-                'Study_Leave_Bal' => $b->Study_Leave_Bal,
-                'Compasionate_Leave_Bal' => $b->Compasionate_Leave_Bal,
-                'Sick_Leave_Bal' => $b->Sick_Leave_Bal
-            ];
+
+        $result = [];
+
+        if(!is_object($approvals)){
+            foreach($approvals as $app){
+
+
+
+                $Approvelink = Html::a('Approve Request',['approve-request','app'=> $app->Document_No ],['class'=>'btn btn-success btn-xs','data' => [
+                    'confirm' => 'Are you sure you want to Approve this request?',
+                    'method' => 'post',
+                ]]);
+                $Rejectlink = Html::a('Reject Request',['reject-request','app'=> $app->Document_No ],['class'=>'btn btn-warning btn-xs','data' => [
+                    'confirm' => 'Are you sure you want to reject this leave request?',
+                    'method' => 'post',
+                ]]);
+
+                $result['data'][] = [
+                    'Key' => $app->Key,
+                    'ToApprove' => $app->ToApprove,
+                    'Details' => $app->Details,
+                    'Comment' => $app->Comment,
+                    'Sender_ID' => $app->Sender_ID,
+                    'Due_Date' => $app->Due_Date,
+                    'Status' => $app->Status,
+                    'Document_No' => $app->Document_No,
+                    'Approvelink' => $Approvelink,
+                    'Rejectlink' => $Rejectlink,
+
+                ];
+            }
         }
 
+
         return $result;
-
     }
 
 
 
-    public function getLeaveTypes($gender = 'Female'){
-        $service = Yii::$app->params['ServiceName']['leaveTypes'];
-        $filter = [
-            'Gender' => $gender,
-            'Gender' => 'Both'
-        ];
+    public function actionApproveRequest($app){
+        $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
+        $data = ['applicationNo' => $app];
 
-        $leavetypes = \Yii::$app->navhelper->getData($service,$filter);
-        return $leavetypes;
+        $request = Yii::$app->navhelper->ApproveLeaveRequest($service, $data);
+
+        print '<pre>';
+        print_r($request);
+        return;
     }
 
-    public function getEmployees(){
-        $service = Yii::$app->params['ServiceName']['employees'];
+    public function actionRejectRequest($app){
+        $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
+        $data = ['applicationNo' => $app];
+        $request = Yii::$app->navhelper->RejectLeaveRequest($service, $data);
 
-        $employees = \Yii::$app->navhelper->getData($service);
-        return $employees;
+        print '<pre>';
+        print_r($request);
+        return;
     }
+
+
+
 
     public function loadtomodel($obj,$model){
 

@@ -61,7 +61,7 @@ use yii\widgets\ActiveForm;
 
                         <div class="col-md-6">
 
-                            <?= $form->field($model, 'Key')->textInput(['readonly'=> true]) ?>
+                            <?= $form->field($model, 'Key')->hiddenInput(['readonly'=> true])->label(false); ?>
                             <?= $form->field($model, 'Balance_After')->textInput(['type' => 'number','readonly'=> true, 'disabled'=>true]) ?>
                             <?= $form->field($model, 'Leave_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                             <?= $form->field($model, 'Approval_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>

@@ -25,9 +25,9 @@ class LoginForm extends Model
             // username and password are both required
             [['username', 'password'], 'required'],
             // rememberMe must be a boolean value
-            ['rememberMe', 'boolean'],
+            //['rememberMe', 'boolean'],
             // password is validated by validatePassword()
-            ['password', 'validatePassword'],
+           ['password', 'validatePassword'],
         ];
     }
 
@@ -40,9 +40,12 @@ class LoginForm extends Model
      */
     public function validatePassword($attribute, $params)
     {
+        // do Active directory authentication here
         if (!$this->hasErrors()) {
             $user = $this->getUser();
+
             if (!$user || !$user->validatePassword($this->password)) {
+
                 $this->addError($attribute, 'Incorrect username or password.');
             }
         }
@@ -55,8 +58,12 @@ class LoginForm extends Model
      */
     public function login()
     {
+
         if ($this->validate()) {
+            //Lets log the password
+            Yii::$app->session->set('IdentityPassword', $this->password);
             return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 30 : 0);
+
         }
         
         return false;
@@ -72,6 +79,7 @@ class LoginForm extends Model
         if ($this->_user === null) {
             $this->_user = User::findByUsername($this->username);
         }
+
 
         return $this->_user;
     }
