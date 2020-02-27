@@ -227,6 +227,12 @@ $employee = Yii::$app->user->identity->employee[0];
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>leave/create?create=1" class="nav-link ">
+                                        <i class="fa fa-running nav-icon"></i>
+                                        <p>Leave Application</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>leave/leavebalances" class="nav-link">
                                         <i class="fa fa-balance-scale nav-icon"></i>
                                         <p>Leave Balances</p>
@@ -245,6 +251,36 @@ $employee = Yii::$app->user->identity->employee[0];
 
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-briefcase"></i>
+                                <p>
+                                    Employee Requisitions
+                                    <i class="fas fa-angle-left right"></i>
+                                    <!--<span class="badge badge-info right">6</span>-->
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>employeerequisition" class="nav-link">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>HR Requsitions List</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>employeerequisition/create?create=1" class="nav-link">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>Create HR Requsitions</p>
+                                    </a>
+                                </li>
+
+
+
+
+                            </ul>
+                        </li>
+
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
                                     Approval Management
@@ -254,7 +290,7 @@ $employee = Yii::$app->user->identity->employee[0];
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="../approvals" class="nav-link">
+                                    <a href="<?= $absoluteUrl ?>approvals" class="nav-link">
                                         <i class="fa fa-check-square nav-icon"></i>
                                         <p>Approval Requests</p>
                                     </a>
@@ -267,6 +303,8 @@ $employee = Yii::$app->user->identity->employee[0];
 
                             </ul>
                         </li>
+
+
 
 
 

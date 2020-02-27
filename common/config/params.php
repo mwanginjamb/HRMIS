@@ -31,6 +31,10 @@ return [
         'leaveTypes' => 'leaveTypes', //70045
 
         'Approvals' => 'Approvals', //654
+        'ApprovalComments' => 'ApprovalComments', //660
+
+        'RequisitionEmployeeList' => 'RequisitionEmployeeList',//70029
+        'RequisitionEmployeeCard' => 'RequisitionEmployeeCard',//70028
 
 
 

@@ -222,10 +222,7 @@ class ApprovalsController extends Controller
                         'confirm' => 'Are you sure you want to Approve this request?',
                         'method' => 'post',
                     ]]):'';
-                    $Rejectlink = ($app->Status == 'Open')? Html::a('Reject Request',['reject-request','app'=> $app->Document_No ],['class'=>'btn btn-warning btn-xs','data' => [
-                        'confirm' => 'Are you sure you want to reject this leave request?',
-                        'method' => 'post',
-                    ]]): "";
+                    $Rejectlink = ($app->Status == 'Open')? Html::a('Reject Request',['reject-request' ],['class'=>'btn btn-warning reject btn-xs','rel' => $app->Document_No ]): "";
 
                     $detailsLink = Html::a('Request Details',['leave/view','ApplicationNo'=> $app->Document_No ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
 
@@ -269,19 +266,59 @@ class ApprovalsController extends Controller
         }
     }
 
-    public function actionRejectRequest($app){
+    public function actionRejectRequest(){
         $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
-        $data = ['applicationNo' => $app];
-        $request = Yii::$app->navhelper->RejectLeaveRequest($service, $data);
+        $Commentservice = Yii::$app->params['ServiceName']['ApprovalComments'];
+
+
+        //Add a comment before rejecting
+
+        if(Yii::$app->request->post()){
+            $comment = Yii::$app->request->post('comment');
+            $documentno = Yii::$app->request->post('docno');
+
+            $Approvaldata = ['applicationNo' => $documentno];
+            (int)$tableid = 71053;
+
+            //return var_dump($tableid);
+            $data = [
+                'Comment' => $comment,
+                 //'User_ID' => Yii::$app->user->identity->{'User ID'},
+                //'Entry_No' => 1,
+                'Table_ID' => $tableid, //Has issues on insert event in nav
+                'Document_No' => $documentno,
+                'Document_Type' => '_LeaveApp'
+            ];
+
+
+            //save comment
+            $Commentrequest = Yii::$app->navhelper->postData($Commentservice,$data);
+
+
+
+        }
+
+        //End Adding Approval Comments
+
+        //if comment was posted successfully then proceed to reject the entry
+        if(count($Commentrequest)){
+            $request = Yii::$app->navhelper->RejectLeaveRequest($service, $Approvaldata);
+        }else{
+            Yii::$app->session->setFlash('error','Comments Page: Error Rejecting Leave Request : '.$Commentrequest,true);
+            return $this->redirect(['index']);
+        }
+
 
         if(is_array($request)){
             Yii::$app->session->setFlash('success','Leave Request Rejected Successfully',true);
             return $this->redirect(['index']);
         }else{
-            Yii::$app->session->setFlash('error','Error Rejecting Leave Request : '.$request,true);
+            Yii::$app->session->setFlash('error','Approvals Page: Error Rejecting Leave Request : '.$request,true);
             return $this->redirect(['index']);
         }
     }
+
+
 
 
 

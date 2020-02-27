@@ -44,6 +44,45 @@ $this->title = 'HRMIS - Approval Requests';
     </div>
 
 
+    <!--My Bs Modal template  --->
+
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Approval Comment</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="approval-comment">
+
+                        <div class="card">
+                            <div class="card-body">
+                                <textarea class="form-control" name="comment" rows="4" placeholder="Enter your approval comment here.."></textarea>
+                                <br>
+                                <input type="hidden" name="documentNo" class="form-control">
+                            </div>
+                            <div class="card-footer">
+                                <div class="input-group">
+                                     <input type="submit" class="btn btn-outline-primary" value="Save & Reject Approval">
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 <?php
 $absoluteUrl = \yii\helpers\Url::home(true);
 
@@ -67,10 +106,10 @@ $script = <<<JS
                 //{ title: 'ToApprove' ,data: 'ToApprove'},
                 { title: 'Details' ,data: 'Details'},
                 { title: 'Comment' ,data: 'Comment'},
-                { title: 'Sender_ID' ,data: 'Sender_ID'},
-                { title: 'Due_Date' ,data: 'Due_Date'},
+                { title: 'Sender ID' ,data: 'Sender_ID'},
+                { title: 'Due Date' ,data: 'Due_Date'},
                 { title: 'Status' ,data: 'Status'},
-                { title: 'Document_No' ,data: 'Document_No'},
+                { title: 'Document No' ,data: 'Document_No'},
                 { title: 'Approve' ,data: 'Approvelink'},
                 { title: 'Reject' ,data: 'Rejectlink'},
                 { title: 'Details' ,data: 'details'},
@@ -87,10 +126,55 @@ $script = <<<JS
         
        //Hidding some 
        var table = $('#approvals').DataTable();
-       //table.columns([0,2,6]).visible(false);
+       table.columns([1,5]).visible(false);
     
     /*End Data tables*/
+    
+    /*Post Approval comment*/
+    
+    $('form#approval-comment').on('submit', function(e){
+        e.preventDefault();
+        
+        var url = absolute + 'approvals/reject-request'; 
+        var comment = $('textarea[name=comment]').val();
+        var docno = $('input[name=documentNo]').val();
+        
+        $.post(url,{"comment": comment ,"docno": docno}).done(function(){
+            //$('.modal').modal('hide');
+        });
+        
+       
     });
+    
+    
+    /*Modal initialization*/
+    
+        $('#approvals').on('click','.reject',function(e){
+            e.preventDefault();
+            
+            var docno = $(this).attr('rel');
+            
+            $('input[name=documentNo]').val(docno);
+    
+            $('.modal').modal('show');                            
+    
+         });
+        
+      /*Submit approval comment */
+      
+      
+        
+        /*Handle dismissal event of modal */
+        $('.modal').on('hidden.bs.modal',function(){
+            var reld = location.reload(true);
+            setTimeout(reld,1000);
+        });
+
+    /* Data tables */
+    
+    });//end jquery initialization
+
+
         
 JS;
 

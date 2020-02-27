@@ -2,26 +2,24 @@
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
- * Date: 2/22/2020
- * Time: 2:53 PM
+ * Date: 2/28/2020
+ * Time: 12:27 AM
  */
+
 
 namespace frontend\controllers;
 
+use frontend\models\Employeerequisition;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use frontend\models\Employee;
 use yii\web\Controller;
-use yii\web\BadRequestHttpException;
-
-use frontend\models\Leave;
 use yii\web\Response;
-use kartik\mpdf\Pdf;
 
-class LeaveController extends Controller
+class EmployeerequisitionController extends Controller
 {
 
     public function behaviors()
@@ -29,15 +27,15 @@ class LeaveController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','index'],
+                'only' => ['index'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => [],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index'],
+                        'actions' => ['index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -51,7 +49,7 @@ class LeaveController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getleaves'],
+                'only' => ['getrequisitions'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -64,7 +62,6 @@ class LeaveController extends Controller
     public function actionIndex(){
 
         return $this->render('index');
-
     }
 
     public function actionCreate(){
@@ -120,7 +117,6 @@ class LeaveController extends Controller
         ]);
     }
 
-
     public function actionUpdate($ApplicationNo){
         $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
         $leaveTypes = $this->getLeaveTypes();
@@ -159,7 +155,7 @@ class LeaveController extends Controller
             'model' => $model,
             'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
             'relievers' => ArrayHelper::map($employees,'No','Full_Name')
-            ]);
+        ]);
     }
 
     public function actionView($ApplicationNo){
@@ -185,156 +181,40 @@ class LeaveController extends Controller
         ]);
     }
 
-
-    public function actionApprovalRequest($app){
-        $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
-        $data = ['applicationNo' => $app];
-
-        $request = Yii::$app->navhelper->SendLeaveApprovalRequest($service, $data);
-
-        if(is_array($request)){
-            Yii::$app->session->setFlash('success','Leave request sent for approval Successfully',true);
-            return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error sending leave request for approval',true);
-            return $this->redirect(['index']);
-        }
-    }
-
-    public function actionCancelRequest($app){
-        $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
-        $data = ['applicationNo' => $app];
-
-        $request = Yii::$app->navhelper->CancelLeaveApprovalRequest($service, $data);
-
-        if(is_array($request)){
-            Yii::$app->session->setFlash('success','Leave Approval Request Cancelled Successfully',true);
-            return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error Cancelling Leave Approval: '.$request,true);
-            return $this->redirect(['index']);
-        }
-    }
-
-    /*Data access functions */
-
-    public function actionLeavebalances(){
-
-        $balances = $this->Getleavebalance();
-
-        return $this->render('leavebalances',['balances' => $balances]);
-
-    }
-
-    public function actionGetleaves(){
-        $service = Yii::$app->params['ServiceName']['leaveApplicationList'];
-        $leaves = \Yii::$app->navhelper->getData($service);
+    public function actionGetrequisitions(){
+        $service = Yii::$app->params['ServiceName']['RequisitionEmployeeList'];
+        $requisitions = \Yii::$app->navhelper->getData($service);
 
         $result = [];
-        foreach($leaves as $leave){
-
-
+        foreach($requisitions as $req){
             $link = $updateLink =  '';
-            $Viewlink = Html::a('Details',['view','ApplicationNo'=> $leave->Application_No ],['class'=>'btn btn-outline-primary btn-xs']);
-            if($leave->Approval_Status == 'New' ){
-                $link = Html::a('Send Approval Request',['approval-request','app'=> $leave->Application_No ],['class'=>'btn btn-primary btn-xs']);
-                $updateLink = Html::a('Update Leave',['update','ApplicationNo'=> $leave->Application_No ],['class'=>'btn btn-info btn-xs']);
-            }else if($leave->Approval_Status == 'Approval_Pending'){
-                $link = Html::a('Cancel Approval Request',['cancel-request','app'=> $leave->Application_No ],['class'=>'btn btn-warning btn-xs']);
+            $Viewlink = Html::a('Details',['view','ApplicationNo'=> $req->Requisition_No ],['class'=>'btn btn-outline-primary btn-xs']);
+            if($req->Approval_Status == 'Open' ){
+                $link = Html::a('Send Approval Request',['approval-request','app'=> $req->Requisition_No ],['class'=>'btn btn-primary btn-xs']);
+                $updateLink = Html::a('Update Requisition',['update','ApplicationNo'=> $req->Requisition_No ],['class'=>'btn btn-info btn-xs']);
+            }else if($req->Approval_Status == 'Pending_Approval'){
+                $link = Html::a('Cancel Approval Request',['cancel-request','app'=> $req->Requisition_No ],['class'=>'btn btn-warning btn-xs']);
             }
 
 
 
             $result['data'][] = [
-                'Key' => $leave->Key,
-                'Employee_No' => $leave->Employee_No,
-                'Employee_Name' => $leave->Employee_Name,
-                'Application_No' => $leave->Application_No,
-                'Days_Applied' => $leave->Days_Applied,
-                'Application_Date' => $leave->Application_Date,
-                'Approval_Status' => $leave->Approval_Status,
-                'Leave_Status' => $leave->Leave_Status,
-                'Action' => $link,
+                'Key' => $req->Key,
+                'Requisition_No' => $req->Requisition_No,
+                'Requisition_Date' => $req->Requisition_Date,
+                'Job_Description' => !empty($req->Job_Description)?$req->Job_Description:'',
+                'Reason_For_Request' => $req->Reason_For_Request,
+                'Required_Positions' => $req->Required_Positions,
+                'Type_of_Contract_Required' => !empty($req->Type_of_Contract_Required)?$req->Type_of_Contract_Required:'',
+                'Completion_Status' => $req->Completion_Status,
+                'Approval_Status' => $req->Approval_Status,
+                'action' => $link,
                 'Update_Action' => $updateLink,
                 'view' => $Viewlink
             ];
         }
 
         return $result;
-    }
-
-    public function actionReport(){
-        $service = Yii::$app->params['ServiceName']['leaveApplicationList'];
-        $leaves = \Yii::$app->navhelper->getData($service);
-        krsort( $leaves);//sort by keys in descending order
-        $content = $this->renderPartial('_historyreport',[
-            'leaves' => $leaves
-        ]);
-
-        //return $content;
-        $pdf = \Yii::$app->pdf;
-        $pdf->content = $content;
-        $pdf->orientation = Pdf::ORIENT_PORTRAIT;
-
-        //The trick to returning binary content
-        $content = $pdf->render('', 'S');
-        $content = chunk_split(base64_encode($content));
-
-        return $content;
-    }
-
-    public function actionReportview(){
-        return $this->render('_viewreport',[
-            'content'=>$this->actionReport()
-        ]);
-    }
-
-    public function Getleavebalance(){
-        $service = Yii::$app->params['ServiceName']['leaveBalance'];
-        $filter = [
-            'No' => Yii::$app->user->identity->{'Employee No_'},
-        ];
-
-        $balances = \Yii::$app->navhelper->getData($service,$filter);
-        $result = [];
-
-        //print '<pre>';
-       // print_r($balances);exit;
-
-        foreach($balances as $b){
-            $result = [
-               'Key' => $b->Key,
-                'Annual_Leave_Bal' => $b->Annual_Leave_Bal,
-                'Maternity_Leave_Bal' => $b->Maternity_Leave_Bal,
-                'Paternity' => $b->Paternity,
-                'Study_Leave_Bal' => $b->Study_Leave_Bal,
-                'Compasionate_Leave_Bal' => $b->Compasionate_Leave_Bal,
-                'Sick_Leave_Bal' => $b->Sick_Leave_Bal
-            ];
-        }
-
-        return $result;
-
-    }
-
-
-
-    public function getLeaveTypes($gender = 'Female'){
-        $service = Yii::$app->params['ServiceName']['leaveTypes'];
-        $filter = [
-            'Gender' => $gender,
-            'Gender' => 'Both'
-        ];
-
-        $leavetypes = \Yii::$app->navhelper->getData($service,$filter);
-        return $leavetypes;
-    }
-
-    public function getEmployees(){
-        $service = Yii::$app->params['ServiceName']['employees'];
-
-        $employees = \Yii::$app->navhelper->getData($service);
-        return $employees;
     }
 
     public function loadtomodel($obj,$model){
