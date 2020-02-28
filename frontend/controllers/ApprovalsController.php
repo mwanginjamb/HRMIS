@@ -222,7 +222,10 @@ class ApprovalsController extends Controller
                         'confirm' => 'Are you sure you want to Approve this request?',
                         'method' => 'post',
                     ]]):'';
-                    $Rejectlink = ($app->Status == 'Open')? Html::a('Reject Request',['reject-request' ],['class'=>'btn btn-warning reject btn-xs','rel' => $app->Document_No ]): "";
+                    $Rejectlink = ($app->Status == 'Open')? Html::a('Reject Request',['reject-request' ],['class'=>'btn btn-warning reject btn-xs',
+                        'rel' => $app->Document_No,
+                        'rev' => $app->Workflow_Step_Instance_ID
+                        ]): "";
 
                     $detailsLink = Html::a('Request Details',['leave/view','ApplicationNo'=> $app->Document_No ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
 
@@ -270,12 +273,12 @@ class ApprovalsController extends Controller
         $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
         $Commentservice = Yii::$app->params['ServiceName']['ApprovalComments'];
 
-
         //Add a comment before rejecting
 
         if(Yii::$app->request->post()){
             $comment = Yii::$app->request->post('comment');
             $documentno = Yii::$app->request->post('docno');
+            $workflowStepInstanceId = Yii::$app->request->post('workflow');
 
             $Approvaldata = ['applicationNo' => $documentno];
             (int)$tableid = 71053;
@@ -287,15 +290,13 @@ class ApprovalsController extends Controller
                 //'Entry_No' => 1,
                 'Table_ID' => $tableid, //Has issues on insert event in nav
                 'Document_No' => $documentno,
-                'Document_Type' => '_LeaveApp'
+                'Document_Type' => '_LeaveApp',
+               // 'Record_ID_to_Approve' => $workflowStepInstanceId
             ];
 
 
             //save comment
             $Commentrequest = Yii::$app->navhelper->postData($Commentservice,$data);
-
-
-
         }
 
         //End Adding Approval Comments

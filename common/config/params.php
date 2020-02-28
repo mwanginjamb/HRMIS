@@ -30,11 +30,12 @@ return [
         'leaveBalance' => 'leaveBalance',//71153
         'leaveTypes' => 'leaveTypes', //70045
 
-        'Approvals' => 'Approvals', //654
+        'Approvals' => 'Approvals', //654---------------duplicated
         'ApprovalComments' => 'ApprovalComments', //660
 
         'RequisitionEmployeeList' => 'RequisitionEmployeeList',//70029
         'RequisitionEmployeeCard' => 'RequisitionEmployeeCard',//70028
+        'JobsList' => 'JobsList',//70009
 
 
 
@@ -42,6 +43,6 @@ return [
         'Portal_Workflows' => 'Portal_Workflows', //50019
 
         /* Request to Approve */
-        'RequeststoApprove' => 'RequeststoApprove', //654
+        'RequeststoApprove' => 'RequeststoApprove', //654---duplication
     ],
 ];

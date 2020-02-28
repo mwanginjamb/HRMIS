@@ -63,6 +63,7 @@ $this->title = 'HRMIS - Approval Requests';
                                 <textarea class="form-control" name="comment" rows="4" placeholder="Enter your approval comment here.."></textarea>
                                 <br>
                                 <input type="hidden" name="documentNo" class="form-control">
+                                <input type="text" name="workflow" class="form-control">
                             </div>
                             <div class="card-footer">
                                 <div class="input-group">
@@ -138,8 +139,10 @@ $script = <<<JS
         var url = absolute + 'approvals/reject-request'; 
         var comment = $('textarea[name=comment]').val();
         var docno = $('input[name=documentNo]').val();
+        var workflow = $('input[name=workflow]').val();
         
-        $.post(url,{"comment": comment ,"docno": docno}).done(function(){
+        
+        $.post(url,{"comment": comment ,"docno": docno,"workflow": workflow}).done(function(){
             //$('.modal').modal('hide');
         });
         
@@ -153,8 +156,11 @@ $script = <<<JS
             e.preventDefault();
             
             var docno = $(this).attr('rel');
+            var workflowInstance = $(this).attr('rev');
             
             $('input[name=documentNo]').val(docno);
+            $('input[name=workflow]').val(workflowInstance);
+            
     
             $('.modal').modal('show');                            
     

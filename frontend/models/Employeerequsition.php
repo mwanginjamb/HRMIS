@@ -3,17 +3,14 @@
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
  * Date: 2/28/2020
- * Time: 12:22 AM
+ * Time: 3:24 PM
  */
-
-
 
 namespace frontend\models;
 
-
 use yii\base\Model;
 
-class Employeerequisition extends Model
+class Employeerequsition extends Model
 {
     public $Key;
     public $Requisition_No;
@@ -37,7 +34,7 @@ class Employeerequisition extends Model
     public function rules()
     {
         return [
-
+            [['Job_ID','Reason_For_Request','Employment_Type','Priority','Required_Positions','Requisition_Type'],'required'],
         ];
     }
 
@@ -50,5 +47,4 @@ class Employeerequisition extends Model
 
         ];
     }
-
 }

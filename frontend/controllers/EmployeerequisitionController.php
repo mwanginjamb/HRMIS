@@ -10,10 +10,12 @@
 namespace frontend\controllers;
 
 use frontend\models\Employeerequisition;
+use frontend\models\Employeerequsition;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\ContentNegotiator;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use frontend\models\Employee;
 use yii\web\Controller;
@@ -66,26 +68,20 @@ class EmployeerequisitionController extends Controller
 
     public function actionCreate(){
 
-
-        $model = new Leave();
-        $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
+        $model = new Employeerequsition();
+        $service = Yii::$app->params['ServiceName']['RequisitionEmployeeCard'];
 
         if(\Yii::$app->request->get('create') ){
             //make an initial empty request to nav
             $req = Yii::$app->navhelper->postData($service,[]);
-            $modeldata = (get_object_vars($req)) ;
-            foreach($modeldata as $key => $val){
-                if(is_object($val)) continue;
-                $model->$key = $val;
-            }
-
-            $model->Start_Date = date('Y-m-d');
-            $model->End_Date = date('Y-m-d');
-
+            $model = $this->loadtomodel($req,$model);
         }
 
-        $leaveTypes = $this->getLeaveTypes();
-        $employees = $this->getEmployees();
+        $jobs = $this->getJobs();
+        $requestReasons = $this->getRequestReasons();
+        $employmentTypes = $this->getEmploymentTypes();
+        $priority = $this->getPriority();
+        $requisitionType = $this->getRequisitionTypes();
         $message = "";
         $success = false;
 
@@ -111,8 +107,11 @@ class EmployeerequisitionController extends Controller
 
         return $this->render('create',[
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name'),
+            'jobs' => $jobs,
+            'requestReasons' => $requestReasons,
+            'employmentTypes' => $employmentTypes,
+            'priority' => $priority,
+            'requisitionType' => $requisitionType
 
         ]);
     }
@@ -181,42 +180,76 @@ class EmployeerequisitionController extends Controller
         ]);
     }
 
-    public function actionGetrequisitions(){
-        $service = Yii::$app->params['ServiceName']['RequisitionEmployeeList'];
-        $requisitions = \Yii::$app->navhelper->getData($service);
+    public function getJobs(){
+        $service = Yii::$app->params['ServiceName']['JobsList'];
+        $jobs = \Yii::$app->navhelper->getData($service);
+        (object)$result = [];
 
-        $result = [];
-        foreach($requisitions as $req){
-            $link = $updateLink =  '';
-            $Viewlink = Html::a('Details',['view','ApplicationNo'=> $req->Requisition_No ],['class'=>'btn btn-outline-primary btn-xs']);
-            if($req->Approval_Status == 'Open' ){
-                $link = Html::a('Send Approval Request',['approval-request','app'=> $req->Requisition_No ],['class'=>'btn btn-primary btn-xs']);
-                $updateLink = Html::a('Update Requisition',['update','ApplicationNo'=> $req->Requisition_No ],['class'=>'btn btn-info btn-xs']);
-            }else if($req->Approval_Status == 'Pending_Approval'){
-                $link = Html::a('Cancel Approval Request',['cancel-request','app'=> $req->Requisition_No ],['class'=>'btn btn-warning btn-xs']);
-            }
-
-
-
-            $result['data'][] = [
-                'Key' => $req->Key,
-                'Requisition_No' => $req->Requisition_No,
-                'Requisition_Date' => $req->Requisition_Date,
-                'Job_Description' => !empty($req->Job_Description)?$req->Job_Description:'',
-                'Reason_For_Request' => $req->Reason_For_Request,
-                'Required_Positions' => $req->Required_Positions,
-                'Type_of_Contract_Required' => !empty($req->Type_of_Contract_Required)?$req->Type_of_Contract_Required:'',
-                'Completion_Status' => $req->Completion_Status,
-                'Approval_Status' => $req->Approval_Status,
-                'action' => $link,
-                'Update_Action' => $updateLink,
-                'view' => $Viewlink
+        foreach($jobs as $j){
+            $result []= [
+                'Job_ID' =>$j->Job_ID,
+                'Job_Description' => !empty($j->Job_Description)? $j->Job_Description: 'Not Set'
             ];
         }
 
-        return $result;
+       return ArrayHelper::map($result,'Job_ID','Job_Description');
     }
 
+    public function getRequestReasons(){
+
+        $result = [
+            ['Code' => 'New_Vacancy', 'Description' => 'New Vacancy'],
+            ['Code' => 'Replacement', 'Description' => 'Replacement'],
+            ['Code' => 'Retirement', 'Description' => 'Retirement'],
+            ['Code' => 'Retrenchment', 'Description' => 'Retrenchment'],
+            ['Code' => 'Demise', 'Description' => 'Demise'],
+            ['Code' => 'Other', 'Description' => 'Other'],
+        ];
+
+        return ArrayHelper::map($result,'Code','Description');
+
+    }
+
+    public function getEmploymentTypes(){
+
+        $result = [
+            ['Code' => 'Permanent', 'Description' => 'Permanent'],
+            ['Code' => 'Temporary', 'Description' => 'Temporary'],
+            ['Code' => 'Voluntary', 'Description' => 'Voluntary'],
+            ['Code' => 'Contract', 'Description' => 'Contract'],
+            ['Code' => 'Interns', 'Description' => 'Interns'],
+            ['Code' => 'Casuals', 'Description' => 'Casuals'],
+        ];
+
+        return ArrayHelper::map($result,'Code','Description');
+
+    }
+
+    public function getPriority(){
+        $result = [
+            ['Code' => '_blank_', 'Description' => '_blank_'],
+            ['Code' => 'High', 'Description' => 'High'],
+            ['Code' => 'Medium', 'Description' => 'Medium'],
+            ['Code' => 'Low', 'Description' => 'Low'],
+
+        ];
+
+        return ArrayHelper::map($result,'Code','Description');
+    }
+
+    public function getRequisitionTypes(){
+
+        $result = [
+            ['Code' => '_blank_', 'Description' => '_blank_'],
+            ['Code' => 'Internal', 'Description' => 'Internal'],
+            ['Code' => 'External', 'Description' => 'External'],
+            ['Code' => 'Both', 'Description' => 'Both'],
+
+        ];
+
+        return ArrayHelper::map($result,'Code','Description');
+
+    }
     public function loadtomodel($obj,$model){
 
         if(!is_object($obj)){
