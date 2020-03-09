@@ -77,10 +77,12 @@ class SiteController extends Controller
 
         $employee = $this->actionGetemployee()[0];
         $supervisor = $this->getSupervisor($employee->Supervisor_Code);
+        $balances = $this->Getleavebalance();
 
         return $this->render('index',[
             'employee' => $employee,
-            'supervisor' => $supervisor
+            'supervisor' => $supervisor,
+            'balances' => $balances
             ]);
     }
 
@@ -289,5 +291,33 @@ class SiteController extends Controller
         ];
         $supervisor = \Yii::$app->navhelper->getData($service,$filter);
         return $supervisor[0];
+    }
+
+    public function Getleavebalance(){
+        $service = Yii::$app->params['ServiceName']['leaveBalance'];
+        $filter = [
+            'No' => Yii::$app->user->identity->{'Employee No_'},
+        ];
+
+        $balances = \Yii::$app->navhelper->getData($service,$filter);
+        $result = [];
+
+        //print '<pre>';
+        // print_r($balances);exit;
+
+        foreach($balances as $b){
+            $result = [
+                'Key' => $b->Key,
+                'Annual_Leave_Bal' => $b->Annual_Leave_Bal,
+                'Maternity_Leave_Bal' => $b->Maternity_Leave_Bal,
+                'Paternity' => $b->Paternity,
+                'Study_Leave_Bal' => $b->Study_Leave_Bal,
+                'Compasionate_Leave_Bal' => $b->Compasionate_Leave_Bal,
+                'Sick_Leave_Bal' => $b->Sick_Leave_Bal
+            ];
+        }
+
+        return $result;
+
     }
 }

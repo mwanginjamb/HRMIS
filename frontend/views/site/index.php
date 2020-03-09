@@ -12,6 +12,90 @@ exit;*/
 
 <section class="content">
     <div class="container-fluid">
+
+
+        <!-- Info boxes -->
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-3">
+
+                <div class="info-box">
+                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-briefcase"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">New Jobs Vacancies</span>
+                        <span class="info-box-number">
+                  10
+                  <small></small>
+                </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+
+
+
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Pending Approvals</span>
+                        <span class="info-box-number">
+                  10
+                  <small>%</small>
+                </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-thumbs-up"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Approved</span>
+                        <span class="info-box-number">41,410</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+
+            <!-- fix for small devices only -->
+            <div class="clearfix hidden-md-up"></div>
+
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-times"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Rejected Approvals</span>
+                        <span class="info-box-number">760</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Staff Count</span>
+                        <span class="info-box-number">2,000</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+
+
         <div class="row">
 
 
@@ -96,38 +180,82 @@ exit;*/
             <div class="col-md-9">
                 <div class="card">
                     <div class="card-header p-2">
-                        <h3>General Information</h3>
+                        <h3 class="card-title">Employes on Leave</h3>
                     </div>
                     <div class="card-body">
 
-                        <table class="table table-hover table-borderless">
+                        <table class="table table-hover table-borderless " id="onleave">
 
+                           <!-- <tbody>
+                                <tr>
+                                    <td>No.</td><td class="bg-gray"><?/*= $employee->No*/?></td>
+                                    <td>User ID.</td><td class="bg-gray"><?/*= $employee->User_ID */?></td>
+                                </tr>
+
+                                <tr>
+                                    <td>First Name: </td><td class="bg-gray"><?/*= $employee->First_Name */?></td>
+                                    <td>Last Name</td><td class="bg-gray"><?/*= $employee->Last_Name */?></td>
+                                </tr>
+
+                                <tr>
+                                    <td>ID Number: </td><td class="bg-gray"><?/*= $employee->First_Name */?></td>
+                                    <td>Passport Number</td><td class="bg-gray"><?/*= $employee->Last_Name */?></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Supervisor Name: </td><td class="bg-gray"><?/*= $employee->Supervisor_Name */?></td>
+                                    <td>Citizenship</td><td class="bg-gray"><?/*= !empty($employee->Citizenship)? $employee->Citizenship: '' */?></td>
+                                </tr>
+                            </tbody>-->
+                            <thead>
+                             <tr>
+                                 <th>Employee Name</th>
+                                 <th>Department </th>
+                                 <th>Start Date</th>
+                                 <th>End Date</th>
+                             </tr>
+                            </thead>
                             <tbody>
-                                <tr>
-                                    <td>No.</td><td class="bg-gray"><?= $employee->No?></td>
-                                    <td>User ID.</td><td class="bg-gray"><?= $employee->User_ID ?></td>
-                                </tr>
 
-                                <tr>
-                                    <td>First Name: </td><td class="bg-gray"><?= $employee->First_Name ?></td>
-                                    <td>Last Name</td><td class="bg-gray"><?= $employee->Last_Name ?></td>
-                                </tr>
-
-                                <tr>
-                                    <td>ID Number: </td><td class="bg-gray"><?= $employee->First_Name ?></td>
-                                    <td>Passport Number</td><td class="bg-gray"><?= $employee->Last_Name ?></td>
-                                </tr>
-
-                                <tr>
-                                    <td>Supervisor Name: </td><td class="bg-gray"><?= $employee->Supervisor_Name ?></td>
-                                    <td>Citizenship</td><td class="bg-gray"><?= !empty($employee->Citizenship)? $employee->Citizenship: '' ?></td>
-                                </tr>
                             </tbody>
-
 
 
                         </table>
 
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">My Leave Balances</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered dt-responsive table-hover" id="leavebances">
+                            <thead>
+                                <tr>
+                                    <th>Leave Type</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            <?php
+
+
+
+                            foreach($balances as $key => $val){
+                                if($key == 'Key')
+                                    continue;
+                                print '
+                                    <tr>
+                                        <td>'.$key.'</td><td>'.$val.'</td>
+                                     </tr>
+                            ';
+
+                            } ?>
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -136,3 +264,44 @@ exit;*/
     </div>
 
 </section>
+
+
+
+<?php
+
+
+$script = <<<JS
+
+    $(function(){
+         /*Data Tables*/
+        
+         
+         //$.fn.dataTable.ext.errMode = 'throw';
+        
+    
+          $('#onleave').DataTable({
+           
+           paging: true,                                        
+           language: {
+                "zeroRecords": "No records to display"
+            },
+            
+            order : [[ 0, "desc" ]]            
+           
+       });
+          
+          $('#leavebances').DataTable({});
+        
+       //Hidding some 
+       var table = $('#onleave').DataTable();
+       //table.columns([3,4,5,6,]).visible(false);
+    
+    /*End Data tables*/
+        $('#onleave').on('click','tr', function(){
+            
+        });
+    });
+        
+JS;
+
+$this->registerJs($script);

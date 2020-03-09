@@ -11,6 +11,7 @@ namespace frontend\controllers;
 
 use frontend\models\Employeerequisition;
 use frontend\models\Employeerequsition;
+use frontend\models\Job;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\ContentNegotiator;
@@ -21,7 +22,7 @@ use frontend\models\Employee;
 use yii\web\Controller;
 use yii\web\Response;
 
-class EmployeerequisitionController extends Controller
+class RecruitmentController extends Controller
 {
 
     public function behaviors()
@@ -51,7 +52,7 @@ class EmployeerequisitionController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getrequisitions'],
+                'only' => ['getvacancies'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -159,34 +160,26 @@ class EmployeerequisitionController extends Controller
         ]);
     }
 
-    public function actionView($ApplicationNo){
-        $service = Yii::$app->params['ServiceName']['RequisitionEmployeeCard'];
+    public function actionView($Job_ID){
+        $service = Yii::$app->params['ServiceName']['JobsCard'];
 
 
         $filter = [
-            'Requisition_No' => $ApplicationNo
+            'Job_ID' => $Job_ID
         ];
 
-        $requisition = Yii::$app->navhelper->getData($service, $filter);
+        $job = Yii::$app->navhelper->getData($service, $filter);
+
+        //print '<pre>';
+        //print_r($job); exit;
 
         //load nav result to model
-        $requisitionModel = new Employeerequsition();
-        $model = $this->loadtomodel($requisition[0],$requisitionModel);
-
-        $jobs = $this->getJobs();
-        $requestReasons = $this->getRequestReasons();
-        $employmentTypes = $this->getEmploymentTypes();
-        $priority = $this->getPriority();
-        $requisitionType = $this->getRequisitionTypes();
-
+        $jobModel = new Job();
+        //$model = $this->loadtomodel($requisition[0],$jobModel);
 
         return $this->render('view',[
-            'model' => $model,
-            'jobs' => $jobs,
-            'requestReasons' => $requestReasons,
-            'employmentTypes' => $employmentTypes,
-            'priority' => $priority,
-            'requisitionType' => $requisitionType
+            'model' => $job,
+
         ]);
     }
 
@@ -202,7 +195,7 @@ class EmployeerequisitionController extends Controller
             ];
         }
 
-       return ArrayHelper::map($result,'Job_ID','Job_Description');
+        return ArrayHelper::map($result,'Job_ID','Job_Description');
     }
 
     public function getRequestReasons(){
@@ -261,40 +254,36 @@ class EmployeerequisitionController extends Controller
 
     }
 
+    public function actionVacancies(){
+        return $this->render('vacancies');
+    }
 
+    public function actionGetvacancies(){
+        $service = Yii::$app->params['ServiceName']['JobsList'];
+        $filter = [
+           /* 'Closed' => false,
+            'Advertised' => true,
+            'Positions' => '>0',*/
 
-    public function actionGetrequisitions(){
-        $service = Yii::$app->params['ServiceName']['RequisitionEmployeeList'];
-        $requisitions = \Yii::$app->navhelper->getData($service);
+        ];
+        $requisitions = \Yii::$app->navhelper->getData($service,$filter);
 
         $result = [];
         foreach($requisitions as $req){
+                if($req->No_of_Posts > 0 && !empty($req->Job_Description) ) {
+                    $Viewlink = Html::a('View Details', ['view', 'Job_ID' => $req->Job_ID], ['class' => 'btn btn-outline-primary btn-xs']);
 
+                    $result['data'][] = [
+                        'Job_ID' => !empty($req->Job_ID) ? $req->Job_ID : 'Not Set',
+                        'Job_Description' => !empty($req->Job_Description) ? $req->Job_Description : '',
+                        'No_of_Posts' => !empty($req->No_of_Posts) ? $req->No_of_Posts : 'Not Set',
+                        'Date_Created' => !empty($req->Date_Created) ? $req->Date_Created : '',
+                        'action' => !empty($Viewlink) ? $Viewlink : '',
 
-            $link = $updateLink =  '';
-            $Viewlink = Html::a('Details',['view','ApplicationNo'=> $req->Requisition_No ],['class'=>'btn btn-outline-primary btn-xs']);
-            if($req->Approval_Status == 'Open' ){
-                $link = Html::a('Send Approval Request',['approval-request','app'=> $req->Requisition_No ],['class'=>'btn btn-primary btn-xs']);
-                $updateLink = Html::a('Update Leave',['update','ApplicationNo'=> $req->Requisition_No ],['class'=>'btn btn-info btn-xs']);
-            }else if($req->Approval_Status == 'Pending_Approval'){
-                $link = Html::a('Cancel Approval Request',['cancel-request','app'=> $req->Requisition_No ],['class'=>'btn btn-warning btn-xs']);
-            }
+                    ];
 
+                }
 
-
-            $result['data'][] = [
-                'Requisition_No' => $req->Requisition_No,
-                'Requisition_Date' => $req->Requisition_Date,
-                'Job_Description' => !empty($req->Job_Description)?$req->Job_Description:'Not Set',
-                'Reason_For_Request' => !empty($req->Reason_for_Request_Other)?$req->Reason_for_Request_Other: 'Not Set',
-                'Required_Positions' => $req->Positions,
-                'Type_of_Contract_Required' => !empty($req->Type_of_Contract_Required)?$req->Type_of_Contract_Required:'Not set',
-                'Completion_Status' => $req->Completion_Status,
-                'Approval_Status' => $req->Approval_Status,
-                'action' => $link,
-                'Update_Action' => $updateLink,
-                'view' => $Viewlink
-            ];
         }
 
         return $result;

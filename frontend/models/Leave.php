@@ -41,6 +41,7 @@ public $Reliever;
 public $Reliever_Name;
 public $Approval_Status;
 public $Leave_Application_Lines1;
+public $Posted;
 
     public function rules()
     {

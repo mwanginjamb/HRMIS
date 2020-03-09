@@ -8,6 +8,7 @@
 
 namespace frontend\controllers;
 
+use frontend\models\Applicantprofile;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\ContentNegotiator;
@@ -21,7 +22,7 @@ use frontend\models\Leave;
 use yii\web\Response;
 use kartik\mpdf\Pdf;
 
-class LeaveController extends Controller
+class ApplicantprofileController extends Controller
 {
 
     public function behaviors()
@@ -70,38 +71,12 @@ class LeaveController extends Controller
 
     public function actionCreate(){
 
-        $model = new Leave();
-        $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
-
-        if(\Yii::$app->request->get('create') ){
-            //make an initial empty request to nav
-            $req = Yii::$app->navhelper->postData($service,[]);
-
-            if(is_string($req)){  // A string response is a fucking error
-                Yii::$app->session->setFlash('error','Error : '.$req,true);
-                return $this->redirect(['index']);
-            }
-
-
-            $modeldata = (get_object_vars($req)) ;
-            foreach($modeldata as $key => $val){
-                if(is_object($val)) continue;
-                $model->$key = $val;
-            }
-
-            $model->Start_Date = date('Y-m-d');
-            $model->End_Date = date('Y-m-d');
-
-        }
-
-        $leaveTypes = $this->getLeaveTypes();
-        $employees = $this->getEmployees();
-        $message = "";
-        $success = false;
+        $model = new Applicantprofile();
+        $service = Yii::$app->params['ServiceName']['applicantProfile'];
 
         if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
 
-            $result = Yii::$app->navhelper->updateData($service,Yii::$app->request->post()['Leave']);
+            $result = Yii::$app->navhelper->postData($service,Yii::$app->request->post()['Applicantprofile']);
 
             if(is_object($result)){
 
@@ -118,11 +93,14 @@ class LeaveController extends Controller
         }
 
 
+        $Countries = $this->getCountries();
+        $Religion = $this->getReligion();
 
         return $this->render('create',[
+
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name'),
+            'countries' => ArrayHelper::map($Countries,'Code','Name'),
+            'religion' => ArrayHelper::map($Religion,'Code','Description')
 
         ]);
     }
@@ -166,7 +144,7 @@ class LeaveController extends Controller
             'model' => $model,
             'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
             'relievers' => ArrayHelper::map($employees,'No','Full_Name')
-            ]);
+        ]);
     }
 
     public function actionView($ApplicationNo){
@@ -306,11 +284,11 @@ class LeaveController extends Controller
         $result = [];
 
         //print '<pre>';
-       // print_r($balances);exit;
+        // print_r($balances);exit;
 
         foreach($balances as $b){
             $result = [
-               'Key' => $b->Key,
+                'Key' => $b->Key,
                 'Annual_Leave_Bal' => $b->Annual_Leave_Bal,
                 'Maternity_Leave_Bal' => $b->Maternity_Leave_Bal,
                 'Paternity' => $b->Paternity,
@@ -337,11 +315,29 @@ class LeaveController extends Controller
         return $leavetypes;
     }
 
-    public function getEmployees(){
-        $service = Yii::$app->params['ServiceName']['employees'];
+    public function getCountries(){
+        $service = Yii::$app->params['ServiceName']['Countries'];
 
-        $employees = \Yii::$app->navhelper->getData($service);
-        return $employees;
+        $res = [];
+        $countries = \Yii::$app->navhelper->getData($service);
+        foreach($countries as $c){
+            if(!empty($c->Name))
+            $res[] = [
+                'Code' => $c->Code,
+                'Name' => $c->Name
+            ];
+        }
+
+        return $res;
+    }
+
+    public function getReligion(){
+        $service = Yii::$app->params['ServiceName']['Religion'];
+        $filter = [
+            'Type' => 'Religion'
+        ];
+        $religion = \Yii::$app->navhelper->getData($service, $filter);
+        return $religion;
     }
 
     public function loadtomodel($obj,$model){

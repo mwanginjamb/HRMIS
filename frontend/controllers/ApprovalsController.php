@@ -207,8 +207,8 @@ class ApprovalsController extends Controller
         ];
         $approvals = \Yii::$app->navhelper->getData($service,$filter);
 
-        //print '<pre>';
-       //print_r($approvals ); exit;
+       /* print '<pre>';
+       print_r($approvals ); exit;*/
 
 
         $result = [];
@@ -224,7 +224,7 @@ class ApprovalsController extends Controller
                     ]]):'';
                     $Rejectlink = ($app->Status == 'Open')? Html::a('Reject Request',['reject-request' ],['class'=>'btn btn-warning reject btn-xs',
                         'rel' => $app->Document_No,
-                        'rev' => $app->Workflow_Step_Instance_ID
+                        'rev' => $app->Record_ID_to_Approve,
                         ]): "";
 
                     $detailsLink = Html::a('Request Details',['leave/view','ApplicationNo'=> $app->Document_No ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
@@ -278,7 +278,7 @@ class ApprovalsController extends Controller
         if(Yii::$app->request->post()){
             $comment = Yii::$app->request->post('comment');
             $documentno = Yii::$app->request->post('docno');
-            $workflowStepInstanceId = Yii::$app->request->post('workflow');
+            $Record_ID_to_Approve = Yii::$app->request->post('Record_ID_to_Approve');
 
             $Approvaldata = ['applicationNo' => $documentno];
             (int)$tableid = 71053;
@@ -290,13 +290,16 @@ class ApprovalsController extends Controller
                 //'Entry_No' => 1,
                 'Table_ID' => $tableid, //Has issues on insert event in nav
                 'Document_No' => $documentno,
-                'Document_Type' => '_LeaveApp',
-               // 'Record_ID_to_Approve' => $workflowStepInstanceId
+                //'Document_Type' => '_LeaveApp',
+                //'Record_ID_to_Approve' => $Record_ID_to_Approve
             ];
 
 
             //save comment
             $Commentrequest = Yii::$app->navhelper->postData($Commentservice,$data);
+            //print '<pre>';
+            //print_r($Commentrequest);
+           // return;
         }
 
         //End Adding Approval Comments
@@ -306,14 +309,22 @@ class ApprovalsController extends Controller
             $request = Yii::$app->navhelper->RejectLeaveRequest($service, $Approvaldata);
         }else{
             Yii::$app->session->setFlash('error','Comments Page: Error Rejecting Leave Request : '.$Commentrequest,true);
+
             return $this->redirect(['index']);
         }
 
 
         if(is_array($request)){
+
+           /* print '<pre>';
+            print_r($request); return;*/
             Yii::$app->session->setFlash('success','Leave Request Rejected Successfully',true);
             return $this->redirect(['index']);
         }else{
+
+             print '<pre>';
+            print_r($request); return;
+
             Yii::$app->session->setFlash('error','Approvals Page: Error Rejecting Leave Request : '.$request,true);
             return $this->redirect(['index']);
         }

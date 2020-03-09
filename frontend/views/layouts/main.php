@@ -211,8 +211,8 @@ $employee = Yii::$app->user->identity->employee[0];
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                              with font-awesome or any other icon font library -->
-                        <li class="nav-item has-treeview menu-open">
-                            <a href="#" class="nav-link active">
+                        <li class="nav-item has-treeview  <?= currentCtrl('leave')?'menu-open':'' ?>">
+                            <a href="#" class="nav-link <?= currentCtrl('leave')?'active':'' ?>">
                                 <i class="nav-icon fas fa-paper-plane"></i>
                                 <p>
                                     Leave Management
@@ -220,40 +220,84 @@ $employee = Yii::$app->user->identity->employee[0];
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
+
                                 <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>leave/" class="nav-link ">
+                                    <a href="<?= $absoluteUrl ?>leave/create?create=1" class="nav-link <?= currentaction('leave','create')?'active':'' ?> ">
+                                        <i class="fa fa-running nav-icon"></i>
+                                        <p>New Leave Application</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>leave/" class="nav-link <?= currentaction('leave','index')?'active':'' ?>">
                                         <i class="fa fa-door-open nav-icon"></i>
                                         <p>Leave List</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>leave/create?create=1" class="nav-link ">
-                                        <i class="fa fa-running nav-icon"></i>
-                                        <p>Leave Application</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>leave/leavebalances" class="nav-link">
+
+                                <!--<li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>leave/leavebalances" class="nav-link <?= currentaction('leave','leavebalances')?'active':'' ?>">
                                         <i class="fa fa-balance-scale nav-icon"></i>
                                         <p>Leave Balances</p>
+                                    </a>
+                                </li>-->
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>leave/reportview" class="nav-link <?= currentaction('leave','reportview')?'active':'' ?>">
+                                        <i class="fa fa-file-pdf nav-icon"></i>
+                                        <p>Leave History Report</p>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>leave/reportview" class="nav-link">
-                                        <i class="fa fa-file-pdf nav-icon"></i>
-                                        <p>Leave History Report</p>
+                                    <a href="<?= $absoluteUrl ?>leaverecall/create/?create=1" class="nav-link <?= currentaction('leaverecall','create')?'active':'' ?>">
+                                        <i class="fa fa-recycle nav-icon"></i>
+                                        <p>Recall Leave</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>leaverecall/index" class="nav-link <?= currentaction('leaverecall','index')?'active':'' ?>">
+                                        <i class="fa fa-list nav-icon"></i>
+                                        <p>Recall Leave List</p>
                                     </a>
                                 </li>
 
                             </ul>
                         </li>
 
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-briefcase"></i>
+                        <!--<li class="nav-item has-treeview <?= currentCtrl('employeerequisition')?'menu-open':'' ?>">
+                            <a href="#" class="nav-link <?= currentCtrl('employeerequisition')?'active':'' ?>">
+                                <i class="nav-icon fas fa-briefcase " ></i>
                                 <p>
                                     Employee Requisitions
+                                    <i class="fas fa-angle-left right"></i>
+                                    <!--<span class="badge badge-info right">6</span>--
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>employeerequisition" class="nav-link <?= currentaction('employeerequisition','index')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>HR Requsitions List</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>employeerequisition/create?create=1" class="nav-link <?= currentaction('employeerequisition','create')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>Create HR Requsitions</p>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>-->
+
+                        <li class="nav-item has-treeview <?= currentCtrl('recruitment')?'menu-open':'' ?>">
+                            <a href="#" class="nav-link <?= currentCtrl('recruitment')?'active':'' ?>">
+                                <i class="nav-icon fas fa-briefcase " ></i>
+                                <p>
+                                    Employee Recruitment
                                     <i class="fas fa-angle-left right"></i>
                                     <!--<span class="badge badge-info right">6</span>-->
                                 </p>
@@ -261,14 +305,28 @@ $employee = Yii::$app->user->identity->employee[0];
                             <ul class="nav nav-treeview">
 
                                 <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>employeerequisition" class="nav-link">
+                                    <a href="<?= $absoluteUrl ?>recruitment/vacancies" class="nav-link <?= currentaction('recruitment','vacancies')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>Job Vacancies </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>applicantprofile/create" class="nav-link <?= currentaction('applicantprofile','create')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>Applicant Profile</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>employeerequisition" class="nav-link <?= currentaction('employeerequisition','index')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
                                         <p>HR Requsitions List</p>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>employeerequisition/create?create=1" class="nav-link">
+                                    <a href="<?= $absoluteUrl ?>employeerequisition/create?create=1" class="nav-link <?= currentaction('employeerequisition','create')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
                                         <p>Create HR Requsitions</p>
                                     </a>
@@ -277,11 +335,12 @@ $employee = Yii::$app->user->identity->employee[0];
 
 
 
+
                             </ul>
                         </li>
 
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
+                        <li class="nav-item has-treeview <?= currentCtrl('approvals')?'menu-open':'' ?>">
+                            <a href="#" class="nav-link <?= currentCtrl('approvals')?'active':'' ?>">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
                                     Approval Management
@@ -291,7 +350,7 @@ $employee = Yii::$app->user->identity->employee[0];
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>approvals" class="nav-link">
+                                    <a href="<?= $absoluteUrl ?>approvals" class="nav-link <?= currentaction('approvals','index')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
                                         <p>Approval Requests</p>
                                     </a>
@@ -376,4 +435,26 @@ $employee = Yii::$app->user->identity->employee[0];
 <?php $this->endBody() ?>
 </body>
 </html>
-<?php $this->endPage() ?>
+<?php $this->endPage();
+
+function currentCtrl($ctrl){
+    $controller = Yii::$app->controller->id;
+
+    if($controller == $ctrl ){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+function currentaction($ctrl,$actn){
+    $controller = Yii::$app->controller->id;
+    $action = Yii::$app->controller->action->id;
+    if($controller == $ctrl && $action == $actn){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+?>

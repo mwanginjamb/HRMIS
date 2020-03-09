@@ -63,7 +63,7 @@ $this->title = 'HRMIS - Approval Requests';
                                 <textarea class="form-control" name="comment" rows="4" placeholder="Enter your approval comment here.."></textarea>
                                 <br>
                                 <input type="hidden" name="documentNo" class="form-control">
-                                <input type="text" name="workflow" class="form-control">
+                                <input type="text" name="Record_ID_to_Approve" class="form-control">
                             </div>
                             <div class="card-footer">
                                 <div class="input-group">
@@ -156,10 +156,10 @@ $script = <<<JS
             e.preventDefault();
             
             var docno = $(this).attr('rel');
-            var workflowInstance = $(this).attr('rev');
+            var Record_ID_to_Approve = $(this).attr('rev');
             
             $('input[name=documentNo]').val(docno);
-            $('input[name=workflow]').val(workflowInstance);
+            $('input[name=Record_ID_to_Approve]').val(Record_ID_to_Approve);
             
     
             $('.modal').modal('show');                            

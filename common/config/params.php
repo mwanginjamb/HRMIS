@@ -29,6 +29,8 @@ return [
         'leaveApplicationCard' => 'leaveApplicationCard', //71075
         'leaveBalance' => 'leaveBalance',//71153
         'leaveTypes' => 'leaveTypes', //70045
+        'leaveRecallCard' => 'leaveRecallCard',//71076
+        'leaveRecallList' => 'leaveRecallList',//71077
 
         'Approvals' => 'Approvals', //654---------------duplicated
         'ApprovalComments' => 'ApprovalComments', //660
@@ -36,6 +38,24 @@ return [
         'RequisitionEmployeeList' => 'RequisitionEmployeeList',//70029
         'RequisitionEmployeeCard' => 'RequisitionEmployeeCard',//70028
         'JobsList' => 'JobsList',//70009
+        'JobsCard' => 'JobsCard',//70002
+        'JobApplicantProfile' => 'JobApplicantProfile', //50000
+        'applicantProfile' => 'applicantProfile',//50001
+        'referees' => 'referees',//55060
+        'applicantLanguages' => 'applicantLanguages', //55061
+        'experience' => 'experience', //55062
+        'hobbies' => 'hobbies', //55063
+        'qualifications' => 'qualifications',//55064
+        'JobResponsibilities' => 'JobResponsibilities',//69000
+        'JobRequirements' => 'JobRequirements', //69001
+        'JobExperience' => 'JobExperience',//69004
+
+        'Countries' => 'Countries', //10
+        'Religion' => 'Religion', //70085
+
+
+
+
 
 
 

@@ -30,11 +30,15 @@ class Employeerequsition extends Model
     public $Completion_Status;
     public $Any_Additional_Information;
     public $Reason_for_Request_Other;
+    public $Closing_Date;
+    public $Nature_of_Employment;
+    public $No_of_Job_Applications;
+    public $Advertised;
 
     public function rules()
     {
         return [
-            [['Job_ID','Reason_For_Request','Employment_Type','Priority','Required_Positions','Requisition_Type'],'required'],
+            [['Job_ID','Employment_Type','Required_Positions','Requisition_Type'],'required'],
         ];
     }
 
