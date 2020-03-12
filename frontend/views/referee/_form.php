@@ -58,7 +58,7 @@ use yii\widgets\ActiveForm;
                                     <?= $form->field($model, 'Key')->textInput(['readonly' => true]) ?>
                                 </tr>
                                 <tr>
-                                    <?= $form->field($model, 'Line_No')->textInput(['readonly' => true]) ?>
+                                    <?= $form->field($model, 'Line_No')->textInput(['readonly' => true,'disabled' => true]) ?>
                                 </tr>
                                 <tr>
                                     <?= $form->field($model, 'Application_No')->textInput(['readonly' => true]) ?>

@@ -93,19 +93,19 @@ class ApplicantprofileController extends Controller
         }
         $service = Yii::$app->params['ServiceName']['applicantProfile'];
 
-        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
+        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Applicantprofile'],$model)){
 
-            $result = Yii::$app->navhelper->postData($service,Yii::$app->request->post()['Applicantprofile']);
+            $result = Yii::$app->navhelper->postData($service,$model);
 
-            if(is_object($result)){
-
-                Yii::$app->session->setFlash('success','Leave request Created Successfully',true);
-                return $this->redirect(['view','ApplicationNo' => $result->Application_No]);
+            if(!is_string($result)){
+                Yii::$app->session->set('ProfileID', $result->No);
+                Yii::$app->session->setFlash('success','Applicant Profile Created Successfully',true);
+                return $this->redirect(['update','No' => $result->No]);
 
             }else{
 
-                Yii::$app->session->setFlash('error','Error Creating Leave request: '.$result,true);
-                return $this->redirect(['index']);
+                Yii::$app->session->setFlash('error','Error Creating Applicant Profile: '.$result,true);
+                return $this->redirect(['create']);
 
             }
 
@@ -125,44 +125,43 @@ class ApplicantprofileController extends Controller
     }
 
 
-    public function actionUpdate($ApplicationNo){
-        $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
-        $leaveTypes = $this->getLeaveTypes();
-        $employees = $this->getEmployees();
-
+    public function actionUpdate($No){
+        $service = Yii::$app->params['ServiceName']['applicantProfile'];
 
         $filter = [
-            'Application_No' => $ApplicationNo
+            'No' => $No,
         ];
         $result = Yii::$app->navhelper->getData($service, $filter);
 
-
-
         //load nav result to model
-        $leaveModel = new Leave();
+        $ProfileModel = new Applicantprofile();
 
-        $model = $this->loadtomodel($result[0],$leaveModel);
-
-
-
-        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
-            $result = Yii::$app->navhelper->updateData($model);
+        $model = $this->loadtomodel($result[0],$ProfileModel);
 
 
-            if(!empty($result)){
-                Yii::$app->session->setFlash('success','Leave request Updated Successfully',true);
-                return $this->redirect(['view','ApplicationNo' => $result->Application_No]);
+
+        if( Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Applicantprofile'],$model)){
+            $result = Yii::$app->navhelper->updateData($service,$model);
+
+
+            if(!is_string($result)){
+                Yii::$app->session->setFlash('success','Applicant Profile Updated Successfully',true);
+                return $this->redirect(['update','No' => $model->No]);
             }else{
-                Yii::$app->session->setFlash('error','Error Updating Leave Request : '.$result,true);
-                return $this->redirect(['index']);
+                Yii::$app->session->setFlash('error','Error Updating Applicant Profile  : '.$result,true);
+                //return $this->redirect(['index']);
+                return $this->redirect(['update','No' => $model->No]);
             }
 
         }
 
+        $Countries = $this->getCountries();
+        $Religion = $this->getReligion();
         return $this->render('update',[
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name')
+            'countries' => ArrayHelper::map($Countries,'Code','Name'),
+            'religion' => ArrayHelper::map($Religion,'Code','Description')
+
         ]);
     }
 
@@ -367,6 +366,19 @@ class ApplicantprofileController extends Controller
         $modeldata = (get_object_vars($obj)) ;
         foreach($modeldata as $key => $val){
             if(is_object($val)) continue;
+            $model->$key = $val;
+        }
+
+        return $model;
+    }
+
+    public function loadpost($post,$model){ // load model with form data
+
+
+        $modeldata = (get_object_vars($model)) ;
+
+        foreach($post as $key => $val){
+
             $model->$key = $val;
         }
 

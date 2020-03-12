@@ -21,7 +21,6 @@ $this->title = 'Update Referee';
 
     <?= $this->render('_form', [
         'model' => $model,
-       
     ]) ?>
 
 </div>

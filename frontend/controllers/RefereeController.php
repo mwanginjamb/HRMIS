@@ -7,6 +7,7 @@
  */
 
 namespace frontend\controllers;
+use frontend\models\Applicantprofile;
 use frontend\models\Referee;
 use Yii;
 use yii\filters\AccessControl;
@@ -71,25 +72,30 @@ class RefereeController extends Controller
         $model = new Referee();
         $service = Yii::$app->params['ServiceName']['referees'];
 
-        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
+        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Referee'],$model)){
+
+            $model->Application_No = Yii::$app->user->identity->employee[0]->No;//on live
 
 
-            $model->Job_Application_No = Yii::$app->user->identity->employee[0]->No;
+
             $result = Yii::$app->navhelper->postData($service,$model);
 
+
             if(is_object($result)){
-                print_r($result); exit;
-                Yii::$app->session->setFlash('success','Referee Added Successfully',true);
+                //store profile id in a session
+
+                Yii::$app->session->setFlash('success','Applicant Referee Added Successfully',true);
                 return $this->redirect(['index']);
 
             }else{
 
-                Yii::$app->session->setFlash('error','Error Creating Referee: '.$result,true);
+                Yii::$app->session->setFlash('error','Error Adding Applicant Referee : '.$result,true);
                 return $this->redirect(['index']);
 
             }
 
-        }//End Saving experience
+        }//End Saving Profile Gen data
+
 
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('create', [
@@ -100,13 +106,10 @@ class RefereeController extends Controller
         }
 
         return $this->render('create',[
-
             'model' => $model,
-
 
         ]);
     }
-
 
     public function actionUpdate(){
         $service = Yii::$app->params['ServiceName']['referees'];
@@ -114,17 +117,17 @@ class RefereeController extends Controller
             'Line_No' => Yii::$app->request->get('Line'),
         ];
         $result = Yii::$app->navhelper->getData($service,$filter);
-        $model = new Referee();
+        $Expmodel = new Referee();
         //load nav result to model
-        $model = $this->loadtomodel($result[0],$model);
+        $model = $this->loadtomodel($result[0],$Expmodel);
 
-        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
+        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Referee'],$model)){
             $result = Yii::$app->navhelper->updateData($service,$model);
-            if(!is_string($result)){
-                Yii::$app->session->setFlash('success','Referee Updated Successfully',true);
+            if(!empty($result)){
+                Yii::$app->session->setFlash('success','Qualification Updated Successfully',true);
                 return $this->redirect(['index']);
             }else{
-                Yii::$app->session->setFlash('error','Error Updating Referee: '.$result,true);
+                Yii::$app->session->setFlash('error','Error Updating Qualification : '.$result,true);
                 return $this->redirect(['index']);
             }
 
@@ -352,18 +355,27 @@ class RefereeController extends Controller
     }
 
     public function loadtomodel($obj,$model){
-var_dump($model);
+
         if(!is_object($obj)){
             return false;
         }
         $modeldata = (get_object_vars($obj)) ;
-
-       print '<pre>';
-        print_r($modeldata); exit;
         foreach($modeldata as $key => $val){
             if(is_object($val)) continue;
             $model->$key = $val;
+        }
 
+        return $model;
+    }
+
+    public function loadpost($post,$model){ // load model with form data
+
+
+        $modeldata = (get_object_vars($model)) ;
+
+        foreach($post as $key => $val){
+
+            $model->$key = $val;
         }
 
         return $model;

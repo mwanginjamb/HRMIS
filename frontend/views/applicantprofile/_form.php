@@ -31,34 +31,20 @@ use yii\widgets\ActiveForm;
 
 <!--END THE STEPS THING--->
 
-<?php
 
-
-if(Yii::$app->session->hasFlash('success')){
-    print ' <div class="alert alert-success alert-dismissable">
-                                 ';
-    echo Yii::$app->session->getFlash('success');
-    print '</div>';
-}else if(Yii::$app->session->hasFlash('error')){
-    print ' <div class="alert alert-danger alert-dismissable">
-                                 ';
-    echo Yii::$app->session->getFlash('success');
-    print '</div>';
-}
-?>
 <div class="row">
     <div class="col-md-12">
-        <?php $form = ActiveForm::begin(['action'=> ['leave/create']]); ?>
+        <?php $form = ActiveForm::begin(); ?>
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">General Details</h3>
+                <h3 class="card-title">General Details : <?= Yii::$app->session->has('ProfileID')? Yii::$app->session->get('ProfileID'): '' ?></h3>
             </div>
             <div class="card-body">
 
                 <div class="row">
                     <div class=" row col-md-12">
                         <div class="col-md-6">
-                            <?= $form->field($model, 'No')->textInput(['readonly'=> true]) ?>
+                            <?= $form->field($model, 'No')->textInput(['readonly'=> true,'disabled' => true]) ?>
                             <?= $form->field($model, 'First_Name')->textInput() ?>
                             <?= $form->field($model, 'Middle_Name')->textInput() ?>
                             <?= $form->field($model, 'Last_Name')->textInput() ?>
@@ -72,7 +58,7 @@ if(Yii::$app->session->hasFlash('success')){
                             <?= $form->field($model, 'ID_Number')->textInput() ?>
                             <?= $form->field($model, 'Gender')->textInput() ?>
                             <?= $form->field($model, 'Date_Of_Birth')->textInput(['type'=> 'date']) ?>
-                            <?= $form->field($model, 'Age')->textInput(['type'=> 'Number']) ?>
+                            <?= $form->field($model, 'Age')->textInput(['type'=> 'Number','readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Known_As')->textInput() ?>
                             <?= $form->field($model, 'Marital_Status')->textInput() ?>
                             <?= $form->field($model, 'Ethnic_Origin')->dropDownList(['African' => 'African', 'Indian' => 'Indian', 'White' => 'White', 'Coloured' => 'Coloured','usa' => 'American' ], ['prompt' => 'Select Ethnic Origin..']) ?>
@@ -161,6 +147,15 @@ if(Yii::$app->session->hasFlash('success')){
 
                         </div>
                     </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="form-group">
+                        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+                    </div>
+
+
                 </div>
 
 

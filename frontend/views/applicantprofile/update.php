@@ -12,19 +12,41 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\AgendaDocument */
 
-$this->title = 'Update Leave: ' . $model->Application_No;
+$this->title = 'Update Applicant: ' . $model->No;
 $this->params['breadcrumbs'][] = ['label' => 'Update Leave', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->Application_No, 'url' => ['view', 'id' => $model->Application_No]];
+$this->params['breadcrumbs'][] = ['label' => $model->No, 'url' => ['view', 'id' => $model->No]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="agenda-document-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="row">
+        <div class="col-md-12">
+
+
+                    <?php
+
+                    if(Yii::$app->session->hasFlash('success')){
+                        print ' <div class="alert alert-success alert-dismissable">';
+                        echo Yii::$app->session->getFlash('success');
+                        print '</div>';
+                    }else if(Yii::$app->session->hasFlash('error')){
+                        print ' <div class="alert alert-danger alert-dismissable">
+                                            ';
+                        echo Yii::$app->session->getFlash('error');
+                        print '</div>';
+                    }
+                    ?>
+
+
+        </div>
+    </div>
+
+
 
     <?= $this->render('_form', [
         'model' => $model,
-        'leaveTypes' => $leaveTypes,
-        'relievers' => $relievers
+        'countries' => $countries,
+        'religion' => $religion
     ]) ?>
 
 </div>

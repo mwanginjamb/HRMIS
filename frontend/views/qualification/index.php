@@ -101,8 +101,7 @@ $script = <<<JS
         var absolute = $('input[name=absolute]').val();
          /*Data Tables*/
          
-         $.fn.dataTable.ext.errMode = 'throw';
-        
+         $.fn.dataTable.ext.errMode = 'throw';        
     
           $('#leaves').DataTable({
            
