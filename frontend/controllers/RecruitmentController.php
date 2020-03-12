@@ -9,6 +9,8 @@
 
 namespace frontend\controllers;
 
+use common\models\HrloginForm;
+use common\models\SignupForm;
 use frontend\models\Employeerequisition;
 use frontend\models\Employeerequsition;
 use frontend\models\Job;
@@ -290,6 +292,49 @@ class RecruitmentController extends Controller
     }
 
 
+
+    /**
+     * Logs in a user.
+     *
+     * @return mixed
+     */
+    public function actionLogin()
+    {
+        $this->layout = 'login';
+
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new HrloginForm();
+
+
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+
+            return $this->goBack();//reroute to recruitment profile page
+
+        } else {
+            $model->password = '';
+
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionSignup()
+    {
+        $this->layout = 'login';
+        $model = new SignupForm(); //This signup form in common is for registering external hrusers
+        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+            return $this->goHome();//redirect to recruitment profile page
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
+    }
 
 
     public function loadtomodel($obj,$model){

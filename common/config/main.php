@@ -39,6 +39,9 @@ return [
         'navhelper' => [
             'class' => 'common\Library\Navhelper',
         ],
+        'recruitment' => [
+            'class' => 'common\Library\Recruitment'
+        ],
         'pdf' => [
             'class' => Pdf::classname(),
             'mode' => Pdf::MODE_CORE,

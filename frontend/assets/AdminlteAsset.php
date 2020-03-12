@@ -36,6 +36,7 @@ class AdminlteAsset extends AssetBundle
         'https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css',
         'css/plugins/timepicker/bootstrap-timepicker.css',
         'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css',
+        'css/steps.css'
 
     ];
     public $js = [

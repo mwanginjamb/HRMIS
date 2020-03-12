@@ -2,13 +2,12 @@
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
- * Date: 2/22/2020
- * Time: 2:53 PM
+ * Date: 3/9/2020
+ * Time: 4:21 PM
  */
 
 namespace frontend\controllers;
-
-use frontend\models\Applicantprofile;
+use frontend\models\Referee;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\ContentNegotiator;
@@ -22,9 +21,8 @@ use frontend\models\Leave;
 use yii\web\Response;
 use kartik\mpdf\Pdf;
 
-class ApplicantprofileController extends Controller
+class RefereeController extends Controller
 {
-
     public function behaviors()
     {
         return [
@@ -52,7 +50,7 @@ class ApplicantprofileController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getleaves'],
+                'only' => ['getreferee'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -64,106 +62,97 @@ class ApplicantprofileController extends Controller
 
     public function actionIndex(){
 
-
         return $this->render('index');
 
     }
 
     public function actionCreate(){
 
-        $model = new Applicantprofile();
-
-        if(!Yii::$app->user->isGuest){//If it's an employee making an application , populate profile form with their employee data where relevant
-            $model->First_Name = Yii::$app->user->identity->employee[0]->First_Name;
-            $model->Middle_Name = !empty(Yii::$app->user->identity->employee[0]->Middle_Name)?Yii::$app->user->identity->employee[0]->Middle_Name:'';
-            $model->Last_Name = Yii::$app->user->identity->employee[0]->Last_Name;
-            $model->Age = !empty(Yii::$app->user->identity->employee[0]->DAge)?Yii::$app->user->identity->employee[0]->DAge:'';
-            $model->Gender = !empty(Yii::$app->user->identity->employee[0]->Gender)?Yii::$app->user->identity->employee[0]->Gender:'';
-            $model->Marital_Status = !empty(Yii::$app->user->identity->employee[0]->Marital_Status)?Yii::$app->user->identity->employee[0]->Marital_Status:'';
-            $model->Citizenship = !empty(Yii::$app->user->identity->employee[0]->Citizenship)?Yii::$app->user->identity->employee[0]->Citizenship:'';
-            $model->E_Mail = !empty(Yii::$app->user->identity->employee[0]->E_Mail)?Yii::$app->user->identity->employee[0]->E_Mail:'';
-            $model->Postal_Address = !empty(Yii::$app->user->identity->employee[0]->Postal_Address)?Yii::$app->user->identity->employee[0]->Postal_Address:'';
-            $model->Post_Code = !empty(Yii::$app->user->identity->employee[0]->Post_Code)?Yii::$app->user->identity->employee[0]->Post_Code:'';
-            $model->NSSF_No = !empty(Yii::$app->user->identity->employee[0]->NSSF_No)?Yii::$app->user->identity->employee[0]->NSSF_No:'';
-            $model->NHIF_No = !empty(Yii::$app->user->identity->employee[0]->NHIF_No)?Yii::$app->user->identity->employee[0]->NHIF_No:'';
-            $model->NHIF_No = !empty(Yii::$app->user->identity->employee[0]->NHIF_No)?Yii::$app->user->identity->employee[0]->NHIF_No:'';
-            $model->HELB_No = !empty(Yii::$app->user->identity->employee[0]->HELB_No)?Yii::$app->user->identity->employee[0]->HELB_No:'';
-            $model->Union_Member_x003F_ = !empty(Yii::$app->user->identity->employee[0]->Union_Member_x003F_)?Yii::$app->user->identity->employee[0]->Union_Member_x003F_:'';
-
-        }
-        $service = Yii::$app->params['ServiceName']['applicantProfile'];
+        $model = new Referee();
+        $service = Yii::$app->params['ServiceName']['referees'];
 
         if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
 
-            $result = Yii::$app->navhelper->postData($service,Yii::$app->request->post()['Applicantprofile']);
+
+            $model->Job_Application_No = Yii::$app->user->identity->employee[0]->No;
+            $result = Yii::$app->navhelper->postData($service,$model);
 
             if(is_object($result)){
-
-                Yii::$app->session->setFlash('success','Leave request Created Successfully',true);
-                return $this->redirect(['view','ApplicationNo' => $result->Application_No]);
+                print_r($result); exit;
+                Yii::$app->session->setFlash('success','Referee Added Successfully',true);
+                return $this->redirect(['index']);
 
             }else{
 
-                Yii::$app->session->setFlash('error','Error Creating Leave request: '.$result,true);
+                Yii::$app->session->setFlash('error','Error Creating Referee: '.$result,true);
                 return $this->redirect(['index']);
 
             }
 
+        }//End Saving experience
+
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('create', [
+                'model' => $model,
+
+
+            ]);
         }
-
-
-        $Countries = $this->getCountries();
-        $Religion = $this->getReligion();
 
         return $this->render('create',[
 
             'model' => $model,
-            'countries' => ArrayHelper::map($Countries,'Code','Name'),
-            'religion' => ArrayHelper::map($Religion,'Code','Description')
+
 
         ]);
     }
 
 
-    public function actionUpdate($ApplicationNo){
-        $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
-        $leaveTypes = $this->getLeaveTypes();
-        $employees = $this->getEmployees();
-
-
+    public function actionUpdate(){
+        $service = Yii::$app->params['ServiceName']['referees'];
         $filter = [
-            'Application_No' => $ApplicationNo
+            'Line_No' => Yii::$app->request->get('Line'),
         ];
-        $result = Yii::$app->navhelper->getData($service, $filter);
-
-
-
+        $result = Yii::$app->navhelper->getData($service,$filter);
+        $model = new Referee();
         //load nav result to model
-        $leaveModel = new Leave();
-
-        $model = $this->loadtomodel($result[0],$leaveModel);
-
-
+        $model = $this->loadtomodel($result[0],$model);
 
         if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
-            $result = Yii::$app->navhelper->updateData($model);
-
-
-            if(!empty($result)){
-                Yii::$app->session->setFlash('success','Leave request Updated Successfully',true);
-                return $this->redirect(['view','ApplicationNo' => $result->Application_No]);
+            $result = Yii::$app->navhelper->updateData($service,$model);
+            if(!is_string($result)){
+                Yii::$app->session->setFlash('success','Referee Updated Successfully',true);
+                return $this->redirect(['index']);
             }else{
-                Yii::$app->session->setFlash('error','Error Updating Leave Request : '.$result,true);
+                Yii::$app->session->setFlash('error','Error Updating Referee: '.$result,true);
                 return $this->redirect(['index']);
             }
 
         }
 
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('update', [
+                'model' => $model,
+
+            ]);
+        }
+
         return $this->render('update',[
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name')
+
         ]);
+    }
+
+    public function actionDelete(){
+        $service = Yii::$app->params['ServiceName']['referees'];
+        $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
+        if(!is_string($result)){
+            Yii::$app->session->setFlash('success','Referee Purged Successfully .',true);
+            return $this->redirect(['index']);
+        }else{
+            Yii::$app->session->setFlash('error','Error Purging Referee: '.$result,true);
+            return $this->redirect(['index']);
+        }
     }
 
     public function actionView($ApplicationNo){
@@ -230,45 +219,48 @@ class ApplicantprofileController extends Controller
 
     }
 
-    public function actionGetleaves(){
-        $service = Yii::$app->params['ServiceName']['leaveApplicationList'];
-        $leaves = \Yii::$app->navhelper->getData($service);
+    public function actionGetreferee(){
+        $service = Yii::$app->params['ServiceName']['referees'];
+        $referees = \Yii::$app->navhelper->getData($service);
 
         $result = [];
-        foreach($leaves as $leave){
+        $count = 0;
+        foreach($referees as $ref){
+            if(!empty($ref->Line_No)){
+                ++$count;
+                $link = $updateLink =  '';
 
 
-            $link = $updateLink =  '';
-            $Viewlink = Html::a('Details',['view','ApplicationNo'=> $leave->Application_No ],['class'=>'btn btn-outline-primary btn-xs']);
-            if($leave->Approval_Status == 'New' ){
-                $link = Html::a('Send Approval Request',['approval-request','app'=> $leave->Application_No ],['class'=>'btn btn-primary btn-xs']);
-                $updateLink = Html::a('Update Leave',['update','ApplicationNo'=> $leave->Application_No ],['class'=>'btn btn-info btn-xs']);
-            }else if($leave->Approval_Status == 'Approval_Pending'){
-                $link = Html::a('Cancel Approval Request',['cancel-request','app'=> $leave->Application_No ],['class'=>'btn btn-warning btn-xs']);
+                $updateLink = Html::a('Update Referee',['update','Line'=> $ref->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
+
+                $link = Html::a('Remove Referee',['delete','Key'=> $ref->Key ],['class'=>'btn btn-outline-warning btn-xs']);
+
+
+
+
+                $result['data'][] = [
+                    'index' => $count,
+                    'Key' => $ref->Key,
+                    'Application_No' => !empty($ref->Application_No)?$ref->Application_No:'',
+                    'First_Name' => !empty($ref->First_Name)?$ref->First_Name:'',
+                    'Middle_Name' => !empty($ref->Middle_Name)? $ref->Middle_Name : '',
+                    'Last_Name' => !empty($ref->Last_Name)? $ref->Last_Name: '',
+                    'Instituition' => !empty($ref->Instituition)? $ref->Instituition: '',
+                    'Position' => !empty($ref->Position)? $ref->Position: '',
+                    'Email' => !empty($ref->Email)? $ref->Email: '',
+                    'Phone_No' => !empty($ref->Phone_No)? $ref->Phone_No: '',
+                    'Update_Action' => $updateLink,
+                    'Remove' => $link
+                ];
             }
 
-
-
-            $result['data'][] = [
-                'Key' => $leave->Key,
-                'Employee_No' => !empty($leave->Employee_No)?$leave->Employee_No:'',
-                'Employee_Name' => !empty($leave->Employee_Name)?$leave->Employee_Name:'',
-                'Application_No' => $leave->Application_No,
-                'Days_Applied' => $leave->Days_Applied,
-                'Application_Date' => $leave->Application_Date,
-                'Approval_Status' => $leave->Approval_Status,
-                'Leave_Status' => $leave->Leave_Status,
-                'Action' => $link,
-                'Update_Action' => $updateLink,
-                'view' => $Viewlink
-            ];
         }
 
         return $result;
     }
 
     public function actionReport(){
-        $service = Yii::$app->params['ServiceName']['leaveApplicationList'];
+        $service = Yii::$app->params['ServiceName']['expApplicationList'];
         $leaves = \Yii::$app->navhelper->getData($service);
         krsort( $leaves);//sort by keys in descending order
         $content = $this->renderPartial('_historyreport',[
@@ -341,10 +333,10 @@ class ApplicantprofileController extends Controller
         $countries = \Yii::$app->navhelper->getData($service);
         foreach($countries as $c){
             if(!empty($c->Name))
-            $res[] = [
-                'Code' => $c->Code,
-                'Name' => $c->Name
-            ];
+                $res[] = [
+                    'Code' => $c->Code,
+                    'Name' => $c->Name
+                ];
         }
 
         return $res;
@@ -360,17 +352,20 @@ class ApplicantprofileController extends Controller
     }
 
     public function loadtomodel($obj,$model){
-
+var_dump($model);
         if(!is_object($obj)){
             return false;
         }
         $modeldata = (get_object_vars($obj)) ;
+
+       print '<pre>';
+        print_r($modeldata); exit;
         foreach($modeldata as $key => $val){
             if(is_object($val)) continue;
             $model->$key = $val;
+
         }
 
         return $model;
     }
-
 }

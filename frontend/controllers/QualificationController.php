@@ -2,13 +2,11 @@
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
- * Date: 2/22/2020
- * Time: 2:53 PM
+ * Date: 3/9/2020
+ * Time: 4:21 PM
  */
 
 namespace frontend\controllers;
-
-use frontend\models\Applicantprofile;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\ContentNegotiator;
@@ -18,13 +16,12 @@ use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\BadRequestHttpException;
 
-use frontend\models\Leave;
+use frontend\models\Qualification;
 use yii\web\Response;
 use kartik\mpdf\Pdf;
 
-class ApplicantprofileController extends Controller
+class QualificationController extends Controller
 {
-
     public function behaviors()
     {
         return [
@@ -52,7 +49,7 @@ class ApplicantprofileController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getleaves'],
+                'only' => ['getqualifications'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -64,7 +61,6 @@ class ApplicantprofileController extends Controller
 
     public function actionIndex(){
 
-
         return $this->render('index');
 
     }
@@ -72,25 +68,6 @@ class ApplicantprofileController extends Controller
     public function actionCreate(){
 
         $model = new Applicantprofile();
-
-        if(!Yii::$app->user->isGuest){//If it's an employee making an application , populate profile form with their employee data where relevant
-            $model->First_Name = Yii::$app->user->identity->employee[0]->First_Name;
-            $model->Middle_Name = !empty(Yii::$app->user->identity->employee[0]->Middle_Name)?Yii::$app->user->identity->employee[0]->Middle_Name:'';
-            $model->Last_Name = Yii::$app->user->identity->employee[0]->Last_Name;
-            $model->Age = !empty(Yii::$app->user->identity->employee[0]->DAge)?Yii::$app->user->identity->employee[0]->DAge:'';
-            $model->Gender = !empty(Yii::$app->user->identity->employee[0]->Gender)?Yii::$app->user->identity->employee[0]->Gender:'';
-            $model->Marital_Status = !empty(Yii::$app->user->identity->employee[0]->Marital_Status)?Yii::$app->user->identity->employee[0]->Marital_Status:'';
-            $model->Citizenship = !empty(Yii::$app->user->identity->employee[0]->Citizenship)?Yii::$app->user->identity->employee[0]->Citizenship:'';
-            $model->E_Mail = !empty(Yii::$app->user->identity->employee[0]->E_Mail)?Yii::$app->user->identity->employee[0]->E_Mail:'';
-            $model->Postal_Address = !empty(Yii::$app->user->identity->employee[0]->Postal_Address)?Yii::$app->user->identity->employee[0]->Postal_Address:'';
-            $model->Post_Code = !empty(Yii::$app->user->identity->employee[0]->Post_Code)?Yii::$app->user->identity->employee[0]->Post_Code:'';
-            $model->NSSF_No = !empty(Yii::$app->user->identity->employee[0]->NSSF_No)?Yii::$app->user->identity->employee[0]->NSSF_No:'';
-            $model->NHIF_No = !empty(Yii::$app->user->identity->employee[0]->NHIF_No)?Yii::$app->user->identity->employee[0]->NHIF_No:'';
-            $model->NHIF_No = !empty(Yii::$app->user->identity->employee[0]->NHIF_No)?Yii::$app->user->identity->employee[0]->NHIF_No:'';
-            $model->HELB_No = !empty(Yii::$app->user->identity->employee[0]->HELB_No)?Yii::$app->user->identity->employee[0]->HELB_No:'';
-            $model->Union_Member_x003F_ = !empty(Yii::$app->user->identity->employee[0]->Union_Member_x003F_)?Yii::$app->user->identity->employee[0]->Union_Member_x003F_:'';
-
-        }
         $service = Yii::$app->params['ServiceName']['applicantProfile'];
 
         if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
@@ -230,37 +207,36 @@ class ApplicantprofileController extends Controller
 
     }
 
-    public function actionGetleaves(){
-        $service = Yii::$app->params['ServiceName']['leaveApplicationList'];
-        $leaves = \Yii::$app->navhelper->getData($service);
+    public function actionGetqualifications(){
+        $service = Yii::$app->params['ServiceName']['qualifications'];
+        $qualifications = \Yii::$app->navhelper->getData($service);
 
         $result = [];
-        foreach($leaves as $leave){
+        $count = 0;
+        foreach($qualifications as $quali){
 
-
+            ++$count;
             $link = $updateLink =  '';
-            $Viewlink = Html::a('Details',['view','ApplicationNo'=> $leave->Application_No ],['class'=>'btn btn-outline-primary btn-xs']);
-            if($leave->Approval_Status == 'New' ){
-                $link = Html::a('Send Approval Request',['approval-request','app'=> $leave->Application_No ],['class'=>'btn btn-primary btn-xs']);
-                $updateLink = Html::a('Update Leave',['update','ApplicationNo'=> $leave->Application_No ],['class'=>'btn btn-info btn-xs']);
-            }else if($leave->Approval_Status == 'Approval_Pending'){
-                $link = Html::a('Cancel Approval Request',['cancel-request','app'=> $leave->Application_No ],['class'=>'btn btn-warning btn-xs']);
-            }
 
+
+            $updateLink = Html::a('Update Qualification',['update','Key'=> $quali->Key ],['class'=>'btn btn-outline-info btn-xs']);
+
+            $link = Html::a('Remove Qualification',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs']);
 
 
             $result['data'][] = [
-                'Key' => $leave->Key,
-                'Employee_No' => !empty($leave->Employee_No)?$leave->Employee_No:'',
-                'Employee_Name' => !empty($leave->Employee_Name)?$leave->Employee_Name:'',
-                'Application_No' => $leave->Application_No,
-                'Days_Applied' => $leave->Days_Applied,
-                'Application_Date' => $leave->Application_Date,
-                'Approval_Status' => $leave->Approval_Status,
-                'Leave_Status' => $leave->Leave_Status,
-                'Action' => $link,
+                'index' => $count,
+                'Key' => $quali->Key,
+                'Employee_No' => !empty($quali->Employee_No)?$quali->Employee_No:'',
+                'Qualification_Code' => !empty($quali->Qualification_Code)?$quali->Qualification_Code:'',
+                'From_Date' => !empty($quali->From_Date)?$quali->From_Date:'',
+                'To_Date' => !empty($quali->To_Date)?$quali->To_Date:'',
+                'Description' => !empty($quali->Description)?$quali->Description:'',
+                'Institution_Company' => !empty($quali->Institution_Company)?$quali->Institution_Company:'',
+                //'Comment' => !empty($quali->Comment)?$quali->Comment:'',
+
                 'Update_Action' => $updateLink,
-                'view' => $Viewlink
+                'Remove' => $link
             ];
         }
 
@@ -268,7 +244,7 @@ class ApplicantprofileController extends Controller
     }
 
     public function actionReport(){
-        $service = Yii::$app->params['ServiceName']['leaveApplicationList'];
+        $service = Yii::$app->params['ServiceName']['expApplicationList'];
         $leaves = \Yii::$app->navhelper->getData($service);
         krsort( $leaves);//sort by keys in descending order
         $content = $this->renderPartial('_historyreport',[
@@ -341,10 +317,10 @@ class ApplicantprofileController extends Controller
         $countries = \Yii::$app->navhelper->getData($service);
         foreach($countries as $c){
             if(!empty($c->Name))
-            $res[] = [
-                'Code' => $c->Code,
-                'Name' => $c->Name
-            ];
+                $res[] = [
+                    'Code' => $c->Code,
+                    'Name' => $c->Name
+                ];
         }
 
         return $res;
@@ -372,5 +348,4 @@ class ApplicantprofileController extends Controller
 
         return $model;
     }
-
 }

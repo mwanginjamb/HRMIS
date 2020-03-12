@@ -14,85 +14,7 @@ exit;*/
     <div class="container-fluid">
 
 
-        <!-- Info boxes -->
-        <div class="row">
-            <div class="col-12 col-sm-6 col-md-3">
 
-                <div class="info-box">
-                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-briefcase"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">New Jobs Vacancies</span>
-                        <span class="info-box-number">
-                  10
-                  <small></small>
-                </span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-
-
-
-                <div class="info-box">
-                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Pending Approvals</span>
-                        <span class="info-box-number">
-                  10
-                  <small>%</small>
-                </span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-thumbs-up"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Approved</span>
-                        <span class="info-box-number">41,410</span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-
-            <!-- fix for small devices only -->
-            <div class="clearfix hidden-md-up"></div>
-
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-times"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Rejected Approvals</span>
-                        <span class="info-box-number">760</span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="info-box mb-3">
-                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">Staff Count</span>
-                        <span class="info-box-number">2,000</span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
 
 
 
@@ -178,6 +100,129 @@ exit;*/
 
 
             <div class="col-md-9">
+
+
+
+                <!-- Info boxes -->
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-3">
+
+                        <div class="info-box">
+                            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-briefcase"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">New Jobs Vacancies</span>
+                                <span class="info-box-number">
+                  10
+                  <small></small>
+                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+
+
+
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Pending Approvals</span>
+                                <span class="info-box-number">
+                  10
+                  <small>%</small>
+                </span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-thumbs-up"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Approved</span>
+                                <span class="info-box-number">41,410</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+
+                    <!-- fix for small devices only -->
+                    <div class="clearfix hidden-md-up"></div>
+
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-times"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Rejected Approvals</span>
+                                <span class="info-box-number">760</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+
+
+                    <!-- /.col -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Staff Count</span>
+                                <span class="info-box-number">2,000</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+
+
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+
+                    <!-- /.col -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Super Approvals</span>
+                                <span class="info-box-number">2,000</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+
+                    <!-- /.col -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Super Rejections</span>
+                                <span class="info-box-number">2,000</span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+
+
+                </div>
+
+
                 <div class="card">
                     <div class="card-header p-2">
                         <h3 class="card-title">Employes on Leave</h3>

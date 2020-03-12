@@ -63,7 +63,8 @@ public $Picture;
     public function attributeLabels()
     {
         return [
-            'Union_Member_x003F_' => 'Union Member ?'
+            'Union_Member_x003F_' => 'Union Member ?',
+            'Known_As' => 'Alias'
         ];
     }
 }

@@ -13,7 +13,23 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 //$this->title = 'AAS - Employee Profile'
 ?>
-<h2 class="title">Employee : <?= $model->No.' - '. $model->First_Name. ' '. $model->Last_Name?></h2>
+
+
+
+<!--THE STEPS THING--->
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Applicant : <?= $model->No.' - '. $model->First_Name. ' '. $model->Last_Name?></h2>
+            </div>
+        </div>
+               <?= $this->render('_steps') ?>
+    </div>
+</div>
+
+<!--END THE STEPS THING--->
 
 <?php
 
@@ -137,7 +153,7 @@ if(Yii::$app->session->hasFlash('success')){
 
                         </div>
                         <div class="col-md-6">
-
+                            <?= $form->field($model,'Key')->hiddenInput()->label('...') ?>
                             <?= $form->field($model, 'Tribe')->textInput() ?>
                             <?= $form->field($model, 'Religion')->dropDownList($religion,['prompt' => 'Select Religion']) ?>
                             <?= $form->field($model, 'Post_Office_No')->textInput() ?>

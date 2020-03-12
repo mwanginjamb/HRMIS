@@ -20,7 +20,7 @@ AdminlteAsset::register($this);
 
 $webroot = Yii::getAlias(@$webroot);
 $absoluteUrl = \yii\helpers\Url::home(true);
-$employee = Yii::$app->user->identity->employee[0];
+$employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[];
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -447,7 +447,7 @@ function currentCtrl($ctrl){
     }
 }
 
-function currentaction($ctrl,$actn){
+function currentaction($ctrl,$actn){//modify it to accept an array of controllers as an argument--> later please
     $controller = Yii::$app->controller->id;
     $action = Yii::$app->controller->action->id;
     if($controller == $ctrl && $action == $actn){

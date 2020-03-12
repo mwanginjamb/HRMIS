@@ -10,22 +10,23 @@ namespace frontend\models;
 use yii\base\Model;
 
 
-class Experience extends Model
+class Referee extends Model
 {
-    public $Job_Application_No;
-    public $Position;
-    public $Job_Description;
-    public $Institution;
-    public $Period;
-    public $From_Date;
-    public $To_Date;
     public $Key;
+    public $Application_No;
+    public $First_Name;
+    public $Middle_Name;
+    public $Last_Name;
+    public $Instituition;
+    public $Position;
+    public $Email;
+    public $Phone_No;
     public $Line_No;
 
     public function rules()
     {
         return [
-            [['From_Date','Institution','Position','Job_Description'],'required'],
+
         ];
     }
 

@@ -34,6 +34,7 @@ return [
 
         'Approvals' => 'Approvals', //654---------------duplicated
         'ApprovalComments' => 'ApprovalComments', //660
+        'RejectedApprovalEntries' => 'RejectedApprovalEntries', //50003
 
         'RequisitionEmployeeList' => 'RequisitionEmployeeList',//70029
         'RequisitionEmployeeCard' => 'RequisitionEmployeeCard',//70028
