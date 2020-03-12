@@ -15,6 +15,7 @@ class Hobby extends Model
     public $Key;
     public $Job_Application_No;
     public $Hobby_Description;
+    public $Line_No;
 
 
     public function rules()

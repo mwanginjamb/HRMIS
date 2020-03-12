@@ -20,6 +20,8 @@ class Qualification extends Model
     public $Description;
     public $Institution_Company;
     public $Comment;
+    public $Line_No;
+    public $Attachement_path;
 
 
 

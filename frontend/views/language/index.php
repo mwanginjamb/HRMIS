@@ -134,34 +134,34 @@ $script = <<<JS
       table.columns([0]).visible(false);
     
     /*End Data tables*/
-         $('#leaves').on('click','.update', function(e){
-             e.preventDefault();
+             $('#leaves').on('click','.update', function(e){
+                 e.preventDefault();
+                var url = $(this).attr('href');
+                console.log('clicking...');
+                $('.modal').modal('show')
+                                .find('.modal-body')
+                                .load(url); 
+    
+            });
+            
+            
+           //Add an experience
+        
+         $('.create').on('click',function(e){
+            e.preventDefault();
             var url = $(this).attr('href');
             console.log('clicking...');
             $('.modal').modal('show')
                             .find('.modal-body')
                             .load(url); 
-
+    
+         });
+        
+        /*Handle dismissal eveent of modal */
+        $('.modal').on('hidden.bs.modal',function(){
+            var reld = location.reload(true);
+            setTimeout(reld,1000);
         });
-        
-        
-       //Add an experience
-    
-     $('.create').on('click',function(e){
-        e.preventDefault();
-        var url = $(this).attr('href');
-        console.log('clicking...');
-        $('.modal').modal('show')
-                        .find('.modal-body')
-                        .load(url); 
-
-     });
-    
-    /*Handle dismissal eveent of modal */
-    $('.modal').on('hidden.bs.modal',function(){
-        var reld = location.reload(true);
-        setTimeout(reld,1000);
-    });
     });
         
 JS;

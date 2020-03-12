@@ -50,6 +50,7 @@ return [
         'JobResponsibilities' => 'JobResponsibilities',//69000
         'JobRequirements' => 'JobRequirements', //69001
         'JobExperience' => 'JobExperience',//69004
+        'HRqualifications' => 'HRqualifications',
 
         'Countries' => 'Countries', //10
         'Religion' => 'Religion', //70085

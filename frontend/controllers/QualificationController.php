@@ -65,82 +65,95 @@ class QualificationController extends Controller
 
     }
 
+
     public function actionCreate(){
 
-        $model = new Applicantprofile();
-        $service = Yii::$app->params['ServiceName']['applicantProfile'];
+        $model = new Qualification();
+        $service = Yii::$app->params['ServiceName']['qualifications'];
 
-        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
+        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
 
-            $result = Yii::$app->navhelper->postData($service,Yii::$app->request->post()['Applicantprofile']);
+            $model->Employee_No = Yii::$app->user->identity->employee[0]->No;
+
+            $result = Yii::$app->navhelper->postData($service,$model);
 
             if(is_object($result)){
 
-                Yii::$app->session->setFlash('success','Leave request Created Successfully',true);
-                return $this->redirect(['view','ApplicationNo' => $result->Application_No]);
+                Yii::$app->session->setFlash('success','Qualification Added Successfully',true);
+                return $this->redirect(['index']);
 
             }else{
 
-                Yii::$app->session->setFlash('error','Error Creating Leave request: '.$result,true);
+                Yii::$app->session->setFlash('error','Error Adding Qualification: '.$result,true);
                 return $this->redirect(['index']);
 
             }
 
+        }//End Saving experience
+
+        $qualificationsList = $this->getQualificationsList();
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('create', [
+                'model' => $model,
+                'qualifications' => ArrayHelper::map($qualificationsList,'Code','Description')
+
+            ]);
         }
-
-
-        $Countries = $this->getCountries();
-        $Religion = $this->getReligion();
 
         return $this->render('create',[
 
             'model' => $model,
-            'countries' => ArrayHelper::map($Countries,'Code','Name'),
-            'religion' => ArrayHelper::map($Religion,'Code','Description')
+
 
         ]);
     }
 
-
-    public function actionUpdate($ApplicationNo){
-        $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
-        $leaveTypes = $this->getLeaveTypes();
-        $employees = $this->getEmployees();
-
-
+    public function actionUpdate(){
+        $service = Yii::$app->params['ServiceName']['qualifications'];
         $filter = [
-            'Application_No' => $ApplicationNo
+            'Line_No' => Yii::$app->request->get('Line'),
         ];
-        $result = Yii::$app->navhelper->getData($service, $filter);
-
-
-
+        $result = Yii::$app->navhelper->getData($service,$filter);
+        $Expmodel = new Qualification();
         //load nav result to model
-        $leaveModel = new Leave();
+        $model = $this->loadtomodel($result[0],$Expmodel);
 
-        $model = $this->loadtomodel($result[0],$leaveModel);
-
-
-
-        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
-            $result = Yii::$app->navhelper->updateData($model);
-
-
+        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
+            $result = Yii::$app->navhelper->updateData($service,$model);
             if(!empty($result)){
-                Yii::$app->session->setFlash('success','Leave request Updated Successfully',true);
-                return $this->redirect(['view','ApplicationNo' => $result->Application_No]);
+                Yii::$app->session->setFlash('success','Qualification Updated Successfully',true);
+                return $this->redirect(['index']);
             }else{
-                Yii::$app->session->setFlash('error','Error Updating Leave Request : '.$result,true);
+                Yii::$app->session->setFlash('error','Error Updating Qualification : '.$result,true);
                 return $this->redirect(['index']);
             }
 
         }
+        $qualificationsList = $this->getQualificationsList();
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('update', [
+                'model' => $model,
+                'qualifications' => ArrayHelper::map($qualificationsList,'Code','Description')
+
+            ]);
+        }
 
         return $this->render('update',[
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name')
+
         ]);
+    }
+
+    public function actionDelete(){
+        $service = Yii::$app->params['ServiceName']['qualifications'];
+        $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
+        if(!is_string($result)){
+            Yii::$app->session->setFlash('success','Qualification Purged Successfully .',true);
+            return $this->redirect(['index']);
+        }else{
+            Yii::$app->session->setFlash('error','Error Purging Qualification: '.$result,true);
+            return $this->redirect(['index']);
+        }
     }
 
     public function actionView($ApplicationNo){
@@ -219,7 +232,7 @@ class QualificationController extends Controller
             $link = $updateLink =  '';
 
 
-            $updateLink = Html::a('Update Qualification',['update','Key'=> $quali->Key ],['class'=>'btn btn-outline-info btn-xs']);
+            $updateLink = Html::a('Update Qualification',['update','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
 
             $link = Html::a('Remove Qualification',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs']);
 
@@ -299,15 +312,11 @@ class QualificationController extends Controller
 
 
 
-    public function getLeaveTypes($gender = 'Female'){
-        $service = Yii::$app->params['ServiceName']['leaveTypes'];
-        $filter = [
-            'Gender' => $gender,
-            'Gender' => 'Both'
-        ];
+    public function getQualificationsList(){
+        $service = Yii::$app->params['ServiceName']['HRqualifications'];
 
-        $leavetypes = \Yii::$app->navhelper->getData($service,$filter);
-        return $leavetypes;
+        $qualifications = \Yii::$app->navhelper->getData($service);
+        return $qualifications;
     }
 
     public function getCountries(){
@@ -343,6 +352,19 @@ class QualificationController extends Controller
         $modeldata = (get_object_vars($obj)) ;
         foreach($modeldata as $key => $val){
             if(is_object($val)) continue;
+            $model->$key = $val;
+        }
+
+        return $model;
+    }
+
+    public function loadpost($post,$model){ // load model with form data
+
+
+        $modeldata = (get_object_vars($model)) ;
+
+        foreach($post as $key => $val){
+
             $model->$key = $val;
         }
 
