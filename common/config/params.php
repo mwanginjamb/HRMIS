@@ -1,9 +1,9 @@
 <?php
 return [
     'adminEmail' => 'admin@example.com',
-    'supportEmail' => 'support@example.com',
-    'senderEmail' => 'noreply@example.com',
-    'senderName' => 'Example.com mailer',
+    'supportEmail' => 'customer@softeboard.com',
+    'senderEmail' => 'customer@softeboard.com',
+    'senderName' => 'HRMIS mailer',
     'user.passwordResetTokenExpire' => 3600,
     'powered' => 'Iansoft Ltd',
     'NavisionUsername'=>'HP ELITEBOOK 840 G5',

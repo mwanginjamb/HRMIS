@@ -122,6 +122,10 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
+
+        if(Yii::$app->session->has('IdentityPassword')){
+            Yii::$app->session->remove('IdentityPassword');
+        }
         Yii::$app->user->logout();
 
         return $this->goHome();

@@ -13,7 +13,15 @@ print_r($model[0]); exit;*/
 
 $model = $model[0];
 ?>
-
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <?= \yii\helpers\Html::a('<i class="fa fa-address-book"></i>  Create a Profile',['applicantprofile/create'],['class' => 'btn btn-outline-success push-right']) ?>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <div class="card">

@@ -12,10 +12,6 @@ class Navhelper extends Component{
         $username = (!Yii::$app->user->isGuest)? Yii::$app->user->identity->{'User ID'} : Yii::$app->params['NavisionUsername'];
         $password = Yii::$app->session->has('IdentityPassword')? Yii::$app->session->get('IdentityPassword'):Yii::$app->params['NavisionPassword'];
 
-        //$username = Yii::$app->params['NavTestApprover'];
-        //$password = Yii::$app->params['NavTestApproverPassword'];
-
-
         $creds = (object)[];
         $creds->UserName = $username;
         $creds->PassWord = $password;
@@ -23,8 +19,8 @@ class Navhelper extends Component{
         $url = new Services($service);
 
         $soapWsdl= $url->getUrl();
-        /*print '<pre>';
-        print_r($url); exit;*/
+       // print '<pre>';
+       // print_r(Yii::$app->session->get('IdentityPassword')); exit;
 
         $filter = [];
         if(sizeof($params)){

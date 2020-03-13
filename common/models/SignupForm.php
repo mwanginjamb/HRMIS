@@ -48,7 +48,7 @@ class SignupForm extends Model
             return null;
         }
         
-        $user = new User();
+        $user = new Hruser();
         $user->username = $this->username;
         $user->email = $this->email;
         $user->setPassword($this->password);
@@ -68,7 +68,7 @@ class SignupForm extends Model
         return Yii::$app
             ->mailer
             ->compose(
-                ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
+                ['html' => 'recruitmentemailVerify-html', 'text' => 'emailVerify-text'],
                 ['user' => $user]
             )
             ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])

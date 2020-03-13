@@ -20,6 +20,7 @@ use yii\web\IdentityInterface;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $profileID
  * @property string $password write-only password
  */
 class Hruser extends ActiveRecord implements IdentityInterface
@@ -34,7 +35,7 @@ class Hruser extends ActiveRecord implements IdentityInterface
      */
     public static function tableName()
     {
-        return Yii::$app->params['CompanyNameStripped'].'User Setup ';
+        return '{{%HRUser}}';
     }
 
     /**
@@ -53,8 +54,8 @@ class Hruser extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            //['status', 'default', 'value' => self::STATUS_INACTIVE],
-            // ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ['status', 'default', 'value' => self::STATUS_INACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
     }
 
@@ -63,8 +64,8 @@ class Hruser extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        $username = strtoupper(Yii::$app->params['ldPrefix'].'\\'.$id);
-        return static::findOne(['User ID' => $id]);
+        //$username = strtoupper(Yii::$app->params['ldPrefix'].'\\'.$id);
+        return static::findOne(['id' => $id]);
     }
 
     /**
@@ -83,9 +84,9 @@ class Hruser extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        $username = strtoupper(Yii::$app->params['ldPrefix'].'\\'.$username);
+        //$username = strtoupper(Yii::$app->params['ldPrefix'].'\\'.$username);
 
-        return static::findOne(['User ID' => $username]);
+        return static::findOne(['username' => $username]);
     }
 
     /**
@@ -96,7 +97,7 @@ class Hruser extends ActiveRecord implements IdentityInterface
      */
     public static function findByPasswordResetToken($token)
     {
-        return;
+
         if (!static::isPasswordResetTokenValid($token)) {
             return null;
         }
@@ -114,7 +115,7 @@ class Hruser extends ActiveRecord implements IdentityInterface
      * @return static|null
      */
     public static function findByVerificationToken($token) {
-        return;
+
         return static::findOne([
             'verification_token' => $token,
             'status' => self::STATUS_INACTIVE
@@ -129,7 +130,7 @@ class Hruser extends ActiveRecord implements IdentityInterface
      */
     public static function isPasswordResetTokenValid($token)
     {
-        return;
+
         if (empty($token)) {
             return false;
         }
@@ -144,7 +145,7 @@ class Hruser extends ActiveRecord implements IdentityInterface
      */
     public function getId()
     {
-        return $this->{'User ID'};
+        return $this->id;
     }
 
     /**
@@ -152,7 +153,6 @@ class Hruser extends ActiveRecord implements IdentityInterface
      */
     public function getAuthKey()
     {
-        return 1;
         return $this->auth_key;
     }
 
@@ -161,7 +161,6 @@ class Hruser extends ActiveRecord implements IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        return 1;
         return $this->getAuthKey() === $authKey;
     }
 
@@ -173,8 +172,7 @@ class Hruser extends ActiveRecord implements IdentityInterface
      */
     public function validatePassword($password)
     {
-        /*Do actual Active directory validation*/
-        return true;
+
         return Yii::$app->security->validatePassword($password, $this->password_hash);
     }
 
@@ -185,7 +183,7 @@ class Hruser extends ActiveRecord implements IdentityInterface
      */
     public function setPassword($password)
     {
-        return;
+
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
 
@@ -194,7 +192,7 @@ class Hruser extends ActiveRecord implements IdentityInterface
      */
     public function generateAuthKey()
     {
-        return;
+
         $this->auth_key = Yii::$app->security->generateRandomString();
     }
 
@@ -203,7 +201,7 @@ class Hruser extends ActiveRecord implements IdentityInterface
      */
     public function generatePasswordResetToken()
     {
-        return;
+
         $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
@@ -212,7 +210,6 @@ class Hruser extends ActiveRecord implements IdentityInterface
      */
     public function generateEmailVerificationToken()
     {
-        return;
         $this->verification_token = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
@@ -221,13 +218,12 @@ class Hruser extends ActiveRecord implements IdentityInterface
      */
     public function removePasswordResetToken()
     {
-        return;
         $this->password_reset_token = null;
     }
 
-    public static function getDb(){
+    /*public static function getDb(){
         return Yii::$app->nav;
-    }
+    }*/
 
     public function getEmployee(){
         $service = Yii::$app->params['ServiceName']['employeeCard'];

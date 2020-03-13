@@ -8,6 +8,7 @@
 
 namespace frontend\controllers;
 
+use common\models\Hruser;
 use frontend\models\Applicantprofile;
 use Yii;
 use yii\filters\AccessControl;
@@ -71,6 +72,7 @@ class ApplicantprofileController extends Controller
 
     public function actionCreate(){
 
+
         $model = new Applicantprofile();
 
         if(!Yii::$app->user->isGuest){//If it's an employee making an application , populate profile form with their employee data where relevant
@@ -98,6 +100,31 @@ class ApplicantprofileController extends Controller
             $result = Yii::$app->navhelper->postData($service,$model);
 
             if(!is_string($result)){
+
+                //Update profileID on Employee or HRUser
+
+                if(Yii::$app->session->has('HRUSER')){
+                    //update a HRUser
+                    $hruser = Hruser::findByUsername(Yii::$app->session->get('HRUSER')->username);
+                    $hruser->profileID = $result->No;
+                    $hruser->save(false);
+                }else{
+                    //update for a particular employee
+                    $srvc = Yii::$app->params['ServiceName']['employeeCard'];
+                    $filter = [
+                        'No' => Yii::$app->user->identity->employee[0]->No
+                    ];
+                    $Employee = Yii::$app->navhelper->getData($srvc,$filter);
+
+                    $data = [
+                        'Key' => $Employee[0]->Key,
+                        'applicantID' => $result->No
+                    ];
+
+                    Yii::$app->navhelper->updateData($srvc,$data);
+
+                }
+
                 Yii::$app->session->set('ProfileID', $result->No);
                 Yii::$app->session->setFlash('success','Applicant Profile Created Successfully',true);
                 return $this->redirect(['update','No' => $result->No]);

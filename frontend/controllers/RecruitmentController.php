@@ -11,6 +11,11 @@ namespace frontend\controllers;
 
 use common\models\HrloginForm;
 use common\models\SignupForm;
+use frontend\models\ResendVerificationEmailForm;
+use frontend\models\VerifyEmailForm;
+
+
+
 use frontend\models\Employeerequisition;
 use frontend\models\Employeerequsition;
 use frontend\models\Job;
@@ -32,10 +37,10 @@ class RecruitmentController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index'],
+                'only' => ['index','vacancies'],
                 'rules' => [
                     [
-                        'actions' => [],
+                        'actions' => ['vacancies'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -49,7 +54,7 @@ class RecruitmentController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'logout' => ['get'],
                 ],
             ],
             'contentNegotiator' =>[
@@ -66,7 +71,8 @@ class RecruitmentController extends Controller
 
     public function actionIndex(){
 
-        return $this->render('index');
+        //return $this->render('index');
+        return $this->redirect(['recruitment/vacancies']);
     }
 
     public function actionCreate(){
@@ -273,7 +279,7 @@ class RecruitmentController extends Controller
         $result = [];
         foreach($requisitions as $req){
                 if($req->No_of_Posts > 0 && !empty($req->Job_Description) ) {
-                    $Viewlink = Html::a('View Details', ['view', 'Job_ID' => $req->Job_ID], ['class' => 'btn btn-outline-primary btn-xs']);
+                    $Viewlink = Html::a('Apply', ['view', 'Job_ID' => $req->Job_ID], ['class' => 'btn btn-outline-primary btn-xs']);
 
                     $result['data'][] = [
                         'Job_ID' => !empty($req->Job_ID) ? $req->Job_ID : 'Not Set',
@@ -311,7 +317,8 @@ class RecruitmentController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
 
-            return $this->goBack();//reroute to recruitment profile page
+            //return $this->goBack();//reroute to recruitment profile page
+            return $this->redirect(['applicantprofile/create']);
 
         } else {
             $model->password = '';
@@ -320,6 +327,17 @@ class RecruitmentController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionLogout()
+    {
+        if(Yii::$app->session->has('HRUSER')){
+            Yii::$app->session->remove('HRUSER');
+            return $this->redirect(['recruitment/vacancies']);
+        }
+        return $this->redirect(['recruitment/vacancies']);
+
+       // return $this->goHome();
     }
 
     public function actionSignup()
@@ -334,6 +352,29 @@ class RecruitmentController extends Controller
         return $this->render('signup', [
             'model' => $model,
         ]);
+    }
+
+    public function actionVerifyEmail($token)
+    {
+
+        try {
+            $model = new VerifyEmailForm($token);
+        } catch (InvalidArgumentException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+
+        if ($user = $model->verifyEmail($HRUser = true)) {
+           /* if (Yii::$app->user->login($user)) {
+                Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
+                return $this->goHome();
+            }*/
+
+           return $this->redirect(['applicantprofile/create']);
+        }
+
+        Yii::$app->session->setFlash('error', 'Sorry, we are unable to verify your account with provided token.');
+        return $this->goHome();
     }
 
 
