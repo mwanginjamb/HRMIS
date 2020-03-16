@@ -97,6 +97,7 @@ class Employee extends Model
     public $Exit_Interview_Date;
     public $Exit_Interview_Done_by;
     public $Activate;
+    public $ProfileID;
 
     public function rules()
     {

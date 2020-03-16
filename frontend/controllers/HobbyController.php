@@ -73,7 +73,7 @@ class HobbyController extends Controller
 
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Hobby'],$model)){
 
-            $model->Job_Application_No = Yii::$app->user->identity->employee[0]->No;
+            $model->Job_Application_No = Yii::$app->recruitment->getProfileID();
 
             $result = Yii::$app->navhelper->postData($service,$model);
 

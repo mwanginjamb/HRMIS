@@ -30,7 +30,7 @@ class LanguageController extends Controller
                 'only' => ['logout', 'signup','index'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['signup','index'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -72,7 +72,7 @@ class LanguageController extends Controller
 
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Language'],$model)){
 
-            $model->Applicant_No = Yii::$app->user->identity->employee[0]->No;
+            $model->Applicant_No = Yii::$app->recruitment->getProfileID();
 
             $result = Yii::$app->navhelper->postData($service,$model);
 

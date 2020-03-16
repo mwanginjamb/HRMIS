@@ -31,7 +31,7 @@ class ExperienceController extends Controller
                 'only' => ['logout', 'signup','index'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['signup','index'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -74,7 +74,7 @@ class ExperienceController extends Controller
         if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
 
 
-            $model->Job_Application_No = Yii::$app->user->identity->employee[0]->No;
+            $model->Job_Application_No = Yii::$app->recruitment->getProfileID();
             $result = Yii::$app->navhelper->postData($service,$model);
 
             if(is_object($result)){

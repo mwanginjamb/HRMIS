@@ -45,7 +45,7 @@ class RecruitmentController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index','vacancies'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -171,23 +171,22 @@ class RecruitmentController extends Controller
     public function actionView($Job_ID){
         $service = Yii::$app->params['ServiceName']['JobsCard'];
 
-
         $filter = [
             'Job_ID' => $Job_ID
         ];
 
         $job = Yii::$app->navhelper->getData($service, $filter);
+        //Get the Job Requisition No
 
-        //print '<pre>';
-        //print_r($job); exit;
-
-        //load nav result to model
-        $jobModel = new Job();
-        //$model = $this->loadtomodel($requisition[0],$jobModel);
+        if(is_null(Yii::$app->recruitment->getRequisitionID($Job_ID))){
+            Yii::$app->session->setFlash('error','You cannot apply for this job : Job ID ('.$Job_ID.') cannot be found in HR Requisitions List',true);
+                return $this->redirect(['vacancies']);
+        }else{
+            Yii::$app->session->set('REQUISITION_NO',Yii::$app->recruitment->getRequisitionID($Job_ID));
+        }
 
         return $this->render('view',[
             'model' => $job,
-
         ]);
     }
 
@@ -269,6 +268,7 @@ class RecruitmentController extends Controller
     public function actionGetvacancies(){
         $service = Yii::$app->params['ServiceName']['JobsList'];
         $filter = [
+
            /* 'Closed' => false,
             'Advertised' => true,
             'Positions' => '>0',*/
@@ -278,7 +278,7 @@ class RecruitmentController extends Controller
 
         $result = [];
         foreach($requisitions as $req){
-                if($req->No_of_Posts > 0 && !empty($req->Job_Description) ) {
+                if($req->No_of_Posts >= 0 && !empty($req->Job_Description) ) {
                     $Viewlink = Html::a('Apply', ['view', 'Job_ID' => $req->Job_ID], ['class' => 'btn btn-outline-primary btn-xs']);
 
                     $result['data'][] = [
@@ -369,7 +369,7 @@ class RecruitmentController extends Controller
                 Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
                 return $this->goHome();
             }*/
-
+           Yii::$app->session->setFlash('success', 'Your email has been confirmed, Welcome !');
            return $this->redirect(['applicantprofile/create']);
         }
 
@@ -377,13 +377,46 @@ class RecruitmentController extends Controller
         return $this->goHome();
     }
 
+    public function actionSubmit(){
+
+
+
+        if(empty($requisitionNo)){
+            return $this->render('submit');
+        }
+
+        $service = Yii::$app->params['ServiceName']['JobApplication'];
+
+
+        //get Applicant No
+
+        $ApplicationNo = Yii::$app->recruitment->getProfileID();      
+
+
+        //call the job application CodeUnit
+        $data = [
+            'applicantNo' => $ApplicationNo,
+            'requisitionNo' => Yii::$app->session->get('REQUISITION_NO'),
+        ];
+
+        $result = Yii::$app->navhelper->SubmitJobApplication($service,$data);
+
+        if(!is_string($result)){
+            Yii::$app->session->setFlash('success', 'Congratulations, Job Application submitted successfully.', true);
+        }else{
+            Yii::$app->session->setFlash('error', 'Sorry, we are unable to submit your application now : '. $result);
+
+        }
+
+
+    }
 
     public function loadtomodel($obj,$model){
 
         if(!is_object($obj)){
             return false;
         }
-        $modeldata = (get_object_vars($obj)) ;
+        $modeldata = (get_object_vars($obj)) ;//get properties of given object
         foreach($modeldata as $key => $val){
             if(is_object($val)) continue;
             $model->$key = $val;
@@ -391,5 +424,7 @@ class RecruitmentController extends Controller
 
         return $model;
     }
+
+    
 
 }

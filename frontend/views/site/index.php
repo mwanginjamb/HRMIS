@@ -223,54 +223,9 @@ exit;*/
                 </div>
 
 
-                <div class="card">
-                    <div class="card-header p-2">
-                        <h3 class="card-title">Employes on Leave</h3>
-                    </div>
-                    <div class="card-body">
-
-                        <table class="table table-hover table-borderless " id="onleave">
-
-                           <!-- <tbody>
-                                <tr>
-                                    <td>No.</td><td class="bg-gray"><?/*= $employee->No*/?></td>
-                                    <td>User ID.</td><td class="bg-gray"><?/*= $employee->User_ID */?></td>
-                                </tr>
-
-                                <tr>
-                                    <td>First Name: </td><td class="bg-gray"><?/*= $employee->First_Name */?></td>
-                                    <td>Last Name</td><td class="bg-gray"><?/*= $employee->Last_Name */?></td>
-                                </tr>
-
-                                <tr>
-                                    <td>ID Number: </td><td class="bg-gray"><?/*= $employee->First_Name */?></td>
-                                    <td>Passport Number</td><td class="bg-gray"><?/*= $employee->Last_Name */?></td>
-                                </tr>
-
-                                <tr>
-                                    <td>Supervisor Name: </td><td class="bg-gray"><?/*= $employee->Supervisor_Name */?></td>
-                                    <td>Citizenship</td><td class="bg-gray"><?/*= !empty($employee->Citizenship)? $employee->Citizenship: '' */?></td>
-                                </tr>
-                            </tbody>-->
-                            <thead>
-                             <tr>
-                                 <th>Employee Name</th>
-                                 <th>Department </th>
-                                 <th>Start Date</th>
-                                 <th>End Date</th>
-                             </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
 
 
-                        </table>
-
-                    </div>
-                </div>
-
-                <div class="card">
+                <div class="card card-blue">
                     <div class="card-header">
                         <h3 class="card-title">My Leave Balances</h3>
                     </div>

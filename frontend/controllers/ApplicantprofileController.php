@@ -107,7 +107,7 @@ class ApplicantprofileController extends Controller
                     //update a HRUser
                     $hruser = Hruser::findByUsername(Yii::$app->session->get('HRUSER')->username);
                     $hruser->profileID = $result->No;
-                    $hruser->save(false);
+                    $hruser->save(false);//do not validate model since we are just updating a single property
                 }else{
                     //update for a particular employee
                     $srvc = Yii::$app->params['ServiceName']['employeeCard'];
@@ -118,14 +118,15 @@ class ApplicantprofileController extends Controller
 
                     $data = [
                         'Key' => $Employee[0]->Key,
-                        'applicantID' => $result->No
+                        'ProfileID' => $result->No
                     ];
 
-                    Yii::$app->navhelper->updateData($srvc,$data);
+                    $update = Yii::$app->navhelper->updateData($srvc,$data);
+
 
                 }
 
-                Yii::$app->session->set('ProfileID', $result->No);
+                Yii::$app->session->set('ProfileID', $result->No); // ProfileID session
                 Yii::$app->session->setFlash('success','Applicant Profile Created Successfully',true);
                 return $this->redirect(['update','No' => $result->No]);
 

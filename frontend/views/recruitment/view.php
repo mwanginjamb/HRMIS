@@ -17,14 +17,28 @@ $model = $model[0];
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <?= \yii\helpers\Html::a('<i class="fa fa-address-book"></i>  Create a Profile',['applicantprofile/create'],['class' => 'btn btn-outline-success push-right']) ?>
+                <?php
+
+                echo (Yii::$app->session->has('ProfileID') && Yii::$app->recruitment->hasProfile(Yii::$app->session->get('ProfileID')))?
+
+                    \yii\helpers\Html::a('<i class="fa fa-address-book"></i>  Update Profile and Submit Application',['applicantprofile/update','No'=> Yii::$app->session->get('ProfileID')],['class' => 'btn btn-outline-warning push-right'])
+                    :
+                    \yii\helpers\Html::a('<i class="fa fa-address-book"></i>  Create a Profile',['applicantprofile/create','Job_ID'=> Yii::$app->request->get('Job_ID')],['class' => 'btn btn-outline-info push-right'])
+                ;
+
+
+
+
+
+
+           ?>
             </div>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="card">
+        <div class="card card-blue">
             <div class="card-header">
 
                 <h3 class="card-title">Job Vacancy : <?= $model->Job_Title?></h3>
@@ -45,133 +59,111 @@ $model = $model[0];
             </div>
             <div class="card-body">
 
+                <table class="table table-bordered">
+                    <tr>
+                        <td colspan="2"><b>Job Title: </b><?= !empty($model->Job_Title)?$model->Job_Title: 'Not Set' ?> </td>
+                    </tr>
 
-               <?php $form = ActiveForm::begin(['action'=> ['leave/create']]); ?>
+                    <tr>
+                        <td><b>Department :</b> <?= !empty($model->Global_Dimension_1_Code)?$model->Global_Dimension_1_Code: 'Not Set'?></td>
+                        <td><b>Location: </b> <?= !empty($model->Location)?$model->Location: 'Not Set' ?></td>
+                    </tr>
 
+                    <tr>
+                        <td><b>Salary: </b> <?= !empty($model->Salary)?$model->Salary: ' Not Set' ?></td>
+                        <td><b>Grade : </b> <?= !empty($model->Grade)?$model->Grade: 'Not Set' ?></td>
+                    </tr>
 
-               <div class="row">
-                   <div class=" row col-md-12">
-                       <div class="col-md-6">
-                           <!-- form start -->
-                           <form class="form-horizontal">
-                               <div class="card-body">
-                                   <div class="form-group row">
-                                       <label for="inputEmail3" class="col-sm-2 col-form-label">Job ID</label>
-                                       <div class="col-sm-10">
-                                           <input type="text" class="form-control" id="inputEmail3" value="<?= $model->Job_ID?>" readonly>
-                                       </div>
-                                   </div>
-                                   <div class="form-group row">
-                                       <label for="inputPassword3" class="col-sm-2 col-form-label">Job Title</label>
-                                       <div class="col-sm-10">
-                                           <input type="text" class="form-control" value="<?= $model->Job_Title ?>">
-                                       </div>
-                                   </div>
+                    <tr>
+                        <td colspan="2">
+                            <b>Job Purpose</b><br> <?= !empty($model->Job_Purpose)?$model->Job_Purpose: 'Not Set' ?>
+                        </td>
+                    </tr>
 
-                                   <div class="form-group row">
-                                       <label for="inputEmail3" class="col-sm-2 col-form-label">Job Purpose</label>
-                                       <div class="col-sm-10">
-                                           <input type="text" class="form-control" id="inputEmail3" value="<?= $model->Job_ID?>" readonly>
-                                       </div>
-                                   </div>
+                    <tr>
 
-                                   <div class="form-group row">
-                                       <label for="inputEmail3" class="col-sm-2 col-form-label">Job Dimension</label>
-                                       <div class="col-sm-10">
-                                           <input type="text" class="form-control" id="inputEmail3" value="<?= $model->Job_ID?>" readonly>
-                                       </div>
-                                   </div>
+                        <td colspan="2">
+                            <b>Reporting Lines</b><br>
 
-                                   <div class="form-group row">
-                                       <label for="inputPassword3" class="col-sm-2 col-form-label">Position Reporting to</label>
-                                       <div class="col-sm-10">
-                                           <input type="text" class="form-control" value="<?= $model->Position_Reporting_to ?>" readonly>
-                                       </div>
-                                   </div>
+                            <?= !empty($model->Position_Reporting_to)?$model->Position_Reporting_to: 'Not Set' ?>
+                        </td>
+                    </tr>
+                </table>
 
 
 
 
-                                   <!--<div class="form-group row">
-                                       <div class="offset-sm-2 col-sm-10">
-                                           <div class="form-check">
-                                               <input type="checkbox" class="form-check-input" id="exampleCheck2">
-                                               <label class="form-check-label" for="exampleCheck2">Remember me</label>
-                                           </div>
-                                       </div>
-                                   </div>-->
-                               </div>
-                               <!-- /.card-body -->
 
-                               <!-- /.card-footer -->
-                           </form>
-                       </div>
-                       <div class="col-md-6">
-
-                           <div class="card-body">
-                           <div class="form-group row">
-                               <label for="inputPassword3" class="col-sm-2 col-form-label">Global Dimension 1 Code</label>
-                               <div class="col-sm-10">
-                                   <input type="text" class="form-control" value="<?= '' ?>" readonly>
-                               </div>
-                           </div>
-
-                           <div class="form-group row">
-                               <label for="inputPassword3" class="col-sm-2 col-form-label">Global Dimension 2 Code</label>
-                               <div class="col-sm-10">
-                                   <input type="text" class="form-control" value="<?= '' ?>" readonly>
-                               </div>
-                           </div>
-
-                           <div class="form-group row">
-                               <label for="inputPassword3" class="col-sm-2 col-form-label">Grade</label>
-                               <div class="col-sm-10">
-                                   <input type="text" class="form-control" value="<?= $model->Grade ?>" readonly>
-                               </div>
-                           </div>
-
-                           <div class="form-group row">
-                               <label for="inputPassword3" class="col-sm-2 col-form-label">Position Reporting to</label>
-                               <div class="col-sm-10">
-                                   <input type="text" class="form-control" value="<?= $model->Position_Reporting_to ?>">
-                               </div>
-                           </div>
-
-                           <div class="form-group row">
-                               <label for="inputPassword3" class="col-sm-2 col-form-label">Status</label>
-                               <div class="col-sm-10">
-                                   <input type="text" class="form-control" value="<?= $model->Status ?>">
-                               </div>
-                           </div>
-
-                           <div class="form-group row">
-                               <label for="inputPassword3" class="col-sm-2 col-form-label">No_of_Requirements</label>
-                               <div class="col-sm-10">
-                                   <input type="text" class="form-control" value="<?= $model->No_of_Requirements ?>" readonly>
-                               </div>
-                           </div>
-
-                           <div class="form-group row">
-                               <label for="inputPassword3" class="col-sm-2 col-form-label">No of Responsibilities</label>
-                               <div class="col-sm-10">
-                                   <input type="text" class="form-control" value="<?= $model->No_of_Responsibilities ?>" readonly>
-                               </div>
-                           </div>
-
-                           </div>
+            </div><!--end form card-body-->
+        </div>
 
 
-                       </div>
-                   </div>
-               </div>
-
-
-
-               <?php ActiveForm::end(); ?>
-
-
-
+        <div class="card card-blue">
+            <!---Add responsibilities------->
+            <div class="card-header">
+                <h3 class="card-title">Job Responsibilities</h3>
             </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                    <table class="table table-bordered" >
+                        <?php
+                            if(!empty($model->Hr_Job_Resposibilities->Hr_Job_Resposibilities) && sizeof($model->Hr_Job_Resposibilities->Hr_Job_Resposibilities)){
+                                foreach($model->Hr_Job_Resposibilities->Hr_Job_Resposibilities as $resp){
+                                    print '<tr>
+                                        <td>'.$resp->Responsibility_Description.'</td>
+                                    </tr>';
+                                }
+                            }else{
+                                print '<tr>
+                                        <td>No responsibilities set yet.</td>
+                                    </tr>';
+                            }
+                        ?>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <!---end responsibilities------->
+
+        <div class="card card-blue">
+            <!---Add requirements------->
+            <div class="card-header">
+                <h3 class="card-title">Job Requirements</h3>
+            </div>
+
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered" >
+                            <?php
+
+                            if(!empty($model->Job_Requirements->Job_Requirements) && sizeof($model->Job_Requirements->Job_Requirements)){
+                                foreach($model->Job_Requirements->Job_Requirements as $req){
+                                    if(!empty($req->Requirement)){
+                                        print '<tr>
+                                            <td>'.$req->Requirement.'</td>
+                                        </tr>';
+                                    }
+
+                                }
+                            }else{
+                                print '<tr>
+                                            <td>No requirements set yet.</td>
+                                        </tr>';
+                            }
+                            ?>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!---end requirements------->
+
+
         </div>
     </div>
 </div>

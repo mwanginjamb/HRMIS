@@ -35,7 +35,7 @@ class Qualification extends Model
     public function attributeLabels()
     {
         return [
-
+            'To_Date' => 'Completion Date',
         ];
     }
 }

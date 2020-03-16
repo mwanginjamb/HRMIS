@@ -293,7 +293,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                             </ul>
                         </li>-->
 
-                        <li class="nav-item has-treeview <?= currentCtrl('recruitment')?'menu-open':'' ?>">
+                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl(Yii::$app->params['profileControllers'])?'menu-open':'' ?>">
                             <a href="#" class="nav-link <?= currentCtrl('recruitment')?'active':'' ?>">
                                 <i class="nav-icon fas fa-briefcase " ></i>
                                 <p>
@@ -312,7 +312,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>applicantprofile/create" class="nav-link <?= currentaction('applicantprofile','create')?'active':'' ?>">
+                                    <a href="<?= $absoluteUrl ?>applicantprofile/create" class="nav-link <?= Yii::$app->recruitment->currentaction(Yii::$app->params['profileControllers'],['create','index'])?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
                                         <p>Applicant Profile</p>
                                     </a>

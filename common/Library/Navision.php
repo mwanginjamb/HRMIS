@@ -588,7 +588,19 @@ class Navision extends Component
 
     }
 
+    //Call Job Application CodeUnit
 
+    public function IanCreateJobApplication($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanCreateJobApplication($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
 
 
 

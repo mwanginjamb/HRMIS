@@ -379,6 +379,79 @@ class Navhelper extends Component{
         }
 
     }
+
+
+
+
+    //Submit a Job Application
+
+    public function SubmitJobApplication($service,$data){
+        $identity = \Yii::$app->user->identity;
+        $username = (!Yii::$app->user->isGuest)? Yii::$app->user->identity->{'User ID'} : Yii::$app->params['NavisionUsername'];
+        $password = Yii::$app->session->has('IdentityPassword')? Yii::$app->session->get('IdentityPassword'):Yii::$app->params['NavisionPassword'];
+
+        $creds = (object)[];
+        $creds->UserName = $username;
+        $creds->PassWord = $password;
+        $url = new Services($service);
+        $soapWsdl=$url->getUrl();
+
+        $entry = (object)[];
+
+        foreach($data as $key => $value){
+            if($key !=='_csrf-frontend'){
+                $entry->$key = $value;
+            }
+
+        }
+
+        if(!Yii::$app->navision->isUp($soapWsdl,$creds)) {
+            throw new \yii\web\HttpException(503, 'Service unavailable');
+
+        }
+
+        $results = Yii::$app->navision->IanCreateJobApplication($creds, $soapWsdl,$entry);
+
+        if(is_object($results)){
+            $lv =(array)$results;
+            return $lv;
+        }
+        else{
+            return $results;
+        }
+
+    }
+
+
+
+    /**Auxilliary methods for working with models */
+
+    public function loadmodel($obj,$model){ //load object data to a model, e,g from service data to model
+
+        if(!is_object($obj)){
+            return false;
+        }
+        $modeldata = (get_object_vars($obj)) ;
+        foreach($modeldata as $key => $val){
+            if(is_object($val)) continue;
+            $model->$key = $val;
+        }
+
+        return $model;
+    }
+
+    public function loadpost($post,$model){ // load form data to a model, e.g from html form-data to model
+
+
+        $modeldata = (get_object_vars($model)) ;
+
+        foreach($post as $key => $val){
+
+            $model->$key = $val;
+        }
+
+        return $model;
+    }
 }
 
 

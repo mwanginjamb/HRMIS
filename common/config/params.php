@@ -19,6 +19,18 @@ return [
     'CompanyName'=>'AAS%20HR%20test',//Nav Company,
     'CompanyNameStripped' => 'AAS HR test$',
     'ldPrefix'=>'francis',//aCTIVE DIRECTORY prefix
+    'profileControllers' => [
+        'applicantprofile',
+        'experience',
+        'qualification',
+        'hobby',
+        'language',
+        'referee'
+    ],
+    'codeUnits' => [
+        'Portal_Workflows', //50019
+        'JobApplication' //50023
+    ],
     'ServiceName'=>[
         'purchaseDocumentLines'=>'purchaseDocumentLines',//6405
 
@@ -47,8 +59,8 @@ return [
         'experience' => 'experience', //55062
         'hobbies' => 'hobbies', //55063
         'qualifications' => 'qualifications',//55064
-        'JobResponsibilities' => 'JobResponsibilities',//69000
-        'JobRequirements' => 'JobRequirements', //69001
+        'JobResponsibilities' => 'JobResponsibilities',//69000 -->specs
+        'JobRequirements' => 'JobRequirements', //69001 ---> specs
         'JobExperience' => 'JobExperience',//69004
         'HRqualifications' => 'HRqualifications',
 
@@ -64,7 +76,11 @@ return [
         //Approval code unit
         'Portal_Workflows' => 'Portal_Workflows', //50019
 
+        //Job Application Code Unit
+        'JobApplication' => 'JobApplication', //50023
+
         /* Request to Approve */
         'RequeststoApprove' => 'RequeststoApprove', //654---duplication
     ],
+
 ];

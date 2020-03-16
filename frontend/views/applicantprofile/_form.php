@@ -37,7 +37,7 @@ use yii\widgets\ActiveForm;
         <?php $form = ActiveForm::begin(); ?>
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">General Details : <?= Yii::$app->session->has('ProfileID')? Yii::$app->session->get('ProfileID'): '' ?></h3>
+                <h3 class="card-title">Bio - Data Details : <?= Yii::$app->session->has('ProfileID')? Yii::$app->session->get('ProfileID'): '' ?></h3>
             </div>
             <div class="card-body">
 

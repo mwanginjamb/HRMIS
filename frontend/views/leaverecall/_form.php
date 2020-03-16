@@ -151,7 +151,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
         </div>
     </div>
 </div>
-<input type="text" name="absolute" value="<?= $absoluteUrl ?>">
+<input type="hidden" name="absolute" value="<?= $absoluteUrl ?>">
 <?php
 
 $script = <<<JS

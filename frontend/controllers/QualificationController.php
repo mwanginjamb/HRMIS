@@ -73,7 +73,7 @@ class QualificationController extends Controller
 
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
 
-            $model->Employee_No = Yii::$app->user->identity->employee[0]->No;
+            $model->Employee_No = Yii::$app->recruitment->getProfileID();
 
             $result = Yii::$app->navhelper->postData($service,$model);
 
@@ -344,7 +344,7 @@ class QualificationController extends Controller
         return $religion;
     }
 
-    public function loadtomodel($obj,$model){
+    public function loadtomodel($obj,$model){ //load object data to a model
 
         if(!is_object($obj)){
             return false;
@@ -358,7 +358,7 @@ class QualificationController extends Controller
         return $model;
     }
 
-    public function loadpost($post,$model){ // load model with form data
+    public function loadpost($post,$model){ // load form data to a model
 
 
         $modeldata = (get_object_vars($model)) ;
