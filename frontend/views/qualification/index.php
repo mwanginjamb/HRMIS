@@ -35,6 +35,25 @@ $this->title = 'Recruitment - Applicant Qualifications';
             </div>
         </div>
     </div>
+
+
+<?php
+if(Yii::$app->session->hasFlash('success')){
+    print ' <div class="alert alert-success alert-dismissable">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                    <h5><i class="icon fas fa-check"></i> Success!</h5>';
+    echo Yii::$app->session->getFlash('success');
+    print '</div>';
+}else if(Yii::$app->session->hasFlash('error')){
+    print ' <div class="alert alert-danger alert-dismissable">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                    <h5><i class="icon fas fa-check"></i> Error!</h5>
+                                ';
+    echo Yii::$app->session->getFlash('error');
+    print '</div>';
+}
+?>
+
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -42,18 +61,6 @@ $this->title = 'Recruitment - Applicant Qualifications';
                     <h3 class="card-title">My Qualifications.</h3>
 
 
-                    <?php
-                    if(Yii::$app->session->hasFlash('success')){
-                        print ' <div class="alert alert-success alert-dismissable">';
-                        echo Yii::$app->session->getFlash('success');
-                        print '</div>';
-                    }else if(Yii::$app->session->hasFlash('error')){
-                        print ' <div class="alert alert-danger alert-dismissable">
-                                ';
-                        echo Yii::$app->session->getFlash('error');
-                        print '</div>';
-                    }
-                    ?>
 
 
 
