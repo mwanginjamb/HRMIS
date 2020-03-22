@@ -29,6 +29,8 @@ class Qualification extends Model
     {
         return [
 
+            [['Employee_No'],'required'],
+
         ];
     }
 
@@ -36,6 +38,7 @@ class Qualification extends Model
     {
         return [
             'To_Date' => 'Completion Date',
+            'Employee_No' => 'Profile ID'
         ];
     }
 }

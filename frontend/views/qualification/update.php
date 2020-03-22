@@ -21,7 +21,7 @@ $this->title = 'Update Language';
 
     <?= $this->render('_form', [
         'model' => $model,
-        'qualifications' => $qualifications,
+        'qlist' => $qualifications,
        
     ]) ?>
 

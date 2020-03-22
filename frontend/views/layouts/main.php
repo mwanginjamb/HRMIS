@@ -339,6 +339,31 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                             </ul>
                         </li>
 
+                         <li class="nav-item has-treeview <?= currentCtrl('payslip')?'menu-open':'' ?>">
+                            <a href="#" class="nav-link <?= currentCtrl('payslip')?'active':'' ?>">
+                                <i class="nav-icon fa fa-file-invoice-dollar"></i>
+                                <p>
+                                    Pay Slip
+                                    <i class="fas fa-angle-left right"></i>
+                                    <!--<span class="badge badge-info right">6</span>-->
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>approvals" class="nav-link <?= currentaction('payslip','index')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>Generate Payslip</p>
+                                    </a>
+                                </li>
+
+
+
+
+
+
+                            </ul>
+                        </li>
+
                         <li class="nav-item has-treeview <?= currentCtrl('approvals')?'menu-open':'' ?>">
                             <a href="#" class="nav-link <?= currentCtrl('approvals')?'active':'' ?>">
                                 <i class="nav-icon fas fa-copy"></i>

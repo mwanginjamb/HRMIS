@@ -62,7 +62,7 @@ return [
         'JobResponsibilities' => 'JobResponsibilities',//69000 -->specs
         'JobRequirements' => 'JobRequirements', //69001 ---> specs
         'JobExperience' => 'JobExperience',//69004
-        'HRqualifications' => 'HRqualifications',
+        'HRqualifications' => 'HRqualifications', //5205
 
         'Countries' => 'Countries', //10
         'Religion' => 'Religion', //70085

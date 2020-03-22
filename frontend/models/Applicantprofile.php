@@ -49,14 +49,15 @@ public $Tribe;
 public $Religion;
 public $Post_Office_No;
 public $Picture;
-
+public $motivation; //not added on nav
 
     public function rules()
     {
         return [
             [['E_Mail','Gender','First_Name','Last_Name','Citizenship'], 'required'],
             [['Union_Member_x003F_'], 'boolean'],
-            [['E_Mail','Company_E_Mail'],'email']
+            [['E_Mail','Company_E_Mail'],'email'],
+            [['motivation'],'string','max' => 250]
         ];
     }
 
@@ -64,7 +65,8 @@ public $Picture;
     {
         return [
             'Union_Member_x003F_' => 'Union Member ?',
-            'Known_As' => 'Alias'
+            'Known_As' => 'Alias',
+            'motivation' => 'Letter of Motivation.'
         ];
     }
 }

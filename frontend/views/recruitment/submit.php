@@ -48,7 +48,17 @@ use yii\widgets\ActiveForm;
                 <table class="table" border="0">
                     <tr>
                         <td>
+                            <p>Briefly put down a letter of motivation (Less than 250 characters)</p>
+                             <?php $form = ActiveForm::begin(); ?>
+                             <?= $form->field($model, 'motivation')->textarea(['rows'=>4,'max-length' => 250]) ?>
+                             <?php ActiveForm::end(); ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                          
                            <?= Html::checkbox('confirm',false,['class' =>'confirm']) ?>
+
 
                             &nbsp;<i>I confirm that information given is true and verifiable.  </i>
                         </td>

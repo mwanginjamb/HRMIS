@@ -29,10 +29,10 @@ use yii\widgets\ActiveForm;
                             <table class="table">
                                 <tbody>
 
-
+                                
 
                                 <tr>
-                                    <?= $form->field($model, 'Qualification_Code')->dropDownList($qualifications, ['prompt' => 'Select Qualification..']) ?>
+                                    <?= $form->field($model, 'Qualification_Code')->dropDownList($qlist, ['prompt' => 'Select Qualification..']) ?>
                                 </tr>
                                 <tr>
                                     <?= $form->field($model, 'Description')->textInput(['readonly' => 'true']) ?>
@@ -47,7 +47,9 @@ use yii\widgets\ActiveForm;
                                     <?= $form->field($model, 'Institution_Company')->textInput() ?>
                                 </tr>
 
+                                <tr>
 
+                                    <?= $form->field($model, 'Employee_No')->textInput(['value' => Yii::$app->recruitment->getProfileID(), 'readonly' => 'true'])->label() ?>
                                     <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
                                 </tr>
 
@@ -107,6 +109,8 @@ $script = <<<JS
             $('#qualification-description').val(selected);
             
         });
+
+        $('#qualification-qualification_code').select2();
     });
 JS;
 

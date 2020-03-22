@@ -27,7 +27,7 @@ $this->title = 'Recruitment - Job Experience';
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-        <?= \yii\helpers\Html::a('Add Experience',['create','create'=> 1],['class' => 'create btn btn-outline-warning push-right']) ?>
+        <?= \yii\helpers\Html::a('Add Employment Record',['create','create'=> 1],['class' => 'create btn btn-outline-warning push-right']) ?>
         </div>
         </div>
     </div>
@@ -79,7 +79,7 @@ if(Yii::$app->session->hasFlash('success')){
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Work Experience</h4>
+                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Employment Record</h4>
                 </div>
                 <div class="modal-body">
 
@@ -111,7 +111,7 @@ $script = <<<JS
             columns: [
                 { title: '....', data: 'index'},
                 { title: 'Position' ,data: 'Position'},
-                { title: 'Job_Description' ,data: 'Job_Description'},
+                { title: 'Responsibilities' ,data: 'Job_Description'},
                 { title: 'Institution' ,data: 'Institution'},
                 { title: 'Update_Action' ,data: 'Update_Action'},
                 { title: 'Remove' ,data: 'Remove'},
@@ -119,7 +119,7 @@ $script = <<<JS
                
             ] ,                              
            language: {
-                "zeroRecords": "No Work Experience to Show.."
+                "zeroRecords": "No Employment record to Show.."
             },
             
             order : [[ 0, "desc" ]]

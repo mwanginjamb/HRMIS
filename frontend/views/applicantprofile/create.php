@@ -11,7 +11,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\AgendaDocument */
 
-$this->title = 'Applicant Profile - Bio - Data';
+$this->title = 'Applicant Personal info.';
 $this->params['breadcrumbs'][] = ['label' => 'New Leave Recall', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

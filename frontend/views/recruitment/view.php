@@ -19,9 +19,18 @@ $model = $model[0];
             <div class="card-body">
                 <?php
 
-                echo (Yii::$app->session->has('ProfileID') && Yii::$app->recruitment->hasProfile(Yii::$app->session->get('ProfileID')))?
+                if(!Yii::$app->user->isGuest && !empty( Yii::$app->user->identity->Employee[0]->ProfileID)){ //Profile ID for internal user
+                    $profileID = Yii::$app->user->identity->Employee[0]->ProfileID;
 
-                    \yii\helpers\Html::a('<i class="fa fa-address-book"></i>  Update Profile and Submit Application',['applicantprofile/update','No'=> Yii::$app->session->get('ProfileID')],['class' => 'btn btn-outline-warning push-right'])
+                    Yii::$app->session->set('ProfileID',$profileID);
+
+                }else if(Yii::$app->session->has('ProfileID')){ //Profile ID for external user
+                    $profileID = Yii::$app->session->get('ProfileID');
+                }
+
+                echo (Yii::$app->session->has('ProfileID') || Yii::$app->recruitment->hasProfile(Yii::$app->session->get('ProfileID')))?
+
+                    \yii\helpers\Html::a('<i class="fa fa-address-book"></i>  Update Profile and Submit Application',['applicantprofile/update','No'=> $profileID],['class' => 'btn btn-outline-warning push-right'])
                     :
                     \yii\helpers\Html::a('<i class="fa fa-address-book"></i>  Create a Profile',['applicantprofile/create','Job_ID'=> Yii::$app->request->get('Job_ID')],['class' => 'btn btn-outline-info push-right'])
                 ;
@@ -118,9 +127,16 @@ if(Yii::$app->session->hasFlash('success')){
                         <?php
                             if(!empty($model->Hr_Job_Resposibilities->Hr_Job_Resposibilities) && sizeof($model->Hr_Job_Resposibilities->Hr_Job_Resposibilities)){
                                 foreach($model->Hr_Job_Resposibilities->Hr_Job_Resposibilities as $resp){
-                                    print '<tr>
-                                        <td>'.$resp->Responsibility_Description.'</td>
-                                    </tr>';
+
+                                    if(!empty($resp->Responsibility_Description)){
+                                        print '<tr>
+                                        <td>'.$resp->Responsibility_Description.'</td>';
+
+                                       echo (Yii::$app->recruitment->Responsibilityspecs($resp->Responsibility_Description));
+
+                                        print '</tr>';
+                                    }
+
                                 }
                             }else{
                                 print '<tr>
@@ -152,8 +168,11 @@ if(Yii::$app->session->hasFlash('success')){
                                 foreach($model->Job_Requirements->Job_Requirements as $req){
                                     if(!empty($req->Requirement)){
                                         print '<tr>
-                                            <td>'.$req->Requirement.'</td>
-                                        </tr>';
+                                            <td>'.$req->Requirement.'</td>';
+
+                                                echo Yii::$app->recruitment->Requirementspecs($req->Requirement);
+
+                                        print'</tr>';
                                     }
 
                                 }

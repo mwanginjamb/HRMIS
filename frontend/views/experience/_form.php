@@ -48,6 +48,12 @@ use yii\widgets\ActiveForm;
                                 <tr>
                                     <?= $form->field($model, 'To_Date')->textInput(['type' => 'date']) ?>
                                 </tr>
+                                 <tr>
+                                    <?= $form->field($model, 'Reporting_To')->textInput() ?>
+                                </tr>
+                                 <tr>
+                                    <?= $form->field($model, 'Direct_Reports')->textInput(['type' => 'number']) ?>
+                                </tr>
                                 <tr>
                                     <?= $form->field($model, 'Period')->textInput(['readonly'=> true]) ?>
                                 </tr>

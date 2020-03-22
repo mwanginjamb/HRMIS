@@ -49,7 +49,7 @@ class QualificationController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getqualifications'],
+                'only' => ['getqualifications','getprofessionalqualifications'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -65,6 +65,12 @@ class QualificationController extends Controller
 
     }
 
+     public function actionProfessional(){
+
+        return $this->render('professional');
+
+    }
+
 
     public function actionCreate(){
 
@@ -72,6 +78,8 @@ class QualificationController extends Controller
         $service = Yii::$app->params['ServiceName']['qualifications'];
 
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
+            list($code, $desc) = explode(' - ',Yii::$app->request->post()['Qualification']['Qualification_Code']);
+            $model->Qualification_Code = $code;
 
             $model->Employee_No = Yii::$app->recruitment->getProfileID();
 
@@ -91,11 +99,14 @@ class QualificationController extends Controller
 
         }//End Saving experience
 
-        $qualificationsList = $this->getQualificationsList();
+        $qList = $this->getQualificationsList();
+
+        /*print '<pre>';
+        print_r($qualificationsList);exit;*/
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('create', [
                 'model' => $model,
-                'qualifications' => ArrayHelper::map($qualificationsList,'Code','Description')
+                'qlist' => ArrayHelper::map($qList,'Code', 'Description')
 
             ]);
         }
@@ -103,6 +114,55 @@ class QualificationController extends Controller
         return $this->render('create',[
 
             'model' => $model,
+            
+
+
+        ]);
+    }
+
+    public function actionCreateprofessional(){
+
+        $model = new Qualification();
+        $service = Yii::$app->params['ServiceName']['qualifications'];
+
+        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
+            list($code, $desc) = explode(' - ',Yii::$app->request->post()['Qualification']['Qualification_Code']);
+            $model->Qualification_Code = $code;
+
+            $model->Employee_No = Yii::$app->recruitment->getProfileID();
+
+            $result = Yii::$app->navhelper->postData($service,$model);
+
+            if(is_object($result)){
+
+                Yii::$app->session->setFlash('success','Professional Qualification Added Successfully',true);
+                return $this->redirect(['professional']);
+
+            }else{
+
+                Yii::$app->session->setFlash('error','Error Adding Professional Qualification: '.$result,true);
+                return $this->redirect(['professional']);
+
+            }
+
+        }//End Saving experience
+
+        $qList = $this->getProfessionalQualificationsList();
+
+        /*print '<pre>';
+        print_r($qualificationsList);exit;*/
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('create', [
+                'model' => $model,
+                'qlist' => ArrayHelper::map($qList,'Code', 'Description')
+
+            ]);
+        }
+
+        return $this->render('create',[
+
+            'model' => $model,
+            
 
 
         ]);
@@ -118,9 +178,16 @@ class QualificationController extends Controller
         //load nav result to model
         $model = $this->loadtomodel($result[0],$Expmodel);
 
+        
+
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
+
+            list($code, $desc) = explode(' - ',Yii::$app->request->post()['Qualification']['Qualification_Code']);
+            $model->Qualification_Code = $code;
             $result = Yii::$app->navhelper->updateData($service,$model);
-            if(!empty($result)){
+
+
+            if(!empty($result) && !is_string($result)){
                 Yii::$app->session->setFlash('success','Qualification Updated Successfully',true);
                 return $this->redirect(['index']);
             }else{
@@ -130,6 +197,50 @@ class QualificationController extends Controller
 
         }
         $qualificationsList = $this->getQualificationsList();
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('update', [
+                'model' => $model,
+                'qualifications' => ArrayHelper::map($qualificationsList,'Code','Description')
+
+            ]);
+        }
+
+        return $this->render('update',[
+            'model' => $model,
+
+        ]);
+    }
+
+
+     public function actionUpdateprofessional(){
+        $service = Yii::$app->params['ServiceName']['qualifications'];
+        $filter = [
+            'Line_No' => Yii::$app->request->get('Line'),
+        ];
+        $result = Yii::$app->navhelper->getData($service,$filter);
+        $Expmodel = new Qualification();
+        //load nav result to model
+        $model = $this->loadtomodel($result[0],$Expmodel);
+
+        
+
+        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
+
+            list($code, $desc) = explode(' - ',Yii::$app->request->post()['Qualification']['Qualification_Code']);
+            $model->Qualification_Code = $code;
+            $result = Yii::$app->navhelper->updateData($service,$model);
+
+
+            if(!empty($result) && !is_string($result)){
+                Yii::$app->session->setFlash('success','Professional Qualification Updated Successfully',true);
+                return $this->redirect(['professional']);
+            }else{
+                Yii::$app->session->setFlash('error','Error Updating Professional Qualification : '.$result,true);
+                return $this->redirect(['professional']);
+            }
+
+        }
+        $qualificationsList = $this->getProfessionalQualificationsList();
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('update', [
                 'model' => $model,
@@ -222,7 +333,11 @@ class QualificationController extends Controller
 
     public function actionGetqualifications(){
         $service = Yii::$app->params['ServiceName']['qualifications'];
-        $qualifications = \Yii::$app->navhelper->getData($service);
+
+        $filter = [
+            'Qualification_Code' => 'ACADEMIC'
+        ];
+        $qualifications = \Yii::$app->navhelper->getData($service,$filter);
 
         $result = [];
         $count = 0;
@@ -256,67 +371,95 @@ class QualificationController extends Controller
         return $result;
     }
 
-    public function actionReport(){
-        $service = Yii::$app->params['ServiceName']['expApplicationList'];
-        $leaves = \Yii::$app->navhelper->getData($service);
-        krsort( $leaves);//sort by keys in descending order
-        $content = $this->renderPartial('_historyreport',[
-            'leaves' => $leaves
-        ]);
+   
+ public function actionGetprofessionalqualifications(){
+        $service = Yii::$app->params['ServiceName']['qualifications'];
 
-        //return $content;
-        $pdf = \Yii::$app->pdf;
-        $pdf->content = $content;
-        $pdf->orientation = Pdf::ORIENT_PORTRAIT;
-
-        //The trick to returning binary content
-        $content = $pdf->render('', 'S');
-        $content = chunk_split(base64_encode($content));
-
-        return $content;
-    }
-
-    public function actionReportview(){
-        return $this->render('_viewreport',[
-            'content'=>$this->actionReport()
-        ]);
-    }
-
-    public function Getleavebalance(){
-        $service = Yii::$app->params['ServiceName']['leaveBalance'];
         $filter = [
-            'No' => Yii::$app->user->identity->{'Employee No_'},
+            'Qualification_Code' => 'PROFESSIONAL'
         ];
-
-        $balances = \Yii::$app->navhelper->getData($service,$filter);
-        $result = [];
+        $qualifications = \Yii::$app->navhelper->getData($service,$filter);
 
         //print '<pre>';
-        // print_r($balances);exit;
+        //print_r($qualifications); exit;
 
-        foreach($balances as $b){
-            $result = [
-                'Key' => $b->Key,
-                'Annual_Leave_Bal' => $b->Annual_Leave_Bal,
-                'Maternity_Leave_Bal' => $b->Maternity_Leave_Bal,
-                'Paternity' => $b->Paternity,
-                'Study_Leave_Bal' => $b->Study_Leave_Bal,
-                'Compasionate_Leave_Bal' => $b->Compasionate_Leave_Bal,
-                'Sick_Leave_Bal' => $b->Sick_Leave_Bal
+        $result = [];
+        $count = 0;
+        foreach($qualifications as $quali){
+
+            ++$count;
+            $link = $updateLink =  '';
+
+
+            $updateLink = Html::a('Update Qualification',['updateprofessional','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
+
+            $link = Html::a('Remove Qualification',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs']);
+
+
+            $result['data'][] = [
+                'index' => $count,
+                'Key' => $quali->Key,
+                'Employee_No' => !empty($quali->Employee_No)?$quali->Employee_No:'',
+                'Qualification_Code' => !empty($quali->Qualification_Code)?$quali->Qualification_Code:'',
+                'From_Date' => !empty($quali->From_Date)?$quali->From_Date:'',
+                'To_Date' => !empty($quali->To_Date)?$quali->To_Date:'',
+                'Description' => !empty($quali->Description)?$quali->Description:'',
+                'Institution_Company' => !empty($quali->Institution_Company)?$quali->Institution_Company:'',
+                //'Comment' => !empty($quali->Comment)?$quali->Comment:'',
+
+                'Update_Action' => $updateLink,
+                'Remove' => $link
             ];
         }
 
         return $result;
-
     }
+    
+
+  
 
 
 
     public function getQualificationsList(){
         $service = Yii::$app->params['ServiceName']['HRqualifications'];
+        $filter = ['Code' => 'Academic'];
 
-        $qualifications = \Yii::$app->navhelper->getData($service);
-        return $qualifications;
+        $qualifications = \Yii::$app->navhelper->getData($service,$filter);
+
+        $res = [];
+
+         foreach($qualifications  as $c){
+            if(!empty($c->Description) && !empty($c->Code)){
+                $res[] = [
+                    'Code' => $c->Code .' - '.$c->Description,
+                    'Description' =>  $c->Code .' - '.$c->Description
+                ];
+            }
+                
+        }
+
+        return $res;
+    }
+
+    public function getProfessionalQualificationsList(){
+        $service = Yii::$app->params['ServiceName']['HRqualifications'];
+        $filter = ['Code' => 'PROFESSIONAL'];
+
+        $qualifications = \Yii::$app->navhelper->getData($service,$filter);
+
+        $res = [];
+
+         foreach($qualifications  as $c){
+            if(!empty($c->Description) && !empty($c->Code)){
+                $res[] = [
+                    'Code' => $c->Code .' - '.$c->Description,
+                    'Description' =>  $c->Code .' - '.$c->Description
+                ];
+            }
+                
+        }
+
+        return $res;
     }
 
     public function getCountries(){

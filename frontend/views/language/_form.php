@@ -30,7 +30,7 @@ use yii\widgets\ActiveForm;
                                 <tbody>
 
                                 <tr>
-                                    <?= $form->field($model, 'Language_Description')->textInput() ?>
+                                    <?= $form->field($model, 'Language_Description')->dropDownList(['English' => 'English', 'French' => 'French', 'Portuguese' => 'Portuguese', 'other' => 'other'], ['prompt' => 'Select Language..']) ?>
                                 </tr>
                                 <tr>
                                     <?= $form->field($model, 'Read')->checkbox() ?>

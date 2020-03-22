@@ -12,7 +12,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\AgendaDocument */
 
-$this->title = 'Update Applicant: ' . $model->No;
+$this->title = 'Update Applicant Personal info.: ' . $model->No;
 $this->params['breadcrumbs'][] = ['label' => 'Update Leave', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->No, 'url' => ['view', 'id' => $model->No]];
 $this->params['breadcrumbs'][] = 'Update';

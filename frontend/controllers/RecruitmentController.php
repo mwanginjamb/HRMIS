@@ -13,6 +13,7 @@ use common\models\HrloginForm;
 use common\models\SignupForm;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
+use frontend\models\Applicantprofile;
 
 
 
@@ -379,18 +380,16 @@ class RecruitmentController extends Controller
 
     public function actionSubmit(){
 
+         $model = new Applicantprofile();
 
-
-        if(empty($requisitionNo)){
-            return $this->render('submit');
-        }
+        
+        return $this->render('submit',['model' => $model]);
+        
 
         $service = Yii::$app->params['ServiceName']['JobApplication'];
-
-
         //get Applicant No
 
-        $ApplicationNo = Yii::$app->recruitment->getProfileID();      
+        $ApplicationNo = Yii::$app->recruitment->getProfileID();   
 
 
         //call the job application CodeUnit

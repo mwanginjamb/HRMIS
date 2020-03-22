@@ -21,6 +21,8 @@ class Experience extends Model
     public $To_Date;
     public $Key;
     public $Line_No;
+    public $Reporting_To; //Not added to Nav 
+    public $Direct_Reports;
 
     public function rules()
     {
@@ -32,7 +34,9 @@ class Experience extends Model
     public function attributeLabels()
     {
         return [
-
+            'Job_Description' => 'Responsibilities',
+            'Direct_Reports' => 'No. of People Reporting To You',
+            'Reporting_To' => 'Reporting To (Position)',
         ];
     }
 }

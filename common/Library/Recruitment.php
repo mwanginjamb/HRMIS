@@ -153,7 +153,7 @@ class Recruitment extends Component
 
     //check for professional qualification
 
-    public function hasProfesssional($profileID){
+    public function hasProfessional($profileID){
          $service = Yii::$app->params['ServiceName']['qualifications'];
 
          //FILTER FOR PROFESSIONAL QUALIFICATIONS
@@ -203,5 +203,63 @@ class Recruitment extends Component
             return true;
         }
 
+    }
+
+    //Show Job Responsibility Specifications / children
+
+    public function Responsibilityspecs($resp){
+        $service = Yii::$app->params['ServiceName']['JobResponsibilities'];
+        $filter = [
+            'Responsibility' => $resp
+        ];
+
+        $results = Yii::$app->navhelper->getData($service, $filter);
+
+        $html  = '<td class="child"><table class="table table-info table-hover">';
+
+        if(!is_string($results) && !is_object($results)){
+
+            foreach($results as $spec){
+
+                $html .= '<tr>
+
+                            <td>'.$spec->Specifaction.'</td>
+
+                        </tr>';
+
+            }
+        }
+
+        $html .='</table></td>';
+
+        return $html;
+    }
+
+    public function Requirementspecs($req){
+        $service = Yii::$app->params['ServiceName']['JobRequirements'];
+        $filter = [
+            'Requirement_ID' => $req
+        ];
+
+        $results = Yii::$app->navhelper->getData($service, $filter);
+
+        $html  = '<td class="child"><table class="table table-info table-hover">';
+
+        if(!is_string($results) && !is_object($results)){
+
+            foreach($results as $spec){
+
+                $html .= '<tr>
+
+                            <td>'.$spec->Requirement_Specifiaction.'</td>
+
+                        </tr>';
+
+            }
+        }
+
+        $html .='</table></td>';
+
+        return $html;
     }
 }
