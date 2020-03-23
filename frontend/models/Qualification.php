@@ -7,7 +7,9 @@
  */
 
 namespace frontend\models;
+use Yii;
 use yii\base\Model;
+use yii\web\UploadedFile;
 
 
 class Qualification extends Model
@@ -22,6 +24,8 @@ class Qualification extends Model
     public $Comment;
     public $Line_No;
     public $Attachement_path;
+    public $ImageUrl;
+    public $imageFile;
 
 
 
@@ -30,6 +34,7 @@ class Qualification extends Model
         return [
 
             [['Employee_No'],'required'],
+            [['imageFile'],'file','mimeTypes' => Yii::$app->params['QualificationsMimeTypes']]
 
         ];
     }
@@ -38,7 +43,19 @@ class Qualification extends Model
     {
         return [
             'To_Date' => 'Completion Date',
-            'Employee_No' => 'Profile ID'
+            'Employee_No' => 'Profile ID',
+            'imageFile' => 'Qualification Attachment'
         ];
+    }
+
+    public function upload()
+    {
+        if ($this->validate('imageFile')) {
+            $this->imageFile->saveAs('qualifications/' . str_replace(' ','',$this->imageFile->baseName) . '.' . $this->imageFile->extension);
+            $this->Attachement_path = 'qualifications/'.str_replace(' ','',$this->imageFile->name);
+            return true;
+        } else {
+            return $this->getErrors();
+        }
     }
 }

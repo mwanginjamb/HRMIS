@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
 
 
                     <?php
-                    $form = ActiveForm::begin(); ?>
+                    $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
                 <div class="row">
                     <div class="col-md-12">
 
@@ -46,10 +46,13 @@ use yii\widgets\ActiveForm;
                                 <tr>
                                     <?= $form->field($model, 'Institution_Company')->textInput() ?>
                                 </tr>
+                                <tr>
+                                    <?= $form->field($model, 'imageFile')->fileInput(['accept' => 'application/*']) ?>
+                                </tr>
 
                                 <tr>
 
-                                    <?= $form->field($model, 'Employee_No')->textInput(['value' => Yii::$app->recruitment->getProfileID(), 'readonly' => 'true'])->label() ?>
+                                    <?= $form->field($model, 'Employee_No')->hiddenInput(['value' => Yii::$app->recruitment->getProfileID(), 'readonly' => 'true'])->label(false) ?>
                                     <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
                                 </tr>
 

@@ -17,6 +17,7 @@ use yii\web\Controller;
 use yii\web\BadRequestHttpException;
 
 use frontend\models\Qualification;
+use yii\web\UploadedFile;
 use yii\web\Response;
 use kartik\mpdf\Pdf;
 
@@ -80,9 +81,14 @@ class QualificationController extends Controller
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
             list($code, $desc) = explode(' - ',Yii::$app->request->post()['Qualification']['Qualification_Code']);
             $model->Qualification_Code = $code;
+            $model->Description = $desc;
 
             $model->Employee_No = Yii::$app->recruitment->getProfileID();
 
+             if(!empty($_FILES['Qualification']['name']['imageFile'])){
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                $model->upload();
+            }
             $result = Yii::$app->navhelper->postData($service,$model);
 
             if(is_object($result)){
@@ -128,9 +134,13 @@ class QualificationController extends Controller
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
             list($code, $desc) = explode(' - ',Yii::$app->request->post()['Qualification']['Qualification_Code']);
             $model->Qualification_Code = $code;
+            $model->Description =  $desc;
 
             $model->Employee_No = Yii::$app->recruitment->getProfileID();
-
+             if(!empty($_FILES['Qualification']['name']['imageFile'])){
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                $model->upload();
+            }
             $result = Yii::$app->navhelper->postData($service,$model);
 
             if(is_object($result)){
@@ -184,6 +194,13 @@ class QualificationController extends Controller
 
             list($code, $desc) = explode(' - ',Yii::$app->request->post()['Qualification']['Qualification_Code']);
             $model->Qualification_Code = $code;
+            $model->Description = $desc;
+
+
+             if(!empty($_FILES['Qualification']['name']['imageFile'])){
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                $model->upload();
+            }
             $result = Yii::$app->navhelper->updateData($service,$model);
 
 
@@ -228,6 +245,12 @@ class QualificationController extends Controller
 
             list($code, $desc) = explode(' - ',Yii::$app->request->post()['Qualification']['Qualification_Code']);
             $model->Qualification_Code = $code;
+            $model->Description = $desc;
+
+             if(!empty($_FILES['Qualification']['name']['imageFile'])){
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                $model->upload();
+            }
             $result = Yii::$app->navhelper->updateData($service,$model);
 
 
@@ -351,12 +374,14 @@ class QualificationController extends Controller
 
             $link = Html::a('Remove Qualification',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs']);
 
+            $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['read','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Qualification_Code;
+
 
             $result['data'][] = [
                 'index' => $count,
                 'Key' => $quali->Key,
                 'Employee_No' => !empty($quali->Employee_No)?$quali->Employee_No:'',
-                'Qualification_Code' => !empty($quali->Qualification_Code)?$quali->Qualification_Code:'',
+                'Qualification_Code' => $qualificationLink,
                 'From_Date' => !empty($quali->From_Date)?$quali->From_Date:'',
                 'To_Date' => !empty($quali->To_Date)?$quali->To_Date:'',
                 'Description' => !empty($quali->Description)?$quali->Description:'',
@@ -395,12 +420,14 @@ class QualificationController extends Controller
 
             $link = Html::a('Remove Qualification',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs']);
 
+            $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['read','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Qualification_Code;
+
 
             $result['data'][] = [
                 'index' => $count,
                 'Key' => $quali->Key,
                 'Employee_No' => !empty($quali->Employee_No)?$quali->Employee_No:'',
-                'Qualification_Code' => !empty($quali->Qualification_Code)?$quali->Qualification_Code:'',
+                'Qualification_Code' => $qualificationLink,
                 'From_Date' => !empty($quali->From_Date)?$quali->From_Date:'',
                 'To_Date' => !empty($quali->To_Date)?$quali->To_Date:'',
                 'Description' => !empty($quali->Description)?$quali->Description:'',
@@ -512,5 +539,17 @@ class QualificationController extends Controller
         }
 
         return $model;
+    }
+
+    public function actionRead($path){
+        $absolute = Yii::$app->recruitment->absoluteUrl().$path;
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $fh = file_get_contents($absolute); //read file into a string
+        $mimetype = $finfo->buffer($fh); //get mime type
+
+        return $this->render('read',[
+            'mimeType' => $mimetype,
+            'documentPath' => $absolute
+            ]);
     }
 }

@@ -8,6 +8,7 @@
 
 namespace frontend\models;
 use yii\base\Model;
+use yii\web\UploadedFile;
 
 class Applicantprofile extends Model
 {
@@ -49,7 +50,9 @@ public $Tribe;
 public $Religion;
 public $Post_Office_No;
 public $Picture;
-public $motivation; //not added on nav
+public $imageFile;
+public $ImageUrl;
+public $Motivation; //not added on nav
 
     public function rules()
     {
@@ -57,7 +60,8 @@ public $motivation; //not added on nav
             [['E_Mail','Gender','First_Name','Last_Name','Citizenship'], 'required'],
             [['Union_Member_x003F_'], 'boolean'],
             [['E_Mail','Company_E_Mail'],'email'],
-            [['motivation'],'string','max' => 250]
+            [['motivation'],'string','max' => 250],
+            [['imageFile'],'file','mimeTypes' => ['image/png','image/jpeg']]
         ];
     }
 
@@ -66,8 +70,20 @@ public $motivation; //not added on nav
         return [
             'Union_Member_x003F_' => 'Union Member ?',
             'Known_As' => 'Alias',
-            'motivation' => 'Letter of Motivation.'
+            'Motivation' => 'Letter of Motivation.',
+            'imageFile' => 'Passport Size Photo'
         ];
+    }
+
+     public function upload()
+    {
+        if ($this->validate('imageFile')) {
+            $this->imageFile->saveAs('profile/' . $this->imageFile->baseName . '.' . $this->imageFile->extension);
+            $this->ImageUrl = 'profile/'.$this->imageFile->name;
+            return true;
+        } else {
+            return $this->getErrors();
+        }
     }
 }
 

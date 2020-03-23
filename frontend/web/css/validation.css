@@ -1,0 +1,9 @@
+div.help-block {
+                content:" * ";
+                color:red;
+            }
+
+            
+            .hideexternally{
+                display: none;
+            }

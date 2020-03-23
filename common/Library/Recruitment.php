@@ -18,6 +18,13 @@ class Recruitment extends Component
         return \yii\helpers\Url::home(true);
     }
 
+
+    public function printrr($var){
+        print '<pre>';
+        print_r($var);
+        exit('turus!!!');
+    }
+    
     function currentCtrl($ctrl){
         $controller = Yii::$app->controller->id;
 

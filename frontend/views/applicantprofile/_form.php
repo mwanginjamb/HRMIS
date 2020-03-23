@@ -34,7 +34,7 @@ use yii\widgets\ActiveForm;
 
 <div class="row">
     <div class="col-md-12">
-        <?php $form = ActiveForm::begin(); ?>
+        <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Personal info for Profile: <?= Yii::$app->session->has('ProfileID')? Yii::$app->session->get('ProfileID'): '' ?></h3>
@@ -53,16 +53,28 @@ use yii\widgets\ActiveForm;
                             <?= $form->field($model, 'Initials')->textInput() ?>
 
                             <?= $form->field($model, 'Full_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Picture')->fileInput() ?>
+                            <?= $form->field($model, 'imageFile')->fileInput(['accept' => 'image/*']) ?>
+                            <div class="image">
+                                <?php if(!empty($model->ImageUrl)){
+                                    print '<img src="'.Yii::$app->recruitment->absoluteUrl().$model->ImageUrl.'">';
+                                } ?>
+                            </div>
 
                         </div>
                         <div class="col-md-6">
                             <?= $form->field($model, 'ID_Number')->textInput() ?>
                             <?= $form->field($model, 'Gender')->textInput() ?>
                             <?= $form->field($model, 'Date_Of_Birth')->textInput(['type'=> 'date']) ?>
-                            <?= $form->field($model, 'Age')->textInput(['type'=> 'Number','readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Age')->textInput(['readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Known_As')->textInput() ?>
-                            <?= $form->field($model, 'Marital_Status')->textInput() ?>
+                            <?= $form->field($model, 'Marital_Status')->dropDownList([
+                                    'Single' => 'Single',
+                                    'Married' => 'Married',
+                                    'Separated' => 'Separated',
+                                    'Divorced' => 'Divorced',
+                                    'Widow_er' => 'Widow_er',
+                                    'Other' => 'Other'
+                            ],['prompt' => 'Select Status']) ?>
                             <?= $form->field($model, 'Ethnic_Origin')->dropDownList(['African' => 'African', 'Indian' => 'Indian', 'White' => 'White', 'Coloured' => 'Coloured','usa' => 'American' ], ['prompt' => 'Select Ethnic Origin..']) ?>
                             <?= $form->field($model, 'Disabled')->dropDownList(['No' => 'NO', 'Yes' => 'YES'],['prompt' => 'Select Disability Status']) ?>
                             <?= $form->field($model, 'Citizenship')->dropDownList($countries, ['prompt' => 'Select Citizenship']) ?>

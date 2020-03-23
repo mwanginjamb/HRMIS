@@ -19,7 +19,7 @@ use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\BadRequestHttpException;
 
-use frontend\models\Leave;
+use yii\web\UploadedFile;
 use yii\web\Response;
 use kartik\mpdf\Pdf;
 
@@ -97,6 +97,10 @@ class ApplicantprofileController extends Controller
 
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Applicantprofile'],$model)){
 
+           if(!empty($_FILES['Applicantprofile']['name']['imageFile'])){
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                $model->upload();
+            }
             $result = Yii::$app->navhelper->postData($service,$model);
 
             if(!is_string($result)){
@@ -164,15 +168,24 @@ class ApplicantprofileController extends Controller
         //load nav result to model
         $ProfileModel = new Applicantprofile();
 
-        $model = $this->loadtomodel($result[0],$ProfileModel);
 
 
+        $model = $this->loadtomodel($result[0],$ProfileModel);  
+
+        //Yii::$app->recruitment->printrr(Yii::$app->request->post()['Applicantprofile']['imageFile']);  
 
         if( Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Applicantprofile'],$model)){
+           
+
+           // Yii::$app->recruitment->printrr($_FILES['Applicantprofile']['name']['imageFile']);
+            if(!empty($_FILES['Applicantprofile']['name']['imageFile'])){
+                $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+                $model->upload();
+            }
+            
             $result = Yii::$app->navhelper->updateData($service,$model);
 
-
-            if(!is_string($result)){
+            if(!is_string($result) ){
                 Yii::$app->session->setFlash('success','Applicant Profile Updated Successfully',true);
                 return $this->redirect(['update','No' => $model->No]);
             }else{

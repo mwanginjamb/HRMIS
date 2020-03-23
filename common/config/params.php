@@ -52,7 +52,7 @@ return [
         'RequisitionEmployeeCard' => 'RequisitionEmployeeCard',//70028
         'JobsList' => 'JobsList',//70009
         'JobsCard' => 'JobsCard',//70002
-        'JobApplicantProfile' => 'JobApplicantProfile', //50000
+        'JobApplicantProfile' => 'JobApplicantProfile', //50001
         'applicantProfile' => 'applicantProfile',//50001
         'referees' => 'referees',//55060
         'applicantLanguages' => 'applicantLanguages', //55061
@@ -82,5 +82,40 @@ return [
         /* Request to Approve */
         'RequeststoApprove' => 'RequeststoApprove', //654---duplication
     ],
+    'QualificationsMimeTypes' => [
+
+        'application/pdf',
+
+    ],
+    'Microsoft' => [
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+        'application/vnd.ms-word.document.macroEnabled.12',
+        'application/vnd.ms-word.template.macroEnabled.12',
+        'application/vnd.ms-excel',
+        'application/vnd.ms-excel',
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+        'application/vnd.ms-excel.sheet.macroEnabled.12',
+        'application/vnd.ms-excel.template.macroEnabled.12',
+        'application/vnd.ms-excel.addin.macroEnabled.12',
+        'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
+        'application/vnd.ms-powerpoint',
+        'application/vnd.ms-powerpoint',
+        'application/vnd.ms-powerpoint',
+        'application/vnd.ms-powerpoint',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'application/vnd.openxmlformats-officedocument.presentationml.template',
+        'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+        'application/vnd.ms-powerpoint.addin.macroEnabled.12',
+        'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
+        'application/vnd.ms-powerpoint.template.macroEnabled.12',
+        'application/vnd.ms-powerpoint.slideshow.macroEnabled.12',
+        'application/vnd.ms-access',
+        'application/rtf',
+        'application/octet-stream'
+    ]
 
 ];
