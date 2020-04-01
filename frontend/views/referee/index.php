@@ -131,8 +131,8 @@ $script = <<<JS
                 { title: 'Position' ,data: 'Position'},
                 { title: 'Email' ,data: 'Email'},
                 { title: 'Phone No' ,data: 'Phone_No'},
-                { title: 'Update Action' ,data: 'Update_Action'},
-                { title: 'Remove' ,data: 'Remove'},
+                { title: 'Actions' ,data: 'Action'},
+                //{ title: 'Remove' ,data: 'Remove'},
                 
                
             ] ,                              
@@ -184,6 +184,13 @@ $script = <<<JS
 JS;
 
 $this->registerJs($script);
+
+$style = <<<CSS
+    tr > td:last-child{ text-align: center; }
+CSS;
+
+$this->registerCss($style);
+
 
 
 

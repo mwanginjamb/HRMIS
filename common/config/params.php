@@ -25,11 +25,14 @@ return [
         'qualification',
         'hobby',
         'language',
-        'referee'
+        'referee',
+        'recruitment',
+        'employeerequisition'
     ],
     'codeUnits' => [
         'Portal_Workflows', //50019
-        'JobApplication' //50023
+        'JobApplication', //50023
+        'PortalReports', //50021
     ],
     'ServiceName'=>[
         'purchaseDocumentLines'=>'purchaseDocumentLines',//6405
@@ -63,9 +66,30 @@ return [
         'JobRequirements' => 'JobRequirements', //69001 ---> specs
         'JobExperience' => 'JobExperience',//69004
         'HRqualifications' => 'HRqualifications', //5205
+        'JobApplicantRequirementEntries' => 'JobApplicantRequirementEntries', //55065
 
         'Countries' => 'Countries', //10
         'Religion' => 'Religion', //70085
+
+        //Appraisal--------------------------------------------------------------------------------
+        'AppraisalRating' => 'AppraisalRating',//60023
+        'AppraisalProficiencyLevel' => 'AppraisalProficiencyLevel', //60025
+        'AppraisalList' => 'AppraisalList', //60007
+        'AppraisalCard' => 'AppraisalCard',//60008
+        'EmployeeAppraisalKPI' => 'EmployeeAppraisalKPI', //60010
+
+        'EmployeeAppraisalKRA' => 'EmployeeAppraisalKRA',//60009
+        'TrainingPlan' => 'TrainingPlan', //60036
+        'EmployeeAppraisalCompetence' => 'EmployeeAppraisalCompetence',//60033
+        'EmployeeAppraisalBehaviours' => 'EmployeeAppraisalBehaviours', //60034
+        'LearningAssessmentCompetence' => 'LearningAssessmentCompetence', //60035
+
+
+        //Payslip report
+        'PortalReports' => 'PortalReports',//50021
+        'Payrollperiods' => 'Payrollperiods', //70255
+
+
 
 
 

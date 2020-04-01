@@ -312,7 +312,14 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>applicantprofile/create" class="nav-link <?= Yii::$app->recruitment->currentaction(Yii::$app->params['profileControllers'],['create','index'])?'active':'' ?>">
+                                    <a href="<?= $absoluteUrl ?>recruitment/externalvacancies" class="nav-link <?= currentaction('recruitment','externalvacancies')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>External Job Vacancies </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>applicantprofile/create" class="nav-link <?= Yii::$app->recruitment->currentaction('applicantprofile',['create','index'])?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
                                         <p>Applicant Profile</p>
                                     </a>
@@ -350,16 +357,31 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>approvals" class="nav-link <?= currentaction('payslip','index')?'active':'' ?>">
+                                    <a href="<?= $absoluteUrl ?>payslip" class="nav-link <?= currentaction('payslip','index')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
                                         <p>Generate Payslip</p>
                                     </a>
                                 </li>
 
+                            </ul>
+                        </li>
 
-
-
-
+                        <li class="nav-item has-treeview <?= currentCtrl('appraisal')?'menu-open':'' ?>">
+                            <a href="#" class="nav-link <?= currentCtrl('appraisal')?'active':'' ?>">
+                                <i class="nav-icon fa fa-balance-scale"></i>
+                                <p>
+                                    Appraisal
+                                    <i class="fas fa-angle-left right"></i>
+                                    <!--<span class="badge badge-info right">6</span>-->
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>appraisal" class="nav-link <?= currentaction('appraisal','index')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>My Appraisal List</p>
+                                    </a>
+                                </li>
 
                             </ul>
                         </li>

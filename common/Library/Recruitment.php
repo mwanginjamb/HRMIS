@@ -87,6 +87,22 @@ class Recruitment extends Component
 
     }
 
+    public function getRequisitionType($Job_ID){ //Internal, External, Both
+        $service = Yii::$app->params['ServiceName']['RequisitionEmployeeCard'];
+
+        $filter = [
+            'Job_ID' => $Job_ID
+        ];
+
+        $result = Yii::$app->navhelper->getData($service,$filter);
+
+        if(is_object($result)){//RETURNS AN EMPTY object if the filter result fails
+            return null;
+        }
+        return $result[0]->Requisition_Type;
+
+    }
+
 /* Checking is various profile setups exists for an applicant */
 
 
@@ -217,7 +233,7 @@ class Recruitment extends Component
     public function Responsibilityspecs($resp){
         $service = Yii::$app->params['ServiceName']['JobResponsibilities'];
         $filter = [
-            'Responsibility' => $resp
+            'Responsibility_Line_No' => $resp
         ];
 
         $results = Yii::$app->navhelper->getData($service, $filter);
@@ -245,27 +261,29 @@ class Recruitment extends Component
     public function Requirementspecs($req){
         $service = Yii::$app->params['ServiceName']['JobRequirements'];
         $filter = [
-            'Requirement_ID' => $req
+            'Requirement_Line_No' => $req
         ];
 
         $results = Yii::$app->navhelper->getData($service, $filter);
 
-        $html  = '<td class="child"><table class="table table-info table-hover">';
+        $html  = '<td class="child">
+                    <table class="table table-info table-hover">';
 
-        if(!is_string($results) && !is_object($results)){
+                                    if(!is_string($results) && !is_object($results)){
 
-            foreach($results as $spec){
+                                        foreach($results as $spec){
 
-                $html .= '<tr>
+                                            $html .= '<tr>
+                            
+                                                        <td>'.$spec->Requirement_Specifiaction.'</td>
+                            
+                                                    </tr>';
 
-                            <td>'.$spec->Requirement_Specifiaction.'</td>
+                                        }
+                                    }
 
-                        </tr>';
-
-            }
-        }
-
-        $html .='</table></td>';
+        $html .='    </table>
+                   </td>';
 
         return $html;
     }

@@ -60,7 +60,7 @@ public $Motivation; //not added on nav
             [['E_Mail','Gender','First_Name','Last_Name','Citizenship'], 'required'],
             [['Union_Member_x003F_'], 'boolean'],
             [['E_Mail','Company_E_Mail'],'email'],
-            [['motivation'],'string','max' => 250],
+            [['Motivation'],'string','max' => 250],
             [['imageFile'],'file','mimeTypes' => ['image/png','image/jpeg']]
         ];
     }

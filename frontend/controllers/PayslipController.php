@@ -21,8 +21,13 @@ use frontend\models\Leave;
 use yii\web\Response;
 use kartik\mpdf\Pdf;
 
-class LeaveController extends Controller
+class PayslipController extends Controller
 {
+
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = ($action->id !== "index"); // <-- here
+        return parent::beforeAction($action);
+    }
 
     public function behaviors()
     {
@@ -62,9 +67,34 @@ class LeaveController extends Controller
     }
 
     public function actionIndex(){
+        $payrollperiods = $this->getPayrollperiods();
+        $service = Yii::$app->params['ServiceName']['PortalReports'];
 
+        //Yii::$app->recruitment->printrr(ArrayHelper::map($payrollperiods,'Date_Opened','desc'));
+        if(Yii::$app->request->post()){
+            //Yii::$app->recruitment->printrr(Yii::$app->request->post('payperiods'));
+            $data = [
+                'payrollPeriod' =>Yii::$app->request->post('payperiods'),
+                'employeeNo' => Yii::$app->user->identity->{'Employee No_'}
+             ];
+            $path = Yii::$app->navhelper->IanGeneratePayslip($service,$data);
+            $binary = file_get_contents($path['return_value']); //fopen($path['return_value'],'rb');
+            $content = chunk_split(base64_encode($binary));
+            //delete the file after getting it's contents --> This is some house keeping
+            unlink($path['return_value']);
 
-        return $this->render('index');
+           // Yii::$app->recruitment->printrr($path);
+            return $this->render('index',[
+                'report' => true,
+                'content' => $content,
+                'pperiods' => ArrayHelper::map($payrollperiods,'Date_Opened','desc')
+            ]);
+        }
+
+        return $this->render('index',[
+            'report' => false,
+            'pperiods' => ArrayHelper::map($payrollperiods,'Date_Opened','desc')
+        ]);
 
     }
 
@@ -273,7 +303,7 @@ class LeaveController extends Controller
     public function actionReport(){
         $service = Yii::$app->params['ServiceName']['leaveApplicationList'];
         $leaves = \Yii::$app->navhelper->getData($service);
-        krsort( $leaves);//sort  keys in descending order
+        krsort( $leaves);//sort by keys in descending order
         $content = $this->renderPartial('_historyreport',[
             'leaves' => $leaves
         ]);
@@ -337,11 +367,19 @@ class LeaveController extends Controller
         return $leavetypes;
     }
 
-    public function getEmployees(){
-        $service = Yii::$app->params['ServiceName']['employees'];
+    public function getPayrollperiods(){
+        $service = Yii::$app->params['ServiceName']['Payrollperiods'];
 
-        $employees = \Yii::$app->navhelper->getData($service);
-        return $employees;
+        $periods = \Yii::$app->navhelper->getData($service);
+        krsort( $periods);//sort  keys in descending order
+        $res = [];
+        foreach($periods as $p){
+            $res[] = [
+                'Date_Opened' => $p->Date_Opened,
+                'desc' => $p->Period_Year.' - '.$p->Period_Name
+            ];
+        }
+        return $res;
     }
 
     public function loadtomodel($obj,$model){

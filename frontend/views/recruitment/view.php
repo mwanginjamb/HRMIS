@@ -130,9 +130,9 @@ if(Yii::$app->session->hasFlash('success')){
 
                                     if(!empty($resp->Responsibility_Description)){
                                         print '<tr>
-                                        <td>'.$resp->Responsibility_Description.'</td>';
+                                        <td class="parent"><span>+</span>'.$resp->Responsibility_Description.'</td>';
 
-                                       echo (Yii::$app->recruitment->Responsibilityspecs($resp->Responsibility_Description));
+                                        echo (Yii::$app->recruitment->Responsibilityspecs($resp->Line_No));
 
                                         print '</tr>';
                                     }
@@ -168,9 +168,8 @@ if(Yii::$app->session->hasFlash('success')){
                                 foreach($model->Job_Requirements->Job_Requirements as $req){
                                     if(!empty($req->Requirement)){
                                         print '<tr>
-                                            <td>'.$req->Requirement.'</td>';
-
-                                                echo Yii::$app->recruitment->Requirementspecs($req->Requirement);
+                                            <td class="parent"><span>+</span>'.$req->Requirement.'</td>';
+                                            echo Yii::$app->recruitment->Requirementspecs($req->Line_No);
 
                                         print'</tr>';
                                     }
@@ -193,3 +192,20 @@ if(Yii::$app->session->hasFlash('success')){
         </div>
     </div>
 </div>
+
+<?php
+
+$script = <<<JS
+    /*Parent-Children accordion*/ 
+    
+    $('td.parent').find('span').text('+');
+    $('td.parent').find('span').css({"color":"red", "font-weight":"bolder", "margin-right": "10px"});    
+    $('td.parent').nextUntil('td.parent').slideUp(1, function(){});    
+    $('td.parent').click(function(){
+            $(this).find('span').text(function(_, value){return value=='-'?'+':'-'}); //to disregard an argument -event- on a function use an underscore in the parameter               
+            $(this).nextUntil('td.parent').slideToggle(100, function(){});
+     });
+JS;
+
+$this->registerJs($script);
+

@@ -234,9 +234,12 @@ class RefereeController extends Controller
                 $link = $updateLink =  '';
 
 
-                $updateLink = Html::a('Update Referee',['update','Line'=> $ref->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
+                $updateLink = Html::a('<i class="fa fa-edit"></i>',['update','Line'=> $ref->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
 
-                $link = Html::a('Remove Referee',['delete','Key'=> $ref->Key ],['class'=>'btn btn-outline-warning btn-xs']);
+                $link = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $ref->Key ],['class'=>'btn btn-outline-warning btn-xs','data' => [
+                    'confirm' => 'Are you sure you want to delete this record?',
+                    'method' => 'post',
+                ]]);
 
 
 
@@ -252,8 +255,8 @@ class RefereeController extends Controller
                     'Position' => !empty($ref->Position)? $ref->Position: '',
                     'Email' => !empty($ref->Email)? $ref->Email: '',
                     'Phone_No' => !empty($ref->Phone_No)? $ref->Phone_No: '',
-                    'Update_Action' => $updateLink,
-                    'Remove' => $link
+                    'Action' => $updateLink.' | '.$link,
+                    //'Remove' => $link
                 ];
             }
 

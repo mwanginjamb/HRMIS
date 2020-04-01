@@ -63,6 +63,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
+        if($id == 1){
+            return null;
+        }
         $username = strtoupper(Yii::$app->params['ldPrefix'].'\\'.$id);
         return static::findOne(['User ID' => $id]);
     }
@@ -237,6 +240,10 @@ class User extends ActiveRecord implements IdentityInterface
 
         $employee = \Yii::$app->navhelper->getData($service,$filter);
         return $employee;
+    }
+
+    public function isSupervisor($AppraiseeNo = ''){
+        return false;
     }
 
 }

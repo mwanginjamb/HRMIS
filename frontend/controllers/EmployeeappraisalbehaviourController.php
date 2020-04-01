@@ -7,6 +7,10 @@
  */
 
 namespace frontend\controllers;
+use frontend\models\Employeeappraisalbehaviours;
+use frontend\models\Employeeappraisalkra;
+use frontend\models\Experience;
+use frontend\models\Trainingplan;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\ContentNegotiator;
@@ -16,11 +20,11 @@ use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\BadRequestHttpException;
 
-use frontend\models\Language;
+use frontend\models\Leave;
 use yii\web\Response;
 use kartik\mpdf\Pdf;
 
-class LanguageController extends Controller
+class EmployeeappraisalbehaviourController extends Controller
 {
     public function behaviors()
     {
@@ -49,7 +53,7 @@ class LanguageController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getlanguage'],
+                'only' => ['getexperience'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -65,26 +69,27 @@ class LanguageController extends Controller
 
     }
 
-    public function actionCreate(){
+    public function actionCreate($Appraisal_No,$Employee_No){
 
-        $model = new Language();
-        $service = Yii::$app->params['ServiceName']['applicantLanguages'];
+        $model = new Employeeappraisalbehaviours() ;
+        $service = Yii::$app->params['ServiceName']['TrainingPlan'];
 
-        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Language'],$model)){
 
-            $model->Applicant_No = Yii::$app->recruitment->getProfileID();
+        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalbehaviours'],$model)  ){
 
+
+
+            $model->Appraisal_No = $Appraisal_No;
+            $model->Employee_No = $Employee_No;
             $result = Yii::$app->navhelper->postData($service,$model);
 
             if(is_object($result)){
-
-                Yii::$app->session->setFlash('success','Language Added Successfully',true);
-                return $this->redirect(['index']);
+                Yii::$app->session->setFlash('success','Training Plan Line Added Successfully',true);
+                return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
 
             }else{
-
-                Yii::$app->session->setFlash('error','Error Adding Language: '.$result,true);
-                return $this->redirect(['index']);
+                Yii::$app->session->setFlash('error','Error Adding Training Plan Line: '.$result,true);
+                return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
 
             }
 
@@ -93,38 +98,45 @@ class LanguageController extends Controller
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('create', [
                 'model' => $model,
-
-
             ]);
         }
 
         return $this->render('create',[
-
             'model' => $model,
-
-
         ]);
     }
 
 
     public function actionUpdate(){
-        $service = Yii::$app->params['ServiceName']['applicantLanguages'];
+        $model = new Employeeappraisalbehaviours() ;
+        $model->isNewRecord = false;
+        $service = Yii::$app->params['ServiceName']['EmployeeAppraisalBehaviours'];
         $filter = [
-            'Line_No' => Yii::$app->request->get('Line'),
+            'Line_No' => Yii::$app->request->get('Line_No'),
+            'Employee_No' => Yii::$app->request->get('Employee_No'),
+            'Appraisal_Code' => Yii::$app->request->get('Appraisal_No')
         ];
         $result = Yii::$app->navhelper->getData($service,$filter);
-        $Expmodel = new Language();
-        //load nav result to model
-        $model = $this->loadtomodel($result[0],$Expmodel);
+        $proficiencylevels = $this->getProficiencylevels();
+        $ratings = $this->getRatings();
+        if(is_array($result)){
+            //load nav result to model
+            $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;//$this->loadtomodeEmployee_Nol($result[0],$Expmodel);
+        }else{
+            Yii::$app->recruitment->printrr($result);
+        }
 
-        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Language'],$model)){
+
+        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalbehaviours'],$model) ){
             $result = Yii::$app->navhelper->updateData($service,$model);
+
+            //Yii::$app->recruitment->printrr($result);
             if(!empty($result)){
-                Yii::$app->session->setFlash('success','Language Updated Successfully',true);
-                return $this->redirect(['index']);
+                Yii::$app->session->setFlash('success','Training Plan Line Updated Successfully',true);
+                return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_Code]);
             }else{
-                Yii::$app->session->setFlash('error','Error Updating Language: '.$result,true);
-                return $this->redirect(['index']);
+                Yii::$app->session->setFlash('error','Error Updating Training Plan Line: '.$result,true);
+                return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_Code]);
             }
 
         }
@@ -132,24 +144,24 @@ class LanguageController extends Controller
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('update', [
                 'model' => $model,
-
+                'proficiencylevels' => ArrayHelper::map($proficiencylevels,'Level','Level'),
+                'ratings' => ArrayHelper::map($ratings,'Rating','Rating_Description'),
             ]);
         }
 
         return $this->render('update',[
             'model' => $model,
-
         ]);
     }
 
     public function actionDelete(){
-        $service = Yii::$app->params['ServiceName']['applicantLanguages'];
+        $service = Yii::$app->params['ServiceName']['experience'];
         $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
         if(!is_string($result)){
-            Yii::$app->session->setFlash('success','Language Purged Successfully .',true);
+            Yii::$app->session->setFlash('success','Work Experience Purged Successfully .',true);
             return $this->redirect(['index']);
         }else{
-            Yii::$app->session->setFlash('error','Error Purging Language: '.$result,true);
+            Yii::$app->session->setFlash('error','Error Purging Work Experience: '.$result,true);
             return $this->redirect(['index']);
         }
     }
@@ -218,42 +230,36 @@ class LanguageController extends Controller
 
     }
 
-    public function actionGetlanguage(){
-        $service = Yii::$app->params['ServiceName']['applicantLanguages'];
-        $languages = \Yii::$app->navhelper->getData($service);
+    public function actionGetexperience(){
+        $service = Yii::$app->params['ServiceName']['experience'];
+        $experience = \Yii::$app->navhelper->getData($service);
 
         $result = [];
         $count = 0;
-        foreach($languages as $lang){
+        foreach($experience as $exp){
+          if(!empty($exp->Job_Application_No) && !empty($exp->Position)){
+              ++$count;
+              $link = $updateLink =  '';
 
-            ++$count;
-            $link = $updateLink =  '';
 
+              $updateLink = Html::a('Update Experience',['update','Line'=> $exp->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
 
-            $updateLink = Html::a('<i class="fa fa-edit"></i>',['update','Line'=> $lang->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
-
-            $link = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $lang->Key ],['class'=>'btn btn-outline-warning btn-xs','data' => [
-                'confirm' => 'Are you sure you want to delete this record?',
-                'method' => 'post',
-            ]]);
-
-            $read = Html::checkbox('read', $lang->Read);
-            $write =  Html::checkbox('write', $lang->Write);
-            $speak =  Html::checkbox('speak', $lang->Speak);
+              $link = Html::a('Remove Experience',['delete','Key'=> $exp->Key ],['class'=>'btn btn-outline-warning btn-xs']);
 
 
 
-            $result['data'][] = [
-                'index' => $count,
-                'Key' => $lang->Key,
-                'Applicant_No' => !empty($lang->Applicant_No)?$lang->Applicant_No:'',
-                'Language_Description' => !empty($lang->Language_Description)?$lang->Language_Description:'',
-                'Read' => $read,
-                'Write' => $write,
-                'Speak' => $speak,
-                'Action' => $updateLink.' | '.$link,
-                //'Remove' => $link
-            ];
+
+              $result['data'][] = [
+                  'index' => $count,
+                  'Key' => $exp->Key,
+                  'Position' => $exp->Position,
+                  'Job_Description' => $exp->Job_Description,
+                  'Institution' => !empty($exp->Institution)? $exp->Institution : '',
+                  'Update_Action' => $updateLink,
+                  'Remove' => $link
+              ];
+          }
+
         }
 
         return $result;
@@ -315,15 +321,22 @@ class LanguageController extends Controller
 
 
 
-    public function getLeaveTypes($gender = 'Female'){
-        $service = Yii::$app->params['ServiceName']['leaveTypes'];
+    public function getProficiencylevels(){
+        $service = Yii::$app->params['ServiceName']['AppraisalProficiencyLevel'];
         $filter = [
-            'Gender' => $gender,
-            'Gender' => 'Both'
         ];
 
-        $leavetypes = \Yii::$app->navhelper->getData($service,$filter);
-        return $leavetypes;
+        $ratings = \Yii::$app->navhelper->getData($service,$filter);
+        return $ratings;
+    }
+
+    public function getRatings(){
+        $service = Yii::$app->params['ServiceName']['AppraisalRating'];
+        $filter = [
+        ];
+
+        $ratings = \Yii::$app->navhelper->getData($service,$filter);
+        return $ratings;
     }
 
     public function getCountries(){
@@ -351,7 +364,7 @@ class LanguageController extends Controller
         return $religion;
     }
 
-    public function loadtomodel($obj,$model){//load an empty model with resource data
+    public function loadtomodel($obj,$model){
 
         if(!is_object($obj)){
             return false;
@@ -360,19 +373,6 @@ class LanguageController extends Controller
         foreach($modeldata as $key => $val){
             if(is_object($val)) continue;
             $model->$key = $val;
-        }
-
-        return $model;
-    }
-
-    public function loadpost($post,$model){ // load model with form data
-
-
-        $modeldata = (get_object_vars($model)) ;
-
-        foreach($post as $key => $val){
-
-           $model->$key = $val;
         }
 
         return $model;

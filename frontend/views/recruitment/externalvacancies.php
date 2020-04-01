@@ -17,7 +17,7 @@ $this->title = 'HRMIS - AAS Careers';
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">HRMIS - Open Vacancies</h3>
+                <h3 class="card-title">HRMIS - Open External Vacancies</h3>
 
 
                 <?php
@@ -60,7 +60,7 @@ $script = <<<JS
           $('#requistions').DataTable({
            
             //serverSide: true,  
-            ajax: absolute +'recruitment/getvacancies',
+            ajax: absolute +'recruitment/getexternalvacancies',
             paging: true,
             columns: [
                 { title: 'Job_ID' ,data: 'Job_ID'},
@@ -74,7 +74,7 @@ $script = <<<JS
                
             ] ,                              
            language: {
-                "zeroRecords": "No Open Vacancies to display"
+                "zeroRecords": "No Open External Vacancies to display"
             },
             
             order : [[ 0, "desc" ]]

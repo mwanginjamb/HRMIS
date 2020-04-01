@@ -32,7 +32,7 @@ use yii\widgets\ActiveForm;
                                 
 
                                 <tr>
-                                    <?= $form->field($model, 'Qualification_Code')->dropDownList($qlist, ['prompt' => 'Select Qualification..']) ?>
+                                    <?= $form->field($model, 'Qualification_Code')->dropDownList($qlist, ['prompt' => 'Select Qualification..','required' => 1]) ?>
                                 </tr>
                                 <tr>
                                     <?= $form->field($model, 'Description')->textInput(['readonly' => 'true']) ?>

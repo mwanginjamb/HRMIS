@@ -231,9 +231,12 @@ class ExperienceController extends Controller
               $link = $updateLink =  '';
 
 
-              $updateLink = Html::a('Update Experience',['update','Line'=> $exp->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
+              $updateLink = Html::a('<i class="fa fa-edit"></i>',['update','Line'=> $exp->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
 
-              $link = Html::a('Remove Experience',['delete','Key'=> $exp->Key ],['class'=>'btn btn-outline-warning btn-xs']);
+              $link = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $exp->Key ],['class'=>'btn btn-outline-warning btn-xs','data' => [
+                  'confirm' => 'Are you sure you want to delete this record?',
+                  'method' => 'post',
+              ]]);
 
 
 
@@ -244,8 +247,8 @@ class ExperienceController extends Controller
                   'Position' => $exp->Position,
                   'Job_Description' => $exp->Job_Description,
                   'Institution' => !empty($exp->Institution)? $exp->Institution : '',
-                  'Update_Action' => $updateLink,
-                  'Remove' => $link
+                  'Action' => $updateLink.' | '.$link,
+                  //'Remove' => $link
               ];
           }
 

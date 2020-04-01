@@ -11,6 +11,7 @@ namespace frontend\controllers;
 
 use common\models\HrloginForm;
 use common\models\SignupForm;
+use frontend\models\Appraisalcard;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use frontend\models\Applicantprofile;
@@ -30,7 +31,7 @@ use frontend\models\Employee;
 use yii\web\Controller;
 use yii\web\Response;
 
-class RecruitmentController extends Controller
+class AppraisalController extends Controller
 {
 
     public function behaviors()
@@ -60,7 +61,7 @@ class RecruitmentController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getvacancies','getexternalvacancies','requirementscheck'],
+                'only' => ['getappraisals'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -72,8 +73,8 @@ class RecruitmentController extends Controller
 
     public function actionIndex(){
 
-        //return $this->render('index');
-        return $this->redirect(['recruitment/vacancies']);
+        return $this->render('index');
+
     }
 
     public function actionCreate(){
@@ -169,25 +170,29 @@ class RecruitmentController extends Controller
         ]);
     }
 
-    public function actionView($Job_ID){
-        $service = Yii::$app->params['ServiceName']['JobsCard'];
+    public function actionView(){
+        $service = Yii::$app->params['ServiceName']['AppraisalCard'];
+        $model = new Appraisalcard();
 
         $filter = [
-            'Job_ID' => $Job_ID
+            'Appraisal_No' => Yii::$app->request->get('Appraisal_No'),
+            'Employee_No' => Yii::$app->request->get('Employee_No')
         ];
 
-        $job = Yii::$app->navhelper->getData($service, $filter);
-        //Get the Job Requisition No
+        $appraisal = Yii::$app->navhelper->getData($service, $filter);
 
-        if(is_null(Yii::$app->recruitment->getRequisitionID($Job_ID))){
-            Yii::$app->session->setFlash('error','You cannot apply for this job : Job ID ('.$Job_ID.') cannot be found in HR Requisitions List',true);
-                return $this->redirect(['vacancies']);
-        }else{
-            Yii::$app->session->set('REQUISITION_NO',Yii::$app->recruitment->getRequisitionID($Job_ID));
+        if(is_array($appraisal)){
+            $model = Yii::$app->navhelper->loadmodel($appraisal[0],$model);
         }
 
+        //echo property_exists($appraisal[0]->Employee_Appraisal_KRAs,'Employee_Appraisal_KRAs')?'Exists':'Haina any';
+
+       // Yii::$app->recruitment->printrr($appraisal[0]);
+
+
         return $this->render('view',[
-            'model' => $job,
+            'model' => $model,
+            'card' => $appraisal[0]
         ]);
     }
 
@@ -270,30 +275,42 @@ class RecruitmentController extends Controller
         return $this->render('externalvacancies');
     }
 
-    public function actionGetvacancies(){
-        $service = Yii::$app->params['ServiceName']['JobsList'];
+    public function actionGetappraisals(){
+
+
+        $service = Yii::$app->params['ServiceName']['AppraisalList'];
         $filter = [
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
         ];
-        $requisitions = \Yii::$app->navhelper->getData($service,$filter);
+        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
         $result = [];
-        foreach($requisitions as $req){
-            $RequisitionType = Yii::$app->recruitment->getRequisitionType($req->Job_ID);
-                if(($req->No_of_Posts >= 0 && !empty($req->Job_Description) && !empty($req->Job_ID)) && ($RequisitionType == 'Internal' || $RequisitionType == 'Both' ) ) {
-                    $Viewlink = Html::a('Apply', ['view', 'Job_ID' => $req->Job_ID], ['class' => 'btn btn-outline-primary btn-xs']);
 
-                    $result['data'][] = [
-                        'Job_ID' => !empty($req->Job_ID) ? $req->Job_ID : 'Not Set',
-                        'Job_Description' => !empty($req->Job_Description) ? $req->Job_Description : '',
-                        'No_of_Posts' => !empty($req->No_of_Posts) ? $req->No_of_Posts : 'Not Set',
-                        'Date_Created' => !empty($req->Date_Created) ? $req->Date_Created : '',
-                        'ReqType' => \Yii::$app->recruitment->getRequisitionType($req->Job_ID),
-                        'action' => !empty($Viewlink) ? $Viewlink : '',
 
-                    ];
 
-                }
+       if(is_array($appraisals)){
+           foreach($appraisals as $req){
 
-        }
+
+               $Viewlink = Html::a('View', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+
+               $result['data'][] = [
+                   'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
+                   'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
+                   'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
+                   'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
+                   'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
+                   'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
+                   'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
+                   'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
+                   'Action' => !empty($Viewlink) ? $Viewlink : '',
+
+               ];
+
+
+
+           }
+       }
+
         return $result;
     }
 
@@ -406,71 +423,33 @@ class RecruitmentController extends Controller
 
     public function actionSubmit(){
 
-        $model = new Applicantprofile();
-        //get Applicant No
-        $ApplicationNo = Yii::$app->recruitment->getProfileID();
+         $model = new Applicantprofile();
 
-        $requirements = '';
-
-        if(Yii::$app->request->isPost){
-
-            if(!empty(Yii::$app->request->post()['Applicantprofile']['Motivation'])){ //Update motivation letter
-                $service = Yii::$app->params['ServiceName']['applicantProfile'];
-                $filter = [
-                    'No' => $ApplicationNo,
-                ];
-                $modelData = Yii::$app->navhelper->getData($service, $filter);
-                $model = $this->loadtomodel($modelData[0],$model);
-                $model->Motivation = Yii::$app->request->post()['Applicantprofile']['Motivation'];
-                $res = Yii::$app->navhelper->updateData($service,$model);
-            }
-
-            $service = Yii::$app->params['ServiceName']['JobApplication'];
-
-            //call the job application CodeUnit
-            $data = [
-                'applicantNo' => $ApplicationNo,
-                'requisitionNo' => Yii::$app->session->get('REQUISITION_NO'),
-            ];
-            $result = Yii::$app->navhelper->SubmitJobApplication($service,$data); // This code unit should return  the Job_Applicant_No so as to generate jobrequirement entries.
-            //$requirements = $this->getRequiremententries();
-
-            //Remove sessions set within the process
-            Yii::$app->session->remove('REQUISITION_NO');
-
-
-            if(!is_string($result)){
-                Yii::$app->session->setFlash('success', 'Congratulations, Job Application submitted successfully.', true);
-            }else{
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to submit your application now : '. $result);
-            }
-        }
+        
+        return $this->render('submit',['model' => $model]);
         
 
+        $service = Yii::$app->params['ServiceName']['JobApplication'];
+        //get Applicant No
 
-        return $this->render('submit',['model' => $model,'requirements' => $requirements]);
+        $ApplicationNo = Yii::$app->recruitment->getProfileID();   
 
-    }
 
-    public function getRequiremententries($Job_Applicant_No){
-        $requirementEntriesService = Yii::$app->params['ServiceName']['JobApplicantRequirementEntries'];
-        $reqFilter = [
-            'Job_Applicant_No' => $Job_Applicant_No,
-        ];
-        $requirements = Yii::$app->navhelper->getData($requirementEntriesService, $reqFilter);
-        return $requirements;
-    }
-
-    public function actionRequirementscheck(){
-        $service = Yii::$app->params['ServiceName']['JobApplicantRequirementEntries'];
+        //call the job application CodeUnit
         $data = [
-            'Key' => Yii::$app->request->post('Key'),
-            'Line_No' => Yii::$app->request->post('Line_No'),
-            'Met' => True,
+            'applicantNo' => $ApplicationNo,
+            'requisitionNo' => Yii::$app->session->get('REQUISITION_NO'),
         ];
 
-        $result = Yii::$app->navhelper->updateData($service,$data);
-        return($result);
+        $result = Yii::$app->navhelper->SubmitJobApplication($service,$data);
+
+        if(!is_string($result)){
+            Yii::$app->session->setFlash('success', 'Congratulations, Job Application submitted successfully.', true);
+        }else{
+            Yii::$app->session->setFlash('error', 'Sorry, we are unable to submit your application now : '. $result);
+
+        }
+
 
     }
 

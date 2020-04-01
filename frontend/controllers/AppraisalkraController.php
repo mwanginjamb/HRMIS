@@ -2,12 +2,13 @@
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
- * Date: 2/22/2020
- * Time: 2:53 PM
+ * Date: 3/9/2020
+ * Time: 4:21 PM
  */
 
 namespace frontend\controllers;
-
+use frontend\models\Employeeappraisalkra;
+use frontend\models\Experience;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\ContentNegotiator;
@@ -21,9 +22,8 @@ use frontend\models\Leave;
 use yii\web\Response;
 use kartik\mpdf\Pdf;
 
-class LeaveController extends Controller
+class AppraisalkraController extends Controller
 {
-
     public function behaviors()
     {
         return [
@@ -32,7 +32,7 @@ class LeaveController extends Controller
                 'only' => ['logout', 'signup','index'],
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['signup','index'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -51,7 +51,7 @@ class LeaveController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getleaves'],
+                'only' => ['getexperience'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -63,110 +63,99 @@ class LeaveController extends Controller
 
     public function actionIndex(){
 
-
         return $this->render('index');
 
     }
 
     public function actionCreate(){
 
-        $model = new Leave();
-        $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
+        $model = new Employeeappraisalkra() ;
+        $service = Yii::$app->params['ServiceName']['EmployeeAppraisalKRA'];
 
-        if(\Yii::$app->request->get('create') ){
-            //make an initial empty request to nav
-            $req = Yii::$app->navhelper->postData($service,[]);
-
-            if(is_string($req)){  // A string response is a fucking error
-                Yii::$app->session->setFlash('error','Error : '.$req,true);
-                return $this->redirect(['index']);
-            }
+        if(Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalkra'],$model) && Yii::$app->request->post()){
 
 
-            $modeldata = (get_object_vars($req)) ;
-            foreach($modeldata as $key => $val){
-                if(is_object($val)) continue;
-                $model->$key = $val;
-            }
-
-            $model->Start_Date = date('Y-m-d');
-            $model->End_Date = date('Y-m-d');
-
-        }
-
-        $leaveTypes = $this->getLeaveTypes();
-        $employees = $this->getEmployees();
-        $message = "";
-        $success = false;
-
-        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
-
-            $result = Yii::$app->navhelper->updateData($service,Yii::$app->request->post()['Leave']);
+            $result = Yii::$app->navhelper->postData($service,$model);
 
             if(is_object($result)){
-
-                Yii::$app->session->setFlash('success','Leave request Created Successfully',true);
-                return $this->redirect(['view','ApplicationNo' => $result->Application_No]);
+                Yii::$app->session->setFlash('success','Key Result Area Evaluated Successfully',true);
+                return $this->redirect(['appraisal/view']);
 
             }else{
-
-                Yii::$app->session->setFlash('error','Error Creating Leave request: '.$result,true);
+                Yii::$app->session->setFlash('error','Error Evaluating Key Result Area: '.$result,true);
                 return $this->redirect(['index']);
 
             }
 
+        }//End Saving experience
+
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('create', [
+                'model' => $model,
+            ]);
         }
-
-
 
         return $this->render('create',[
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name'),
-
         ]);
     }
 
 
-    public function actionUpdate($ApplicationNo){
-        $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
-        $leaveTypes = $this->getLeaveTypes();
-        $employees = $this->getEmployees();
-
-
+    public function actionUpdate(){
+        $model = new Employeeappraisalkra() ;
+        $model->isNewRecord = false;
+        $service = Yii::$app->params['ServiceName']['EmployeeAppraisalKRA'];
         $filter = [
-            'Application_No' => $ApplicationNo
+            'Line_No' => Yii::$app->request->get('Line_No'),
+            'Employee_No' => Yii::$app->request->get('Employee_No'),
+            'Appraisal_No' => Yii::$app->request->get('Appraisal_No')
         ];
-        $result = Yii::$app->navhelper->getData($service, $filter);
+        $result = Yii::$app->navhelper->getData($service,$filter);
+        $ratings = $this->getAppraisalrating();
+        if(is_array($result)){
+            //load nav result to model
+            $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;//$this->loadtomodeEmployee_Nol($result[0],$Expmodel);
+        }else{
+            Yii::$app->navhelper->printrr($result);
+        }
 
 
+        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalkra'],$model) ){
+            $result = Yii::$app->navhelper->updateData($service,$model);
 
-        //load nav result to model
-        $leaveModel = new Leave();
-
-        $model = $this->loadtomodel($result[0],$leaveModel);
-
-
-
-        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
-            $result = Yii::$app->navhelper->updateData($model);
-
-
+            //Yii::$app->recruitment->printrr($result);
             if(!empty($result)){
-                Yii::$app->session->setFlash('success','Leave request Updated Successfully',true);
-                return $this->redirect(['view','ApplicationNo' => $result->Application_No]);
+                Yii::$app->session->setFlash('success','Key Result Area Evaluated Successfully',true);
+                return $this->redirect(['appraisal/view','Employee_No' => $model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
             }else{
-                Yii::$app->session->setFlash('error','Error Updating Leave Request : '.$result,true);
-                return $this->redirect(['index']);
+                Yii::$app->session->setFlash('error','Error Evaluating Key Result Area: '.$result,true);
+                return $this->redirect(['appraisal/view']);
             }
 
         }
 
+        if(Yii::$app->request->isAjax){
+            return $this->renderAjax('update', [
+                'model' => $model,
+                'ratings' => ArrayHelper::map($ratings,'Rating','Rating_Description')
+            ]);
+        }
+
         return $this->render('update',[
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name')
-            ]);
+        ]);
+    }
+
+    public function actionDelete(){
+        $service = Yii::$app->params['ServiceName']['experience'];
+        $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
+        if(!is_string($result)){
+            Yii::$app->session->setFlash('success','Work Experience Purged Successfully .',true);
+            return $this->redirect(['index']);
+        }else{
+            Yii::$app->session->setFlash('error','Error Purging Work Experience: '.$result,true);
+            return $this->redirect(['index']);
+        }
     }
 
     public function actionView($ApplicationNo){
@@ -233,47 +222,45 @@ class LeaveController extends Controller
 
     }
 
-    public function actionGetleaves(){
-        $service = Yii::$app->params['ServiceName']['leaveApplicationList'];
-        $leaves = \Yii::$app->navhelper->getData($service);
+    public function actionGetexperience(){
+        $service = Yii::$app->params['ServiceName']['experience'];
+        $experience = \Yii::$app->navhelper->getData($service);
 
         $result = [];
-        foreach($leaves as $leave){
+        $count = 0;
+        foreach($experience as $exp){
+          if(!empty($exp->Job_Application_No) && !empty($exp->Position)){
+              ++$count;
+              $link = $updateLink =  '';
 
 
-            $link = $updateLink =  '';
-            $Viewlink = Html::a('Details',['view','ApplicationNo'=> $leave->Application_No ],['class'=>'btn btn-outline-primary btn-xs']);
-            if($leave->Approval_Status == 'New' ){
-                $link = Html::a('Send Approval Request',['approval-request','app'=> $leave->Application_No ],['class'=>'btn btn-primary btn-xs']);
-                $updateLink = Html::a('Update Leave',['update','ApplicationNo'=> $leave->Application_No ],['class'=>'btn btn-info btn-xs']);
-            }else if($leave->Approval_Status == 'Approval_Pending'){
-                $link = Html::a('Cancel Approval Request',['cancel-request','app'=> $leave->Application_No ],['class'=>'btn btn-warning btn-xs']);
-            }
+              $updateLink = Html::a('Update Experience',['update','Line'=> $exp->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
+
+              $link = Html::a('Remove Experience',['delete','Key'=> $exp->Key ],['class'=>'btn btn-outline-warning btn-xs']);
 
 
 
-            $result['data'][] = [
-                'Key' => $leave->Key,
-                'Employee_No' => !empty($leave->Employee_No)?$leave->Employee_No:'',
-                'Employee_Name' => !empty($leave->Employee_Name)?$leave->Employee_Name:'',
-                'Application_No' => $leave->Application_No,
-                'Days_Applied' => $leave->Days_Applied,
-                'Application_Date' => $leave->Application_Date,
-                'Approval_Status' => $leave->Approval_Status,
-                'Leave_Status' => $leave->Leave_Status,
-                'Action' => $link,
-                'Update_Action' => $updateLink,
-                'view' => $Viewlink
-            ];
+
+              $result['data'][] = [
+                  'index' => $count,
+                  'Key' => $exp->Key,
+                  'Position' => $exp->Position,
+                  'Job_Description' => $exp->Job_Description,
+                  'Institution' => !empty($exp->Institution)? $exp->Institution : '',
+                  'Update_Action' => $updateLink,
+                  'Remove' => $link
+              ];
+          }
+
         }
 
         return $result;
     }
 
     public function actionReport(){
-        $service = Yii::$app->params['ServiceName']['leaveApplicationList'];
+        $service = Yii::$app->params['ServiceName']['expApplicationList'];
         $leaves = \Yii::$app->navhelper->getData($service);
-        krsort( $leaves);//sort  keys in descending order
+        krsort( $leaves);//sort by keys in descending order
         $content = $this->renderPartial('_historyreport',[
             'leaves' => $leaves
         ]);
@@ -306,11 +293,11 @@ class LeaveController extends Controller
         $result = [];
 
         //print '<pre>';
-       // print_r($balances);exit;
+        // print_r($balances);exit;
 
         foreach($balances as $b){
             $result = [
-               'Key' => $b->Key,
+                'Key' => $b->Key,
                 'Annual_Leave_Bal' => $b->Annual_Leave_Bal,
                 'Maternity_Leave_Bal' => $b->Maternity_Leave_Bal,
                 'Paternity' => $b->Paternity,
@@ -326,22 +313,38 @@ class LeaveController extends Controller
 
 
 
-    public function getLeaveTypes($gender = 'Female'){
-        $service = Yii::$app->params['ServiceName']['leaveTypes'];
+    public function getAppraisalrating(){
+        $service = Yii::$app->params['ServiceName']['AppraisalRating'];
         $filter = [
-            'Gender' => $gender,
-            'Gender' => 'Both'
         ];
 
-        $leavetypes = \Yii::$app->navhelper->getData($service,$filter);
-        return $leavetypes;
+        $ratings = \Yii::$app->navhelper->getData($service,$filter);
+        return $ratings;
     }
 
-    public function getEmployees(){
-        $service = Yii::$app->params['ServiceName']['employees'];
+    public function getCountries(){
+        $service = Yii::$app->params['ServiceName']['Countries'];
 
-        $employees = \Yii::$app->navhelper->getData($service);
-        return $employees;
+        $res = [];
+        $countries = \Yii::$app->navhelper->getData($service);
+        foreach($countries as $c){
+            if(!empty($c->Name))
+                $res[] = [
+                    'Code' => $c->Code,
+                    'Name' => $c->Name
+                ];
+        }
+
+        return $res;
+    }
+
+    public function getReligion(){
+        $service = Yii::$app->params['ServiceName']['Religion'];
+        $filter = [
+            'Type' => 'Religion'
+        ];
+        $religion = \Yii::$app->navhelper->getData($service, $filter);
+        return $religion;
     }
 
     public function loadtomodel($obj,$model){
@@ -357,5 +360,4 @@ class LeaveController extends Controller
 
         return $model;
     }
-
 }

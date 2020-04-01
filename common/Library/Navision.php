@@ -602,6 +602,21 @@ class Navision extends Component
 
     }
 
+    //Payslip report
+
+    public function IanGeneratePayslip($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanGeneratePayslip($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+
 
 
 

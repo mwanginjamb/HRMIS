@@ -132,6 +132,8 @@ class QualificationController extends Controller
         $service = Yii::$app->params['ServiceName']['qualifications'];
 
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
+
+
             list($code, $desc) = explode(' - ',Yii::$app->request->post()['Qualification']['Qualification_Code']);
             $model->Qualification_Code = $code;
             $model->Description =  $desc;
@@ -172,8 +174,6 @@ class QualificationController extends Controller
         return $this->render('create',[
 
             'model' => $model,
-            
-
 
         ]);
     }
@@ -192,10 +192,10 @@ class QualificationController extends Controller
 
         if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Qualification'],$model)){
 
+
             list($code, $desc) = explode(' - ',Yii::$app->request->post()['Qualification']['Qualification_Code']);
             $model->Qualification_Code = $code;
-            $model->Description = $desc;
-
+            $model->Description =  $desc;
 
              if(!empty($_FILES['Qualification']['name']['imageFile'])){
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -370,9 +370,12 @@ class QualificationController extends Controller
             $link = $updateLink =  '';
 
 
-            $updateLink = Html::a('Update Qualification',['update','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
+            $updateLink = Html::a('<i class="fa fa-edit"></i>',['update','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-xs','title' => 'Update Qualification']);
 
-            $link = Html::a('Remove Qualification',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs']);
+            $link = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs','title' => 'Remove Qualification','data' => [
+                'confirm' => 'Are you sure you want to delete this qualification?',
+                'method' => 'post',
+            ]]);
 
             $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['read','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Qualification_Code;
 
@@ -388,8 +391,8 @@ class QualificationController extends Controller
                 'Institution_Company' => !empty($quali->Institution_Company)?$quali->Institution_Company:'',
                 //'Comment' => !empty($quali->Comment)?$quali->Comment:'',
 
-                'Update_Action' => $updateLink,
-                'Remove' => $link
+                'Action' => $updateLink.' | '.$link,
+                //'Remove' => $link
             ];
         }
 
@@ -416,9 +419,12 @@ class QualificationController extends Controller
             $link = $updateLink =  '';
 
 
-            $updateLink = Html::a('Update Qualification',['updateprofessional','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
+            $updateLink = Html::a('<i class="fa fa-edit"></i>',['updateprofessional','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
 
-            $link = Html::a('Remove Qualification',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs']);
+            $link = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs','data' => [
+                'confirm' => 'Are you sure you want to delete this qualification?',
+                'method' => 'post',
+            ]]);
 
             $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['read','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Qualification_Code;
 
@@ -434,8 +440,8 @@ class QualificationController extends Controller
                 'Institution_Company' => !empty($quali->Institution_Company)?$quali->Institution_Company:'',
                 //'Comment' => !empty($quali->Comment)?$quali->Comment:'',
 
-                'Update_Action' => $updateLink,
-                'Remove' => $link
+                'Action' => $updateLink.' | '.$link,
+                //'Remove' => $link
             ];
         }
 
