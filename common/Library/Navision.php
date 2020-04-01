@@ -617,6 +617,23 @@ class Navision extends Component
     }
 
 
+    //Generate P9 report
+
+    public function IanGenerateP9($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanGenerateP9($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+
+
+
 
 
 

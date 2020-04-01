@@ -346,11 +346,11 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                             </ul>
                         </li>
 
-                         <li class="nav-item has-treeview <?= currentCtrl('payslip')?'menu-open':'' ?>">
-                            <a href="#" class="nav-link <?= currentCtrl('payslip')?'active':'' ?>">
+                         <li class="nav-item has-treeview <?= currentCtrl(['payslip','p9'])?'menu-open':'' ?>">
+                            <a href="#" class="nav-link <?= currentCtrl(['payslip','p9'])?'active':'' ?>">
                                 <i class="nav-icon fa fa-file-invoice-dollar"></i>
                                 <p>
-                                    Pay Slip
+                                    Payroll Reports
                                     <i class="fas fa-angle-left right"></i>
                                     <!--<span class="badge badge-info right">6</span>-->
                                 </p>
@@ -360,6 +360,13 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                     <a href="<?= $absoluteUrl ?>payslip" class="nav-link <?= currentaction('payslip','index')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
                                         <p>Generate Payslip</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>p9" class="nav-link <?= currentaction('p9','index')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>Generate P9 </p>
                                     </a>
                                 </li>
 
@@ -487,6 +494,11 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
 function currentCtrl($ctrl){
     $controller = Yii::$app->controller->id;
 
+    if(is_array($ctrl)){
+        if(in_array($controller,$ctrl)){
+            return true;
+        }
+    }
     if($controller == $ctrl ){
         return true;
     }else{

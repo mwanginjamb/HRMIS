@@ -433,11 +433,10 @@ class RecruitmentController extends Controller
                 'requisitionNo' => Yii::$app->session->get('REQUISITION_NO'),
             ];
             $result = Yii::$app->navhelper->SubmitJobApplication($service,$data); // This code unit should return  the Job_Applicant_No so as to generate jobrequirement entries.
-            //$requirements = $this->getRequiremententries();
-
             //Remove sessions set within the process
             Yii::$app->session->remove('REQUISITION_NO');
-
+            //print_r($result); exit;
+            $requirements = $this->getRequiremententries($result['return_value']);
 
             if(!is_string($result)){
                 Yii::$app->session->setFlash('success', 'Congratulations, Job Application submitted successfully.', true);
@@ -471,7 +470,6 @@ class RecruitmentController extends Controller
 
         $result = Yii::$app->navhelper->updateData($service,$data);
         return($result);
-
     }
 
     public function loadtomodel($obj,$model){

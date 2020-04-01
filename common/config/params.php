@@ -89,6 +89,10 @@ return [
         'PortalReports' => 'PortalReports',//50021
         'Payrollperiods' => 'Payrollperiods', //70255
 
+        //P9 report
+
+        'P9YEARS' => 'P9YEARS', //70286
+
 
 
 

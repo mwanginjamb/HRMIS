@@ -53,7 +53,7 @@ exit;*/
             <div class="card-body">
 
             <?php if(is_array($requirements)){ ?>
-                <h3><u>Mark if you meet following qualifications.</u></h3>
+                <h4 class="alert alert-info">Kindly, Mark if you meet following qualifications.</h4>
 
                 <table class="table table-hover table-bordered">
                     <thead>
@@ -77,9 +77,12 @@ exit;*/
                     </tbody>
 
 
+
                 </table>
 
-            <?php }  ?>
+                <?= Html::a('Complete Application',['applicantprofile/update','No' => Yii::$app->recruitment->getProfileID()],['class' => 'btn btn-success','style' => 'margin-top: 10px']);?>
+
+            <?php }else{  ?>
 
                 <table class="table" border="0">
                     <tr>
@@ -104,6 +107,8 @@ exit;*/
                         <?php ActiveForm::end(); ?>
                     </tr>
                 </table>
+
+    <?php } ?>
 
 
 
