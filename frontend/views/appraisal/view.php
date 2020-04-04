@@ -9,7 +9,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Performance Appraisal';
+$this->title = 'Performance Appraisal - '.$model->Appraisal_No;
+$this->params['breadcrumbs'][] = ['label' => 'Performance Management', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Appraisal View', 'url' => ['view','Employee_No'=> $model->Employee_No,'Appraisal_No' => $model->Appraisal_No]];
 ?>
 
 <div class="row">

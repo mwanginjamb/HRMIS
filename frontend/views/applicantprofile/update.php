@@ -13,9 +13,8 @@ use yii\helpers\Html;
 /* @var $model frontend\models\AgendaDocument */
 
 $this->title = 'Update Applicant Personal info.: ' . $model->No;
-$this->params['breadcrumbs'][] = ['label' => 'Update Leave', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->No, 'url' => ['view', 'id' => $model->No]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = ['label' => 'Recruitment ', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Update Applicant Profile', 'url' => ['applicantprofile/update','No' => $model->No ]];
 ?>
 <div class="agenda-document-update">
 

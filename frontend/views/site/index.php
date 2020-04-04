@@ -3,6 +3,8 @@
 /* @var $this yii\web\View */
 
 $this->title = 'HRMIS - AAS';
+$this->params['breadcrumbs'][] = ['label' => 'Dashboard', 'url' => ['index']];
+$this->params['breadcrumbs'][] = '';
 
 /*print '<pre>';
 print_r(Yii::$app->user->identity->employee);

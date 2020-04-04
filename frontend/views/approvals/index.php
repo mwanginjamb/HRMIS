@@ -11,6 +11,8 @@
 /* @var $this yii\web\View */
 
 $this->title = 'HRMIS - Approval Requests';
+$this->params['breadcrumbs'][] = ['label' => 'Approval Management', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Approvals List', 'url' => ['index']];
 ?>
     <div class="row">
         <div class="col-md-12">

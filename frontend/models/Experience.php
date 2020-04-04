@@ -17,12 +17,12 @@ class Experience extends Model
     public $Job_Description;
     public $Institution;
     public $Period;
-    public $From_Date;
-    public $To_Date;
+    public $Start_Date;
+    public $End_Date;
     public $Key;
     public $Line_No;
-    public $Reporting_To; //Not added to Nav 
-    public $Direct_Reports;
+    public $No_of_People_Reporting_to_You;  
+    public $Reporting_To;
 
     public function rules()
     {
@@ -35,7 +35,7 @@ class Experience extends Model
     {
         return [
             'Job_Description' => 'Responsibilities',
-            'Direct_Reports' => 'No. of People Reporting To You',
+            'No_of_People_Reporting_to_You' => 'No. of People Reporting To You',
             'Reporting_To' => 'Reporting To (Position)',
         ];
     }

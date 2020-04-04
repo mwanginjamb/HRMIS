@@ -33,7 +33,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body>
+
 <?php $this->beginBody() ?>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -54,7 +54,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
             </ul>
 
             <!-- SEARCH FORM -->
-            <form class="form-inline ml-3">
+            <!--<form class="form-inline ml-3">
                 <div class="input-group input-group-sm">
                     <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
                     <div class="input-group-append">
@@ -63,7 +63,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                         </button>
                     </div>
                 </div>
-            </form>
+            </form>-->
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
@@ -128,11 +128,11 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                 <!-- Notifications Dropdown Menu -->
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="far fa-bell"></i>
-                        <span class="badge badge-warning navbar-badge">15</span>
+                        <i class="fas fa-th-large"></i>
+
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-item dropdown-header">15 Notifications</span>
+                        <!--<span class="dropdown-item dropdown-header">15 Notifications</span>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">
                             <i class="fas fa-envelope mr-2"></i> 4 new messages
@@ -147,7 +147,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                         <a href="#" class="dropdown-item">
                             <i class="fas fa-file mr-2"></i> 3 new reports
                             <span class="float-right text-muted text-sm">2 days</span>
-                        </a>
+                        </a>-->
 
 
 
@@ -172,15 +172,14 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
 
                         <?= Html::a('<i class="fas fa-user"></i> Profile','employee/',['class'=> 'dropdown-item']); ?>
 
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">Approval Management</a>
+
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
+               <!-- <li class="nav-item">
+                    <a class="nav-link" data-widget="control-sidebar" data-slide="false" href="#">
                         <i class="fas fa-th-large"></i>
                     </a>
-                </li>
+                </li>-->
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -441,10 +440,22 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="<?= $absoluteUrl ?>site">Home</a></li>
-                                <li class="breadcrumb-item active">Dashboard v1</li>
+                                <!--<li class="breadcrumb-item"><a href="site">Home</a></li>
+                                <li class="breadcrumb-item active">Dashboard v1</li>-->
+                                <?=
+                                Breadcrumbs::widget([
+                                'itemTemplate' => "<li class=\"breadcrumb-item\"><i>{link}</i></li>\n", // template for all links
+                                'homeLink' => [
+                                'label' => Yii::t('yii', 'Home'),
+                                'url' => Yii::$app->homeUrl,
+                                ],
+                                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                                ])
+                                ?>
                             </ol>
-                        </div><!-- /.col -->
+
+                        </div><!-- /.col-6 bread ish -->
+
                     </div><!-- /.row -->
                 </div><!-- /.container-fluid -->
             </div>
@@ -463,6 +474,17 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
         </div>
         <!-- /.content-wrapper -->
 
+
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; AAS -  <?= Html::encode(Yii::$app->name) ?> 2014 - <?= date('Y') ?>   <a href="#"> African Academy of Sciences</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b><?= Yii::signature() ?></b>
+            </div>
+        </footer>
+
+
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
@@ -474,15 +496,6 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
 
     </div>
 
-
-    <footer class="footer">
-        <strong>Copyright &copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?>.</strong>
-        All rights reserved.
-        <div class="float-right d-none d-sm-inline-block">
-            <b><?= Yii::powered() ?></b>
-        </div>
-
-    </footer>
 </body>
 
 

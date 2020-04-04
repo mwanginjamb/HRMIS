@@ -11,6 +11,8 @@
 /* @var $this yii\web\View */
 
 $this->title = 'HRMIS - P9 Report';
+$this->params['breadcrumbs'][] = ['label' => 'Payroll Reports', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'P9 Report', 'url' => ['index']];
 ?>
 
     <div class="row">

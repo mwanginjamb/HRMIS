@@ -46,6 +46,7 @@ return [
         'leaveTypes' => 'leaveTypes', //70045
         'leaveRecallCard' => 'leaveRecallCard',//71076
         'leaveRecallList' => 'leaveRecallList',//71077
+        'activeLeaveList' => 'activeLeaveList',//69005 --> Not published or taken to live server
 
         'Approvals' => 'Approvals', //654---------------duplicated
         'ApprovalComments' => 'ApprovalComments', //660

@@ -43,19 +43,20 @@ use yii\widgets\ActiveForm;
                                     <?= $form->field($model, 'Institution')->textInput() ?>
                                 </tr>
                                 <tr>
-                                    <?= $form->field($model, 'From_Date')->textInput(['type' => 'date']) ?>
+                                    <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date']) ?>
                                 </tr>
                                 <tr>
-                                    <?= $form->field($model, 'To_Date')->textInput(['type' => 'date']) ?>
+                                    <?= $form->field($model, 'End_Date')->textInput(['type' => 'date']) ?>
                                 </tr>
                                  <tr>
                                     <?= $form->field($model, 'Reporting_To')->textInput() ?>
                                 </tr>
                                  <tr>
-                                    <?= $form->field($model, 'Direct_Reports')->textInput(['type' => 'number']) ?>
+                                    <?= $form->field($model, 'No_of_People_Reporting_to_You')->textInput(['type' => 'number']) ?>
                                 </tr>
+                                
                                 <tr>
-                                    <?= $form->field($model, 'Period')->textInput(['readonly'=> true]) ?>
+                                    <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
                                 </tr>
 
 

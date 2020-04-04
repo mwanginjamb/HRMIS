@@ -51,7 +51,7 @@ class LeaveController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getleaves'],
+                'only' => ['getleaves','getactiveleaves'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -66,6 +66,10 @@ class LeaveController extends Controller
 
         return $this->render('index');
 
+    }
+
+    public function actionActiveleaves(){
+        return $this->render('activeleaves');
     }
 
     public function actionCreate(){
@@ -235,7 +239,12 @@ class LeaveController extends Controller
 
     public function actionGetleaves(){
         $service = Yii::$app->params['ServiceName']['leaveApplicationList'];
-        $leaves = \Yii::$app->navhelper->getData($service);
+        $filter = [
+            'Employee_No' => Yii::$app->user->identity->Employee[0]->No,
+        ];
+
+        //Yii::$app->recruitment->printrr( );
+        $leaves = \Yii::$app->navhelper->getData($service,$filter);
 
         $result = [];
         foreach($leaves as $leave){
@@ -342,6 +351,33 @@ class LeaveController extends Controller
 
         $employees = \Yii::$app->navhelper->getData($service);
         return $employees;
+    }
+
+    /*Get Active Leaves*/
+
+    public function actionGetactiveleaves(){
+        $service = Yii::$app->params['ServiceName']['activeLeaveList'];
+
+        $active = \Yii::$app->navhelper->getData($service);
+        krsort($active);//sort  keys in descending order
+
+        //Yii::$app->recruitment->printrr($active);
+        $result = [];
+        foreach($active as $leave){
+
+            $result['data'][] = [
+                'Key' => $leave->Key,
+                'Application Code' => !empty($leave->Application_Code)?$leave->Application_Code:'',
+                'Employee_Name' => !empty($leave->Names)?$leave->Names:'',
+                'Days_Applied' => $leave->Days_Applied,
+                'Start_Date' => $leave->Start_Date,
+                'Return_Date' => $leave->Return_Date,
+                'End_Date' => $leave->End_Date,
+                'Status' => $leave->Status,
+            ];
+        }
+
+        return $result;
     }
 
     public function loadtomodel($obj,$model){

@@ -12,8 +12,8 @@ use yii\helpers\Html;
 /* @var $model frontend\models\AgendaDocument */
 
 $this->title = 'Applicant Personal info.';
-$this->params['breadcrumbs'][] = ['label' => 'New Leave Recall', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => 'Recruitment ', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Create Applicant Profile', 'url' => ['applicantprofile/create']];
 ?>
 <div class="leave-document-create">
 

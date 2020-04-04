@@ -11,6 +11,8 @@
 /* @var $this yii\web\View */
 
 $this->title = 'HRMIS - AAS Leave History Report';
+$this->params['breadcrumbs'][] = ['label' => 'Leaves', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Leaves Report', 'url' => ['reportview']];
 $webroot = Yii::getAlias(@$webroot);
 ?>
 

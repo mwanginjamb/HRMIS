@@ -11,6 +11,8 @@
 /* @var $this yii\web\View */
 
 $this->title = 'HRMIS - AAS Employee Requisition';
+$this->params['breadcrumbs'][] = ['label' => 'Employee Requisition ', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Requisitions List', 'url' => ['index']];
 ?>
 
 <div class="row">
