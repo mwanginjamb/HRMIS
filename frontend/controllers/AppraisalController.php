@@ -92,6 +92,78 @@ class AppraisalController extends Controller
 
     }
 
+    public function actionMyappraiseelist(){
+
+        return $this->render('myappraiseelist');
+
+    }
+
+    public function actionMysupervisorlist(){
+
+        return $this->render('mysupervisorlist');
+
+    }
+
+    public function actionMyapprovedappraiseelist(){
+
+        return $this->render('myapprovedappraiseelist');
+
+    }
+
+    public function actionMyapprovedsupervisorlist(){
+
+        return $this->render('myapprovedsupervisorlist');
+
+    }
+
+    public function actionEyappraiseelist(){
+
+        return $this->render('eyappraiseelist');
+
+    }
+
+    public function actionEysupervisorlist(){
+
+        return $this->render('eysupervisorlist');
+
+    }
+
+    public function actionEypeer1list(){
+
+        return $this->render('eypeer1list');
+
+    }
+
+    public function actionEypeer2list(){
+
+        return $this->render('eypeer2list');
+
+    }
+
+    public function actionEyagreementlist(){
+
+        return $this->render('eyagreementlist');
+
+    }
+
+    public function actionEyappraiseeclosedlist(){
+
+        return $this->render('eyappraiseeclosedlist');
+
+    }
+
+    public function actionEysupervisorclosedlist(){
+
+        return $this->render('eysupervisorclosedlist');
+
+    }
+
+    public function actionSuperapprovedappraisals12(){
+
+        return $this->render('superapprovedappraisals');
+
+    }
+
 
     public function actionGetappraisals(){
 
@@ -273,19 +345,43 @@ class AppraisalController extends Controller
         if(is_array($appraisals)){
             foreach($appraisals as $req){
 
+                $Viewlink = Html::a('view', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
 
-               /* if($model->isSupervisor($req->Employee_User_Id,$req->Supervisor_User_Id)){
-                    Yii::$app->session->set('isSupervisor',true);
-                }else{
-                    Yii::$app->session->set('isSupervisor',false);
-                }*/
+                $result['data'][] = [
+                    'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
+                    'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
+                    'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
+                    'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
+                    'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
+                    'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
+                    'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
+                    'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink : '',
 
+                ];
+
+            }
+        }
+
+        return $result;
+    }
+
+    /*Get Mid Year Approved Appraisals - Appraisee List*/
+
+    public function actionGetMYApprovedAppraiseeList(){
+        // $model = new Appraisalcard();
+        $service = Yii::$app->params['ServiceName']['MYApprovedList'];
+        $filter = [
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+        ];
+        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+
+        $result = [];
+
+        if(is_array($appraisals)){
+            foreach($appraisals as $req){
 
                 $Viewlink = Html::a('view', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
-               /* if($model->isSupervisor($req->Employee_User_Id,$req->Supervisor_User_Id)){
-                    $Viewlink = Html::a('viewsubmitted', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
-                }*/
-
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -342,6 +438,44 @@ class AppraisalController extends Controller
 
         return $result;
     }
+
+
+    /*Get Mid Year Approved Appraisals - Supervisor List*/
+
+    public function actionGetMYApprovedSupervisorList(){
+        // $model = new Appraisalcard();
+        $service = Yii::$app->params['ServiceName']['MYApprovedList'];
+        $filter = [
+            'Supervisor_User_Id' => Yii::$app->user->identity->getId(),
+        ];
+        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+
+        $result = [];
+
+        if(is_array($appraisals)){
+            foreach($appraisals as $req){
+
+                $Viewlink = Html::a('view', ['viewsubmitted','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+
+                $result['data'][] = [
+                    'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
+                    'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
+                    'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
+                    'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
+                    'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
+                    'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
+                    'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
+                    'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+
+                ];
+
+            }
+        }
+
+        return $result;
+    }
+
 
 
     /*Get End Year Appraisals - Appraisee List*/

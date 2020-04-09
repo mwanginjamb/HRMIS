@@ -10,9 +10,9 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'HRMIS - AAS Approved Appraisals';
+$this->title = 'HRMIS - AAS Mid Year Appraisal List: Supervisor';
 $this->params['breadcrumbs'][] = ['label' => 'Performance Management', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => 'Approved Appraisals List (Supervisor)', 'url' => ['approvedappraisals']];
+$this->params['breadcrumbs'][] = ['label' => 'Approved Mid Year Appraisal List (Appraisee)', 'url' => ['index']];
 ?>
 
 
@@ -34,20 +34,20 @@ if(Yii::$app->session->hasFlash('success')){
     print '</div>';
 }
 ?>
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Approved Appraisal List(Supervisor View)</h3>
-            </div>
-            <div class="card-body">
-                <table class="table table-bordered dt-responsive table-hover" id="appraisal">
-                </table>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Approved Mid Year Appraisal List (Appraisee)</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered dt-responsive table-hover" id="appraisal">
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<input type="hidden" name="absolute" value="<?= Yii::$app->recruitment->absoluteUrl() ?>">
+    <input type="hidden" name="absolute" value="<?= Yii::$app->recruitment->absoluteUrl() ?>">
 <?php
 
 $script = <<<JS
@@ -62,7 +62,7 @@ $script = <<<JS
           $('#appraisal').DataTable({
            
             //serverSide: true,  
-            ajax: absolute+'appraisal/getsuperapprovedappraisals',
+            ajax: absolute+'appraisal/getappraisals',
             paging: true,
             columns: [
                 { title: 'Appraisal No' ,data: 'Appraisal_No'},
@@ -79,7 +79,7 @@ $script = <<<JS
                
             ] ,                              
            language: {
-                "zeroRecords": "No Approved Appraisals to display"
+                "zeroRecords": "No Appraisals to display"
             },
             
             order : [[ 6, "desc" ]]

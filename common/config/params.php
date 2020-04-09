@@ -84,6 +84,7 @@ return [
         'ApprovedAppraisals' => 'ApprovedAppraisals', //60013 --> Not taken to live server
         'MYAppraiseeList' => 'MYAppraiseeList',//60014 -->Not Taken to live server
         'MYSupervisorList' => 'MYSupervisorList',//60015 -->Not Taken to live server
+        'MYApprovedList' => 'MYApprovedList',//60016 --> Not Taken to live server (MY CLOSED)
         'EYAppraiseeList' => 'EYAppraiseeList',//60017 -->Not Taken to live server
         'EYSupervisorList' => 'EYSupervisorList',//60018 -->Not Taken to live server
         'EYPeer1List' => 'EYPeer1List',//60019 -->Not Taken to live server

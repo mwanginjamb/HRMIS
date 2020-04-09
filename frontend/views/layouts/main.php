@@ -388,32 +388,131 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                         <p>My Appraisal List</p>
                                     </a>
                                 </li>
-
+                    <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>appraisal/submitted" class="nav-link <?= currentaction('appraisal','submitted')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
                                         <p>Submitted Appraisals </p>
                                     </a>
                                 </li>
-
+                    <?php endif; ?>
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>appraisal/approvedappraisals" class="nav-link <?= currentaction('appraisal','approvedappraisals')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
                                         <p>Approved (Appraisee)</p>
                                     </a>
                                 </li>
-
+                <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>appraisal/superapprovedappraisals" class="nav-link <?= currentaction('appraisal','superapprovedappraisals')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
                                         <p>Approved (Supervisor) </p>
                                     </a>
                                 </li>
+                <?php endif; ?>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>appraisal/myappraiseelist" class="nav-link <?= currentaction('appraisal','myappraiseelist')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>M-Y Appraisal (Appraisee) </p>
+                                    </a>
+                                </li>
+
+                                <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>appraisal/mysupervisorlist" class="nav-link <?= currentaction('appraisal','mysupervisorlist')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>M-Y Appraisal (Supervisor) </p>
+                                    </a>
+                                </li>
+
+                                <?php endif; ?>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>appraisal/myapprovedappraiseelist" class="nav-link <?= currentaction('appraisal','myapprovedappraiseelist')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>M-Y Approved (Appraisee) </p>
+                                    </a>
+                                </li>
+
+                            <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>appraisal/myapprovedsupervisorlist" class="nav-link <?= currentaction('appraisal','myapprovedsupervisorlist')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>M-Y Approved (Supervisor) </p>
+                                    </a>
+                                </li>
+
+                            <?php endif; ?>
+
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>appraisal/eyappraiseelist" class="nav-link <?= currentaction('appraisal','eyappraiseelist')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>E-Y Appraisals (Appraisee) </p>
+                                    </a>
+                                </li>
+
+                            <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>appraisal/eysupervisorlist" class="nav-link <?= currentaction('appraisal','eysupervisorlist')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>E-Y Appraisals (Supervisor) </p>
+                                    </a>
+                                </li>
+
+                            <?php endif; ?>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>appraisal/eypeer1list" class="nav-link <?= currentaction('appraisal','eypeer1list')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>E-Y Appraisals (Peer1) </p>
+                                    </a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>appraisal/eypeer2list" class="nav-link <?= currentaction('appraisal','eypeer2list')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>E-Y Appraisals (Peer2) </p>
+                                    </a>
+                                </li>
+
+                            <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>appraisal/eyagreementlist" class="nav-link <?= currentaction('appraisal','eyagreementlist')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>E-Y Appraisals (Agreement) </p>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>appraisal/eyappraiseeclosedlist" class="nav-link <?= currentaction('appraisal','eyappraiseeclosedlist')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>E-Y Closed (Appraisee) </p>
+                                    </a>
+                                </li>
+                        <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>appraisal/eysupervisorclosedlist" class="nav-link <?= currentaction('appraisal','eysupervisorclosedlist')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>E-Y Closed (Superviosr) </p>
+                                    </a>
+                                </li>
+
+                        <?php endif; ?>
+
+
 
                             </ul>
                         </li>
 
                         <li class="nav-item has-treeview <?= currentCtrl('approvals')?'menu-open':'' ?>">
+
+
                             <a href="#" class="nav-link <?= currentCtrl('approvals')?'active':'' ?>">
                                 <i class="nav-icon fas fa-copy"></i>
                                 <p>
@@ -429,10 +528,6 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                         <p>Approval Requests</p>
                                     </a>
                                 </li>
-
-
-
-
 
 
                             </ul>
