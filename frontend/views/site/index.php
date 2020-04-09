@@ -113,39 +113,45 @@ exit;*/
                             <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-briefcase"></i></span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">New Jobs Vacancies</span>
-                                <span class="info-box-number">
-                  10
-                  <small></small>
-                </span>
+                                <span class="info-box-text">HR Vacancies</span>
+                                <span class="info-box-number"><?= Yii::$app->dashboard->getVacancies() ?>
+                                  <small></small>
+                                </span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
 
+                    </div>
+
+                    <!-- fix for small devices only -->
+                    <div class="clearfix hidden-md-up"></div>
 
 
+                    <div class="col-12 col-sm-6 col-md-3">
                         <div class="info-box">
                             <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">Pending Approvals</span>
-                                <span class="info-box-number">
-                  10
-                  <small>%</small>
-                </span>
+                                <span class="info-box-text">Open Approvals</span>
+                                <span class="info-box-number"><?= Yii::$app->dashboard->getOpenApprovals() ?>
+                                  <small></small>
+                                </span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
                         <!-- /.info-box -->
                     </div>
+
+                    <!-- fix for small devices only -->
+                    <div class="clearfix hidden-md-up"></div>
                     <!-- /.col -->
                     <div class="col-12 col-sm-6 col-md-3">
                         <div class="info-box mb-3">
                             <span class="info-box-icon bg-success elevation-1"><i class="fas fa-thumbs-up"></i></span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">Approved</span>
-                                <span class="info-box-number">41,410</span>
+                                <span class="info-box-text">Approved Reqs.</span>
+                                <span class="info-box-number"><?= Yii::$app->dashboard->getApprovedApprovals() ?></span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
@@ -161,14 +167,17 @@ exit;*/
                             <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-times"></i></span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">Rejected Approvals</span>
-                                <span class="info-box-number">760</span>
+                                <span class="info-box-text">Rejected Reqs.</span>
+                                <span class="info-box-number"><?= Yii::$app->dashboard->getRejectedApprovals() ?></span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
                         <!-- /.info-box -->
                     </div>
 
+
+                    <!-- fix for small devices only -->
+                    <div class="clearfix hidden-md-up"></div>
 
                     <!-- /.col -->
                     <div class="col-12 col-sm-6 col-md-3">
@@ -177,10 +186,30 @@ exit;*/
 
                             <div class="info-box-content">
                                 <span class="info-box-text">Staff Count</span>
-                                <span class="info-box-number">2,000</span>
+                                <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getStaffCount())?></span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+
+                    <!-- fix for small devices only -->
+                    <div class="clearfix hidden-md-up"></div>
+
+                    <!-- /.col -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'leave/activeleaves' ?>" target="_blank">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-paper-plane"></i></span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Staff on Leave</span>
+                                    <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getOnLeave())?></span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                        </a>
                         <!-- /.info-box -->
                     </div>
                     <!-- /.col -->
@@ -197,8 +226,8 @@ exit;*/
                             <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">Super Approvals</span>
-                                <span class="info-box-number">2,000</span>
+                                <span class="info-box-text">Super Approved</span>
+                                <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getSuperApproved())?></span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>
@@ -209,11 +238,11 @@ exit;*/
                     <!-- /.col -->
                     <div class="col-12 col-sm-6 col-md-3">
                         <div class="info-box mb-3">
-                            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+                            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-users"></i></span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">Super Rejections</span>
-                                <span class="info-box-number">2,000</span>
+                                <span class="info-box-text">Super Rejected</span>
+                                <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getSuperRejected())?></span>
                             </div>
                             <!-- /.info-box-content -->
                         </div>

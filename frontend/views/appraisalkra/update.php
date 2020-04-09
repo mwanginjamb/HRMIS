@@ -22,6 +22,7 @@ $this->title = 'Evaluate Key Result Area';
     <?= $this->render('_form', [
         'model' => $model,
         'ratings' => $ratings,
+        'performancelevels' => $performancelevels
     ]) ?>
 
 </div>

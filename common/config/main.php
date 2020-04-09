@@ -42,6 +42,9 @@ return [
         'recruitment' => [
             'class' => 'common\Library\Recruitment'
         ],
+        'dashboard' => [
+            'class' => 'common\Library\Dashboard'
+        ],
         'pdf' => [
             'class' => Pdf::classname(),
             'mode' => Pdf::MODE_CORE,

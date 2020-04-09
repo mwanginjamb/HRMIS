@@ -112,6 +112,7 @@ class AppraisalkraController extends Controller
         ];
         $result = Yii::$app->navhelper->getData($service,$filter);
         $ratings = $this->getAppraisalrating();
+        $performcelevels = $this->getPerformancelevels();
         if(is_array($result)){
             //load nav result to model
             $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;//$this->loadtomodeEmployee_Nol($result[0],$Expmodel);
@@ -137,7 +138,8 @@ class AppraisalkraController extends Controller
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('update', [
                 'model' => $model,
-                'ratings' => ArrayHelper::map($ratings,'Rating','Rating_Description')
+                'ratings' => ArrayHelper::map($ratings,'Rating','Rating_Description'),
+                'performancelevels' => ArrayHelper::map($performcelevels,'Line_Nos','Perfomace_Level'),
             ]);
         }
 
@@ -319,6 +321,13 @@ class AppraisalkraController extends Controller
         ];
 
         $ratings = \Yii::$app->navhelper->getData($service,$filter);
+        return $ratings;
+    }
+
+    public function getPerformancelevels(){
+        $service = Yii::$app->params['ServiceName']['PerformanceLevel'];
+
+        $ratings = \Yii::$app->navhelper->getData($service);
         return $ratings;
     }
 

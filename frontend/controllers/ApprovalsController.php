@@ -9,6 +9,7 @@
 
 namespace frontend\controllers;
 
+use common\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\ContentNegotiator;
@@ -236,7 +237,7 @@ class ApprovalsController extends Controller
                     //'ToApprove' => $app->ToApprove,
                     'Details' => $app->Details,
                     'Comment' => $app->Comment,
-                    'Sender_ID' => $app->Sender_ID,
+                    'Sender_ID' => $this->getName($app->Sender_ID),
                     'Due_Date' => $app->Due_Date,
                     'Status' => $app->Status,
                     'Document_No' => $app->Document_No,
@@ -330,7 +331,20 @@ class ApprovalsController extends Controller
         }
     }
 
+    public function getName($userID){
 
+        //get Employee No
+        $user = \common\models\User::find()->where(['User ID' => $userID])->one();
+        $No = $user->{'Employee No_'};
+        //Get Employees full name
+        $service = Yii::$app->params['ServiceName']['employees'];
+        $filter = [
+            'No' => $No
+        ];
+
+        $results = Yii::$app->navhelper->getData($service,$filter);
+        return $results[0]->Full_Name;
+    }
 
 
 

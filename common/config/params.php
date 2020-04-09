@@ -32,10 +32,12 @@ return [
     'codeUnits' => [
         'Portal_Workflows', //50019
         'JobApplication', //50023
+        'AppraisalWorkflow' => 'AppraisalWorkflow', //50020 np  not taken to live
         'PortalReports', //50021
     ],
     'ServiceName'=>[
         'purchaseDocumentLines'=>'purchaseDocumentLines',//6405
+        'UserSetup' => 'UserSetup', //119
 
         'employeeCard' => 'employeeCard', //70335
         'employees' => 'employees', //70312
@@ -46,7 +48,7 @@ return [
         'leaveTypes' => 'leaveTypes', //70045
         'leaveRecallCard' => 'leaveRecallCard',//71076
         'leaveRecallList' => 'leaveRecallList',//71077
-        'activeLeaveList' => 'activeLeaveList',//69005 --> Not published or taken to live server
+        'activeLeaveList' => 'activeLeaveList',//69005
 
         'Approvals' => 'Approvals', //654---------------duplicated
         'ApprovalComments' => 'ApprovalComments', //660
@@ -78,6 +80,19 @@ return [
         'AppraisalList' => 'AppraisalList', //60007
         'AppraisalCard' => 'AppraisalCard',//60008
         'EmployeeAppraisalKPI' => 'EmployeeAppraisalKPI', //60010
+        'SubmittedAppraisals' => 'SubmittedAppraisals', //60012 --->Not taken to live server
+        'ApprovedAppraisals' => 'ApprovedAppraisals', //60013 --> Not taken to live server
+        'MYAppraiseeList' => 'MYAppraiseeList',//60014 -->Not Taken to live server
+        'MYSupervisorList' => 'MYSupervisorList',//60015 -->Not Taken to live server
+        'EYAppraiseeList' => 'EYAppraiseeList',//60017 -->Not Taken to live server
+        'EYSupervisorList' => 'EYSupervisorList',//60018 -->Not Taken to live server
+        'EYPeer1List' => 'EYPeer1List',//60019 -->Not Taken to live server
+        'EYPeer2List' => 'EYPeer2List',//60020 -->Not Taken to live server
+        'EYAgreementList' => 'EYAgreementList',//60021 -->Not Taken to live server
+        'ClosedAppraisalsList' => 'ClosedAppraisalsList',//60022 -->Not Taken to live server
+
+        'AppraisalWorkflow' => 'AppraisalWorkflow', // 50020 ---> Code Unit : not published on live
+        'PerformanceLevel' => 'PerformanceLevel',//60037 -> Not published on live
 
         'EmployeeAppraisalKRA' => 'EmployeeAppraisalKRA',//60009
         'TrainingPlan' => 'TrainingPlan', //60036
@@ -109,7 +124,7 @@ return [
         'JobApplication' => 'JobApplication', //50023
 
         /* Request to Approve */
-        'RequeststoApprove' => 'RequeststoApprove', //654---duplication
+        'RequeststoApprove' => 'RequeststoApprove', //654
     ],
     'QualificationsMimeTypes' => [
 

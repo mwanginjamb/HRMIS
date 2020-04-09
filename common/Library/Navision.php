@@ -630,9 +630,190 @@ class Navision extends Component
         }
 
     }
+    /** PERFOMANCE MANAGEMENT FUNCTIONS ON APPRAISAL WORKFLOW CODEUNIT */
+    //send Appraisal for approval
+
+    public function IanSendGoalSettingForApproval($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanSendGoalSettingForApproval($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    //Approve set Goals
+
+    public function IanApproveGoalSetting($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanApproveGoalSetting($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    //Reject Appraisal and send it back to appraisee
 
 
+    public function IanSendGoalSettingBackToAppraisee($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanSendGoalSettingBackToAppraisee($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
 
+    }
+
+    //Send Mid Year Appraisal for Approval
+
+    public function IanSendMYAppraisalForApproval($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanSendMYAppraisalForApproval($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    //Approve Mid Year Appraisal
+
+    public function IanApproveMYAppraisal($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanApproveMYAppraisal($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    //Send Mid Year Appraisal back to Appraisee (A Rejection)
+
+    public function IanSendMYAppraisaBackToAppraisee($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanSendMYAppraisaBackToAppraisee($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    //Send End Year Appraisal for Approval
+
+    public function IanSendEYAppraisalForApproval($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanSendEYAppraisalForApproval($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+
+    //Approve End Year Appraisal
+
+    public function IanApproveEYAppraisal($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanApproveEYAppraisal($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    //Send End Year Appraisal back to Appraisee (Rejection)
+
+    public function IanSendEYAppraisaBackToAppraisee($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanSendEYAppraisaBackToAppraisee($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    //send End Year Appraisal to Peer1
+
+    public function IanSendEYAppraisalToPeer1($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanSendEYAppraisalToPeer1($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    //send End Year Appraisal to Peer2
+
+    public function IanSendEYAppraisalToPeer2($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanSendEYAppraisalToPeer2($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    //send appraisal to supervisor from peers
+
+    public function IanSendEYAppraisaBackToSupervisorFromPeer($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanSendEYAppraisaBackToSupervisorFromPeer($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+    //Send Appraisal to Agreement Level
+
+    public function IanSendEYAppraisalToAgreementLevel($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanSendEYAppraisalToAgreementLevel($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
 
 
 

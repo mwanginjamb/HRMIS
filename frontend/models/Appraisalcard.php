@@ -7,6 +7,7 @@
  */
 
 namespace frontend\models;
+use common\models\User;
 use Yii;
 use yii\base\Model;
 
@@ -84,6 +85,17 @@ public $Learning_Assesment_Competenc;
 
         $behaviours = Yii::$app->navhelper->getData($service, $filter);
         return $behaviours;
+    }
+
+    //get supervisor status
+
+    public function isSupervisor($Employee_User_Id,$Supervisor_User_Id)
+    {
+
+        $user = Yii::$app->user->identity->getId();
+
+        return ($user == $Supervisor_User_Id);
+
     }
 
 
