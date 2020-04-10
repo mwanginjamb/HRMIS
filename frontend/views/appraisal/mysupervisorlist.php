@@ -62,7 +62,7 @@ $script = <<<JS
           $('#appraisal').DataTable({
            
             //serverSide: true,  
-            ajax: absolute+'appraisal/getappraisals',
+            ajax: absolute+'appraisal/getmysupervisorlist',
             paging: true,
             columns: [
                 { title: 'Appraisal No' ,data: 'Appraisal_No'},

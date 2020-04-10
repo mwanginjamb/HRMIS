@@ -58,7 +58,24 @@ class AppraisalController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['getappraisals','getsubmittedappraisals','getapprovedappraisals','getsuperapprovedappraisals'],
+                'only' => [
+                    'getappraisals',
+                    'getsubmittedappraisals',
+                    'getapprovedappraisals',
+                    'getsuperapprovedappraisals',
+                    'getmyappraiseelist',
+                    'getmysupervisorlist',
+                    'getmyapprovedappraiseelist',
+                    'getmyapprovedsupervisorlist',
+                    'geteyappraiseelist',
+                    'geteysupervisorlist',
+                    'geteypeer1list',
+                    'geteypeer2list',
+                    'geteyagreementlist',
+                    'geteyappraiseeclosedlist',
+                    'geteysupervisorclosedlist'
+
+                    ],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -331,7 +348,7 @@ class AppraisalController extends Controller
 
     /*Get Mid Year Appraisals - Appraisee List*/
 
-    public function actionGetMYAppraiseeList(){
+    public function actionGetmyappraiseelist(){
        // $model = new Appraisalcard();
         $service = Yii::$app->params['ServiceName']['MYAppraiseeList'];
         $filter = [
@@ -368,7 +385,7 @@ class AppraisalController extends Controller
 
     /*Get Mid Year Approved Appraisals - Appraisee List*/
 
-    public function actionGetMYApprovedAppraiseeList(){
+    public function actionGetmyapprovedappraiseelist(){
         // $model = new Appraisalcard();
         $service = Yii::$app->params['ServiceName']['MYApprovedList'];
         $filter = [
@@ -404,7 +421,7 @@ class AppraisalController extends Controller
 
     /*Get Mid Year Appraisals - Supervisor List*/
 
-    public function actionGetMYSupervisorList(){
+    public function actionGetmysupervisorlist(){
         // $model = new Appraisalcard();
         $service = Yii::$app->params['ServiceName']['MYSupervisorList'];
         $filter = [
@@ -442,7 +459,7 @@ class AppraisalController extends Controller
 
     /*Get Mid Year Approved Appraisals - Supervisor List*/
 
-    public function actionGetMYApprovedSupervisorList(){
+    public function actionGetmyapprovedsupervisorlist(){
         // $model = new Appraisalcard();
         $service = Yii::$app->params['ServiceName']['MYApprovedList'];
         $filter = [
@@ -480,7 +497,7 @@ class AppraisalController extends Controller
 
     /*Get End Year Appraisals - Appraisee List*/
 
-    public function actionGetEYAppraiseeList(){
+    public function actionGeteyappraiseelist(){
         // $model = new Appraisalcard();
         $service = Yii::$app->params['ServiceName']['EYAppraiseeList'];
         $filter = [
@@ -532,7 +549,7 @@ class AppraisalController extends Controller
 
     /*Get Mid Year Appraisals - Supervisor List*/
 
-    public function actionGetEYSupervisorList(){
+    public function actionGeteysupervisorlist(){
         // $model = new Appraisalcard();
         $service = Yii::$app->params['ServiceName']['EYSupervisorList'];
         $filter = [
@@ -571,7 +588,7 @@ class AppraisalController extends Controller
 
     /*Get End Year Appraisals - Peer1 List*/
 
-    public function actionGetEYPeer1List(){
+    public function actionGeteypeer1list(){
 
         $service = Yii::$app->params['ServiceName']['EYPeer1List'];
         $filter = [
@@ -610,7 +627,7 @@ class AppraisalController extends Controller
 
     /*Get End Year Appraisals - Peer2 List*/
 
-    public function actionGetEYPeer2List(){
+    public function actionGeteypeer2list(){
 
         $service = Yii::$app->params['ServiceName']['EYPeer2List'];
         $filter = [
@@ -649,7 +666,7 @@ class AppraisalController extends Controller
 
     /*Get Mid Year Appraisals - Supervisor List*/
 
-    public function actionGetEYAgreementList(){
+    public function actionGeteyagreementlist(){
         // $model = new Appraisalcard();
         $service = Yii::$app->params['ServiceName']['EYAgreementList'];
         $filter = [
@@ -688,7 +705,7 @@ class AppraisalController extends Controller
 
     /*Get EY Year Closed Appraisals - Appraisee List*/
 
-    public function actionGetEYAppraiseeClosedList(){
+    public function actionGeteyappraiseeclosedlist(){
         // $model = new Appraisalcard();
         $service = Yii::$app->params['ServiceName']['ClosedAppraisalsList'];
         $filter = [
@@ -725,7 +742,7 @@ class AppraisalController extends Controller
 
     /*Get EY Year Closed Appraisals -  Supervisor List*/
 
-    public function actionGetEYSupervisorClosedList(){
+    public function actionGeteysupervisorclosedlist(){
         // $model = new Appraisalcard();
         $service = Yii::$app->params['ServiceName']['ClosedAppraisalsList'];
         $filter = [
