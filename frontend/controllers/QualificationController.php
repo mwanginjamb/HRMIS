@@ -21,6 +21,8 @@ use yii\web\UploadedFile;
 use yii\web\Response;
 use kartik\mpdf\Pdf;
 
+
+
 class QualificationController extends Controller
 {
     public function behaviors()
@@ -283,6 +285,10 @@ class QualificationController extends Controller
         $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
         if(!is_string($result)){
             Yii::$app->session->setFlash('success','Qualification Purged Successfully .',true);
+            if(!empty(Yii::$app->request->get('path'))){
+                //$file = Yii::$app->recruitment->absoluteUrl().Yii::$app->request->get('path');
+                unlink(Yii::$app->request->get('path'));
+            }
             return $this->redirect(['index']);
         }else{
             Yii::$app->session->setFlash('error','Error Purging Qualification: '.$result,true);
@@ -372,12 +378,20 @@ class QualificationController extends Controller
 
             $updateLink = Html::a('<i class="fa fa-edit"></i>',['update','Line'=> $quali->Line_No ],['class'=>'update btn btn-outline-info btn-xs','title' => 'Update Qualification']);
 
-            $link = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs','title' => 'Remove Qualification','data' => [
-                'confirm' => 'Are you sure you want to delete this qualification?',
-                'method' => 'post',
-            ]]);
+            if(!empty($quali->Attachement_path)){
+                $deletelink = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $quali->Key,'path' => $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs','title' => 'Remove Qualification','data' => [
+                    'confirm' => 'Are you sure you want to delete this qualification?',
+                    'method' => 'post',
+                ]]);
+            }else{
+                $deletelink = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $quali->Key ],['class'=>'btn btn-outline-warning btn-xs','title' => 'Remove Qualification','data' => [
+                    'confirm' => 'Are you sure you want to delete this qualification?',
+                    'method' => 'post',
+                ]]);
+            }
 
-            $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['read','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Qualification_Code;
+            //for sharepoint use "download" for local fs use "read"
+            $qualificationLink = !empty($quali->Attachement_path)? Html::a('View Document',['download','path'=> $quali->Attachement_path ],['class'=>'btn btn-outline-warning btn-xs']):$quali->Qualification_Code;
 
 
             $result['data'][] = [
@@ -391,7 +405,7 @@ class QualificationController extends Controller
                 'Institution_Company' => !empty($quali->Institution_Company)?$quali->Institution_Company:'',
                 //'Comment' => !empty($quali->Comment)?$quali->Comment:'',
 
-                'Action' => $updateLink.' | '.$link,
+                'Action' => $updateLink.' | '.$deletelink,
                 //'Remove' => $link
             ];
         }
@@ -550,12 +564,30 @@ class QualificationController extends Controller
     public function actionRead($path){
         $absolute = Yii::$app->recruitment->absoluteUrl().$path;
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
-        $fh = file_get_contents($absolute); //read file into a string
+        $fh = file_get_contents($absolute); //read file into a string or get a file handle resource from sharepoint
         $mimetype = $finfo->buffer($fh); //get mime type
 
         return $this->render('read',[
             'mimeType' => $mimetype,
             'documentPath' => $absolute
             ]);
+    }
+
+    public function actionDownload($path){
+        $base = basename($path);
+        $ctx = Yii::$app->recruitment->connectWithAppOnlyToken(
+            Yii::$app->params['sharepointUrl'],
+            Yii::$app->params['clientID'],
+            Yii::$app->params['clientSecret']
+        );
+        $fileUrl = '/Mydocs/'.$base;
+        $targetFilePath = './qualifications/download.pdf';
+        $resource = Yii::$app->recruitment->downloadFile($ctx,$fileUrl,$targetFilePath);
+
+        return $this->render('readsharepoint',[
+            'content' => $resource
+        ]);
+
+
     }
 }

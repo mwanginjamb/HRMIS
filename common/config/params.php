@@ -18,7 +18,16 @@ return [
     'ServerInstance'=>'DynamicsNAV90',//Nav Server Instance
     'CompanyName'=>'AAS%20HR%20test',//Nav Company,
     'CompanyNameStripped' => 'AAS HR test$',
-    'ldPrefix'=>'francis',//aCTIVE DIRECTORY prefix
+    'ldPrefix'=>'francis',//ACTIVE DIRECTORY prefix
+
+    //sharepoint config
+    'sharepointUrl' => 'https://ackads.sharepoint.com',
+    'sharepointUsername' => 'francis@ackads.onmicrosoft.com',
+    'sharepointPassword' => '@crm1220#*',
+    'library' => 'Mydocs',
+    'clientID' => '7e92ce54-e4bf-491a-bef6-eb94044ce297',
+    'clientSecret' => 'Q6UJkB3bRlPkGBjWNgrQVCyyjL2vgi5rtP7THpLwJ+s=',
+
     'profileControllers' => [
         'applicantprofile',
         'experience',

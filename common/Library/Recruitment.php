@@ -12,6 +12,19 @@ use yii\base\Component;
 use common\models\Hruser;
 
 
+use Office365\PHP\Client\Runtime\Auth\NetworkCredentialContext;
+use Office365\PHP\Client\SharePoint\ClientContext;
+use Office365\PHP\Client\Runtime\Auth\AuthenticationContext;
+use Office365\PHP\Client\Runtime\Utilities\RequestOptions;
+use Office365\PHP\Client\Runtime\ClientRuntimeContext;
+use Office365\PHP\Client\SharePoint\ListCreationInformation;
+use Office365\PHP\Client\SharePoint\SPList;
+use Office365\PHP\Client\SharePoint\Web;
+use Office365\PHP\Client\SharePoint\ListTemplateType;
+
+
+
+
 class Recruitment extends Component
 {
     public function absoluteUrl(){
@@ -22,6 +35,7 @@ class Recruitment extends Component
     public function printrr($var){
         print '<pre>';
         print_r($var);
+        print '<br>';
         exit('turus!!!');
     }
     
@@ -287,4 +301,148 @@ class Recruitment extends Component
 
         return $html;
     }
+
+    //Sharepoint Functions
+
+    //SHAREPOINT UPLOAD
+    public function sharepoint_attach($filepath)
+    {  //read list
+
+        $Url = Yii::$app->params['sharepointUrl'];//"http://rbadev-shrpnt";
+        $username = Yii::$app->params['sharepointUsername'];//'rbadev\administrator';
+        $password = Yii::$app->params['sharepointPassword']; //'rba123!!';
+        $localPath = $filepath;
+        $targetLibraryTitle = \Yii::$app->params['library'];
+
+        try {
+
+            $ctx = $this->connectWithAppOnlyToken(
+                Yii::$app->params['sharepointUrl'],
+                Yii::$app->params['clientID'],
+                Yii::$app->params['clientSecret']
+            );
+            $site = $ctx->getSite();
+
+
+            $ctx->load($site); //load site settings
+            $ctx->executeQuery();
+
+            $list = $this->ensureList($ctx->getWeb(), $targetLibraryTitle, \Office365\PHP\Client\SharePoint\ListTemplateType::DocumentLibrary);
+
+            $localFilePath = realpath($localPath);
+            $this->uploadFiles($localFilePath, $list);
+        } catch (Exception $e) {
+            print 'Authentication failed: ' . $e->getMessage() . "\n";
+        }
+    }
+
+    //Upload Files function
+
+    private static function uploadFiles($localFilePath, \Office365\PHP\Client\SharePoint\SPList $targetList)
+    {
+
+        $ctx = $targetList->getContext();
+
+        $session = Yii::$app->session;
+
+        $fileCreationInformation = new \Office365\PHP\Client\SharePoint\FileCreationInformation();
+        $fileCreationInformation->Content = file_get_contents($localFilePath);
+        $fileCreationInformation->Url = basename($localFilePath);
+
+        //print_r($fileCreationInformation); exit;
+
+        $uploadFile = $targetList->getRootFolder()->getFiles()->add($fileCreationInformation);
+        $ctx->executeQuery();
+        print "File {$uploadFile->getProperty('Name')} has been uploaded\r\n";
+
+
+        $uploadFile->getListItemAllFields()->setProperty('Title', basename($localFilePath));
+        $uploadFile->getListItemAllFields()->setProperty('Profileid', 'App123');
+       // $uploadFile->getListItemAllFields()->setProperty('RequiredDocumentID', $metadata['RequiredDocumentID']);
+        //$uploadFile->getListItemAllFields()->setProperty('RequiredDocumentName', $metadata['RequiredDocumentName']);
+        $uploadFile->getListItemAllFields()->update();
+        $ctx->executeQuery();
+    }
+
+    public static function ensureList(Web $web, $listTitle, $type, $clearItems = true)
+    {
+        $ctx = $web->getContext();
+        $lists = $web->getLists()->filter("Title eq '$listTitle'")->top(1);
+        $ctx->load($lists);
+        $ctx->executeQuery();
+        if ($lists->getCount() == 1) {
+            $existingList = $lists->getData()[0];
+            if ($clearItems) {
+                //self::deleteListItems($existingList);
+            }
+            return $existingList;
+        }
+        //return ListExtensions::createList($web, $listTitle, $type);
+        return ListExtensions::createList($web, $listTitle, $type);
+    }
+
+    /**
+     * @param Web $web
+     * @param $listTitle
+     * @param $type
+     * @return SPList
+     * @internal param ClientRuntimeContext $ctx
+     */
+    public static function createList(Web $web, $listTitle, $type)
+    {
+        $ctx = $web->getContext();
+        $info = new ListCreationInformation($listTitle);
+        $info->BaseTemplate = $type;
+        $list = $web->getLists()->add($info);
+        $ctx->executeQuery();
+        return $list;
+    }
+
+    /**
+     * @param \Office365\PHP\Client\SharePoint\SPList $list
+     */
+    public static function deleteList(\Office365\PHP\Client\SharePoint\SPList $list)
+    {
+        $ctx = $list->getContext();
+        $list->deleteObject();
+        $ctx->executeQuery();
+    }
+
+    function downloadFile(ClientRuntimeContext $ctx, $fileUrl, $targetFilePath){
+
+        try {
+            $fileContent = \Office365\PHP\Client\SharePoint\File::openBinary($ctx, $fileUrl);
+            //file_put_contents($targetFilePath, $fileContent);
+            return base64_encode($fileContent);
+        } catch (Exception $e) {
+            print "File download failed:\r\n";
+        }
+    }
+
+    /*Sharepoint Authentication Context methods */
+
+
+    function connectWithUserCredentials($url,$username,$password){
+        $authCtx = new AuthenticationContext($url);
+        $authCtx->acquireTokenForUser($username,$password);
+        $ctx = new ClientContext($url,$authCtx);
+        return $ctx;
+    }
+
+    function connectWithNTLMAuth($url,$username,$password){
+        $authCtx = new NetworkCredentialContext($username, $password);
+        $authCtx->AuthType = CURLAUTH_NTLM;
+        $ctx = new ClientContext($url,$authCtx);
+        return $ctx;
+    }
+
+    function connectWithAppOnlyToken($url,$clientId,$clientSecret){
+        $authCtx = new AuthenticationContext($url);
+        $authCtx->acquireAppOnlyAccessToken($clientId,$clientSecret);
+        $ctx = new ClientContext($url,$authCtx);
+        return $ctx;
+    }
+
+
+
 }

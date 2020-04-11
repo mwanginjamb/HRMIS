@@ -8,7 +8,7 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'Recruitment - Applicant Qualifications';
+$this->title = 'Recruitment - Sharepoint Reader';
 ?>
 
     <!--THE STEPS THING--->
@@ -43,36 +43,13 @@ $this->title = 'Recruitment - Applicant Qualifications';
                 </div>
                 <div class="card-body" >
 
-                    <div class="doc" style="width: 1200px; height: 1000px; padding:20px 5px">
-                            <?php
-                            if($mimeType == 'application/pdf'){
-
-                                echo \lesha724\documentviewer\ViewerJsDocumentViewer::widget([
-                                    'url' => $documentPath, //url на ваш документ или http://example.com/test.odt
-                                    'width'=>'100%',
-                                    'height'=>'100%',
-                                ]);
-
-                                /*echo \lesha724\documentviewer\GoogleDocumentViewer::widget([
-                                    'url'=>$documentPath,//url на ваш документ
-                                    'width'=>'100%',
-                                    'height'=>'100%',
-                                    //https://geektimes.ru/post/111647/
-                                    'embedded'=>true,
-                                    'a'=>\lesha724\documentviewer\GoogleDocumentViewer::A_BI //A_V = 'v', A_GT= 'gt', A_BI = 'bi'
-                                ]);*/
-
-                            }else if(in_array($mimeType,\Yii::$app->params['Microsoft'])){
 
 
-                                echo \lesha724\documentviewer\MicrosoftDocumentViewer::widget([
-                                    'url'=>$documentPath,//url на ваш документ
-                                    'width'=>'100%',
-                                    'height'=>'100%'
-                                ]);
-                            }
-                            ?>
-                    </div>
+
+                    <iframe src="data:application/pdf;base64,<?= $content; ?>" height="950px" width="100%"></iframe>
+
+
+
                 </div>
             </div>
         </div>
