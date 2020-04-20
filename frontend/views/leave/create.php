@@ -12,8 +12,9 @@ use yii\helpers\Html;
 /* @var $model frontend\models\AgendaDocument */
 
 $this->title = 'New Leave Application';
-$this->params['breadcrumbs'][] = ['label' => 'New Leave Application', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => 'Leave History', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'New Leave Application', 'url' => ['create']];
+
 ?>
 <div class="leave-document-create">
 

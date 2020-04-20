@@ -37,12 +37,14 @@ Yii::$app->session->set('isSupervisor',false);
                         <?= Html::a('<i class="fas fa-forward"></i> submit',['submit','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],['class' => 'btn btn-app submitforapproval','data' => [
                                 'confirm' => 'Are you sure you want to submit this appraisal?',
                                 'method' => 'post',
-                            ]
+                            ],
+                            'title' => 'Submit Goals for Approval'
+
                         ]) ?>
                     </div>
 
                 <?php endif; ?>
-                <?php if($model->MY_Appraisal_Status == 'Appraisee_Level'): ?>
+                <?php if($model->Goal_Setting_Status == 'Approved' && $model->MY_Appraisal_Status == 'Appraisee_Level'): ?>
 
                     <div class="col-md-4">
                         <?= Html::a('<i class="fas fa-forward"></i> MY Appraisal',['submitmy','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
@@ -261,7 +263,7 @@ Yii::$app->session->set('isSupervisor',false);
 
         <!--ENF KRA CARD -->
 
-        <?php if($model->isSupervisor($model->Employee_User_Id,$model->Supervisor_User_Id)){ ?>
+        <?php //if($model->isSupervisor($model->Employee_User_Id,$model->Supervisor_User_Id)){ ?>
         <!--Training Plan Card -->
         <div class="card-info">
             <div class="card-header">
@@ -303,7 +305,7 @@ Yii::$app->session->set('isSupervisor',false);
             </div>
         </div>
         <!--/Training Plan Card -->
-        <?php }  ?>
+        <?php //}  ?>
         <!--Employee Appraisal  Competence --->
 
         <div class="card-info">
@@ -399,7 +401,7 @@ Yii::$app->session->set('isSupervisor',false);
 
         <!--/Employee Appraisal  Competence --->
 
-<?php if($model->isSupervisor($model->Employee_User_Id,$model->Supervisor_User_Id)){ ?>
+<?php if($model->EY_Appraisal_Status == 'Agreement_Level'){ ?>
         <!--Learning Assessment Card -->
         <div class="card-info">
             <div class="card-header">

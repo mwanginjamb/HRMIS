@@ -44,7 +44,7 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
 
-            if (!$user || !$user->validatePassword($this->password)) {
+            if (!$user || !$user->validatePassword($this->password)) {//Add AD login condition here also--> when ad details are given
 
                 $this->addError($attribute, 'Incorrect username or password.');
             }
@@ -67,6 +67,43 @@ class LoginForm extends Model
         }
         
         return false;
+    }
+
+    //Ad Login
+
+    function logintoAD($username,$password){
+
+        //$adServer = "ldap://ERC-SVRV7.erc.go.ke";
+
+        $adServer = Yii::$app->params['adServer'];//
+        $ldap = ldap_connect($adServer, 389);//connect
+        $ldaprdn = Yii::$app->params['ldPrefix'] . "\\" . strtoupper($username);//put the username in a way specific to the domain
+        ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
+        ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);
+        $bind = @ldap_bind($ldap, $ldaprdn, $password);
+
+        if ($bind) {
+            $filter = "(sAMAccountName=$username)";
+            $result = ldap_search($ldap, "CN=KRBHQS,DC=GO, DC=KE", $filter);
+
+            // ldap_sort($ldap,$result,"sn");
+            $info = ldap_get_entries($ldap, $result);
+            //var_dump($info); exit;
+            //print_r($info);exit;
+//            for ($i=0; $i<$info["count"]; $i++)
+//            {
+//                if($info['count'] > 1)
+//                    break;
+//                return $info[$i];
+//            }
+
+            return $info;
+            @ldap_close($ldap);
+        } else {
+            //notify incorrect login
+            return false;
+        }
+
     }
 
     /**

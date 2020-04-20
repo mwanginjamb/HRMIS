@@ -12,7 +12,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\AgendaDocument */
 
-$this->title = 'Update Employee Appraisal Competences Line';
+$this->title = 'Appraise Employee Appraisal Competences';
 
 ?>
 <div class="agenda-document-update">

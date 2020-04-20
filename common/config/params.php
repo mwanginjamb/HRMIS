@@ -19,6 +19,7 @@ return [
     'CompanyName'=>'AAS%20HR%20test',//Nav Company,
     'CompanyNameStripped' => 'AAS HR test$',
     'ldPrefix'=>'francis',//ACTIVE DIRECTORY prefix
+    'adServer' => 'KRB-SVR7.KRBHQS.GO.KE', //Active directory domain controller
 
     //sharepoint config
     'sharepointUrl' => 'https://ackads.sharepoint.com',

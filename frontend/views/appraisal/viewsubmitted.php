@@ -17,6 +17,7 @@ Yii::$app->session->set('Goal_Setting_Status',$model->Goal_Setting_Status);
 Yii::$app->session->set('MY_Appraisal_Status',$model->MY_Appraisal_Status);
 Yii::$app->session->set('EY_Appraisal_Status',$model->EY_Appraisal_Status);
 Yii::$app->session->set('isSupervisor','true');
+//Yii::$app->recruitment->printrr($peers);
 ?>
 
 <div class="row">
@@ -107,33 +108,37 @@ Yii::$app->session->set('isSupervisor','true');
 
                 <?php endif; ?>
 </div><!--end row-->
+
 <div class="row"><!-- start peer actions-->
                     <div class="col-md-3">
                     </div>
 
                     <div class="col-md-3">
 
-                        <?= Html::a('<i class="fas fa-play"></i> Send Peer1',['sendpeer1','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                        <?=($model->EY_Appraisal_Status == 'Supervisor_Level')?Html::a('<i class="fas fa-play"></i> Send Peer1',['sendpeer1','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
                                 'class' => 'btn btn-app bg-warning',
                                 'title' => 'Reject Mid-Year Appraisal',
                                 'data' => [
                                 'confirm' => 'Are you sure you want to appraisal peer 1?',
                                 'method' => 'post',]
-                            ]) 
+                            ]) :'';
                         ?>
+
+
+
                     </div>
 
                     <div class="col-md-3">
                     </div>
 
                     <div class="col-md-3">
-                        <?= Html::a('<i class="fas fa-play"></i> Send Peer2',['sendpeer2','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                        <?= ($model->EY_Appraisal_Status == 'Supervisor_Level')? Html::a('<i class="fas fa-play"></i> Send Peer2',['sendpeer2','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
                                 'class' => 'btn btn-app bg-warning pull-right',
                                 'title' => 'Reject Mid-Year Appraisal',
                                 'data' => [
                                 'confirm' => 'Are you sure you want to send appraisal to peer 2?',
                                 'method' => 'post',]
-                            ]) 
+                            ]) :'';
                         ?>
 
                     </div>
@@ -141,7 +146,20 @@ Yii::$app->session->set('isSupervisor','true');
                    
                 </div><!--end peer actions--->
 
-            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <?=($model->EY_Appraisal_Status == 'Peer_1_Level' || $model->EY_Appraisal_Status == 'Peer_2_Level')?Html::a('<i class="fas fa-play"></i> Send Back to Supervisor',['sendbacktosupervisor','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                            'class' => 'btn btn-success ',
+                            'title' => 'Send Peer Appraisal to Supervisor',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to send Appraisal to Supervisor?',
+                                'method' => 'post',]
+                        ]) :'';
+                        ?>
+                    </div>
+                </div>
+
+            </div><!--end card body-->
          
         </div>
     </div>
@@ -217,8 +235,11 @@ Yii::$app->session->set('isSupervisor','true');
                                <?= $form->field($model, 'Supervisor_No')->hiddenInput(['readonly'=> true, 'disabled'=>true])->label(false) ?>
 
 
-                               <?= $form->field($model, 'Peer_1_Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                               <?= $form->field($model, 'Peer_2_Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                               <?= ($model->EY_Appraisal_Status == 'eer_1_Level')?
+                                   $form->field($model, 'Peer_1_Employee_Name')->dropDownList($peers,['prompt'=>'Select Peer 1'])
+                                   :$form->field($model, 'Peer_1_Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                               <?= ($model->EY_Appraisal_Status == 'eer_2_Level')?$form->field($model, 'Peer_2_Employee_Name')->dropDownList($peers,['prompt'=>'Select Peer 2','class'=>'peer'])
+                               :$form->field($model, 'Peer_2_Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
 
                                <?= $form->field($model, 'Goal_Setting_Start_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
@@ -243,10 +264,11 @@ Yii::$app->session->set('isSupervisor','true');
             </div>
         </div><!--end details card-->
 
+        <?php if(($model->EY_Appraisal_Status <> 'Peer_1_Level') && ($model->EY_Appraisal_Status <> 'Peer_2_Level' )){ ?>
         <!--KRA CARD -->
         <div class="card-info">
             <div class="card-header">
-                <h4 class="card-title">Employee Appraisal KRA</h4>
+                <h4 class="card-title">Employee Appraisal KRA <?php $model->EY_Appraisal_Status ?></h4>
             </div>
             <div class="card-body">
 
@@ -327,9 +349,11 @@ Yii::$app->session->set('isSupervisor','true');
             </div>
         </div>
 
-        <!--ENF KRA CARD -->
+        <?php } ?>
+        <!--END KRA CARD -->
 
         <!--Training Plan Card -->
+<?php if(($model->EY_Appraisal_Status <> 'Peer_1_Level') && ($model->EY_Appraisal_Status <> 'Peer_2_Level' )){ ?>
         <div class="card-info">
             <div class="card-header">
                 <h4 class="card-title">Training Plan</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -370,7 +394,7 @@ Yii::$app->session->set('isSupervisor','true');
             </div>
         </div>
 
-
+<?php } ?>
         <!--/Training Plan Card -->
 
         <!--Employee Appraisal  Competence --->
@@ -470,6 +494,7 @@ Yii::$app->session->set('isSupervisor','true');
 
 
         <!--Learning Assessment Card -->
+<?php if(($model->EY_Appraisal_Status <> 'Peer_1_Level') && ($model->EY_Appraisal_Status <> 'Peer_2_Level' )){ ?>
         <div class="card-info">
             <div class="card-header">
                 <h4 class="card-title">Learning Assessment - Competence</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -519,7 +544,7 @@ Yii::$app->session->set('isSupervisor','true');
             </div>
         </div>
 
-
+<?php }  ?>
         <!--/Learning Assessment  Card -->
 
 
@@ -664,7 +689,9 @@ $script = <<<JS
             $(this).nextUntil('p.parent').slideToggle(100, function(){});
      });
     
+    //select2
     
+    $('.peer').select2();
     
         
     });//end jquery

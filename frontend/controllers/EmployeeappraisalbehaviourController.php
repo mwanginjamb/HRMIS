@@ -132,10 +132,17 @@ class EmployeeappraisalbehaviourController extends Controller
 
             //Yii::$app->recruitment->printrr($result);
             if(!empty($result)){
-                Yii::$app->session->setFlash('success','Training Plan Line Updated Successfully',true);
-                return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_Code]);
+                Yii::$app->session->setFlash('success','Employee Appraisal Competence Evaluated Successfully',true);
+
+                $evaluator = ['Peer_1_Level','Peer_2_Level','Supervisor_Level'];
+                if(in_array(Yii::$app->session->get('EY_Appraisal_Status'),$evaluator)){
+                    return $this->redirect(['appraisal/viewsubmitted','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_Code]);
+                }else{
+                    return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_Code]);
+                }
+
             }else{
-                Yii::$app->session->setFlash('error','Error Updating Training Plan Line: '.$result,true);
+                Yii::$app->session->setFlash('error','Error Evaluating Employee Appraisal Competence : '.$result,true);
                 return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_Code]);
             }
 

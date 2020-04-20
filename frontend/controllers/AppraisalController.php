@@ -602,7 +602,7 @@ class AppraisalController extends Controller
         if(is_array($appraisals)){
             foreach($appraisals as $req){
 
-                $Viewlink = Html::a('view', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Viewlink = Html::a('view', ['viewsubmitted','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -641,7 +641,7 @@ class AppraisalController extends Controller
         if(is_array($appraisals)){
             foreach($appraisals as $req){
 
-                $Viewlink = Html::a('view', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Viewlink = Html::a('view', ['viewsubmitted','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -827,7 +827,8 @@ class AppraisalController extends Controller
 
         return $this->render('viewsubmitted',[
             'model' => $model,
-            'card' => $appraisal[0]
+            'card' => $appraisal[0],
+            'peers' =>  ArrayHelper::map($this->getEmployees(),'No','Full_Name'),
         ]);
     }
 
@@ -889,10 +890,10 @@ class AppraisalController extends Controller
             'employeeNo' => $employeeNo,
             'sendEmail' => 0,
             'approvalURL' => 1,
-            'approvalComment' => 'This is Rejected .', //Yii::$app->request->post('rejectionComments')
+            'rejectionComments' => 'This is Rejected .', //Yii::$app->request->post('rejectionComments')
         ];
 
-        $result = Yii::$app->navhelper->IanSendGoalSettingForApproval($service,$data);
+        $result = Yii::$app->navhelper->IanSendGoalSettingBackToAppraisee($service,$data);
 
         if(!is_string($result)){
             Yii::$app->session->setFlash('success', 'Perfomance Appraisal Goals Rejected and Sent Back to Appraisee Successfully.', true);
@@ -1170,6 +1171,24 @@ class AppraisalController extends Controller
 
         }
 
+    }
+
+    //Get Employees this is just for selecting peer1 and Peer 2
+
+    public function getEmployees(){
+        $service = Yii::$app->params['ServiceName']['employees'];
+
+        $employees = \Yii::$app->navhelper->getData($service);
+        $res = [];
+        foreach($employees as $e){
+            if(!empty($e->User_ID)){
+                $res[] = [
+                    'No' => $e->No,
+                    'Full_Name' => $e->Full_Name
+                ];
+            }
+        }
+        return $res;
     }
 
 

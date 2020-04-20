@@ -127,7 +127,13 @@ class AppraisalkraController extends Controller
             //Yii::$app->recruitment->printrr($result);
             if(!empty($result)){
                 Yii::$app->session->setFlash('success','Key Result Area Evaluated Successfully',true);
-                return $this->redirect(['appraisal/view','Employee_No' => $model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
+                $evaluator = ['Agreement_Level','Supervisor_Level'];
+                if(in_array(Yii::$app->session->get('MY_Appraisal_Status'),$evaluator)){
+                    return $this->redirect(['appraisal/viewsubmitted','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
+                }else{
+                    return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
+                }
+                //return $this->redirect(['appraisal/view','Employee_No' => $model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
             }else{
                 Yii::$app->session->setFlash('error','Error Evaluating Key Result Area: '.$result,true);
                 return $this->redirect(['appraisal/view']);
