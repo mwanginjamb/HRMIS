@@ -23,11 +23,14 @@ class SiteController extends Controller
     /**
      * {@inheritdoc}
      */
+
+
+
     public function behaviors()
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => ['logout', 'signup','index'],
                 'rules' => [
                     [
@@ -36,11 +39,16 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index'],
+                        'actions' => ['logout','index','getemployee'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+
                 ],
+                /*'denyCallback' => function ($rule, $action) {
+                    //throw new \Exception('You are not allowed to access this page');
+                    return $this->goBack();
+                }*/
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -279,6 +287,7 @@ class SiteController extends Controller
     }
 
     public function actionGetemployee(){
+
         $service = Yii::$app->params['ServiceName']['employeeCard'];
         $filter = [
             'No' => Yii::$app->user->identity->{'Employee No_'},

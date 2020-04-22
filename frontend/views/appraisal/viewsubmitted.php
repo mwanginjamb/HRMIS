@@ -18,6 +18,7 @@ Yii::$app->session->set('MY_Appraisal_Status',$model->MY_Appraisal_Status);
 Yii::$app->session->set('EY_Appraisal_Status',$model->EY_Appraisal_Status);
 Yii::$app->session->set('isSupervisor','true');
 //Yii::$app->recruitment->printrr($peers);
+$absoluteUrl = \yii\helpers\Url::home(true);
 ?>
 
 <div class="row">
@@ -74,11 +75,13 @@ Yii::$app->session->set('isSupervisor','true');
                     <div class="col-md-4">
 
                         <?= Html::a('<i class="fas fa-times"></i> Reject',['reject','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                                'class' => 'btn btn-app bg-warning',
+                                'class' => 'btn btn-app bg-warning reject',
                                 'title' => 'Reject Goals Set by Appraisee',
-                                'data' => [
+                                'rel' => $_GET['Appraisal_No'],
+                                'rev' => $_GET['Employee_No'],
+                                /*'data' => [
                                 'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
-                                'method' => 'post',]
+                                'method' => 'post',]*/
                             ]) 
                         ?>
 
@@ -86,23 +89,27 @@ Yii::$app->session->set('isSupervisor','true');
 
                 <?php elseif($model->MY_Appraisal_Status == 'Supervisor_Level'): ?>
 
-                    <?= Html::a('<i class="fas fa-times"></i> Reject MY',['rejectmy','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                                'class' => 'btn btn-app bg-warning',
+                    <?= Html::a('<i class="fas fa-times"></i> Reject MY',['rejectmy'],[
+                                'class' => 'btn btn-app bg-warning rejectmy',
                                 'title' => 'Reject Mid-Year Appraisal',
-                                'data' => [
+                                'rel' => $_GET['Appraisal_No'],
+                                'rev' => $_GET['Employee_No'],
+                                /*'data' => [
                                 'confirm' => 'Are you sure you want to Reject this Mid-Year appraisal?',
-                                'method' => 'post',]
+                                'method' => 'post',]*/
                             ]) 
                         ?>
                 <?php elseif($model->EY_Appraisal_Status == 'Supervisor_Level'): ?>
 
                     
                     <?= Html::a('<i class="fas fa-times"></i> Reject EY',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                                'class' => 'btn btn-app bg-warning',
-                                'title' => 'Reject Mid-Year Appraisal',
-                                'data' => [
+                                'class' => 'btn btn-app bg-warning rejectey',
+                                'title' => 'Reject End-Year Appraisal',
+                                'rel' =>  $_GET['Appraisal_No'],
+                                'rev' => $_GET['Employee_No'],
+                                /*'data' => [
                                 'confirm' => 'Are you sure you want to Reject this End-Year Appraisal?',
-                                'method' => 'post',]
+                                'method' => 'post',]*/
                             ]) 
                     ?>
 
@@ -575,6 +582,68 @@ Yii::$app->session->set('isSupervisor','true');
     </div>
 </div>
 
+<!-----end modal----------->
+
+<!-- GOALS REJECTION COMMENT FORM--->
+    <div id="rejform" style="display: none">
+
+        <?= Html::beginForm(['appraisal/reject'],'post',['id'=>'reject-form']) ?>
+
+        <?= Html::textarea('comment','',['placeholder'=>'Rejection Comment','row'=> 4,'class'=>'form-control','required'=>true])?>
+
+        <?= Html::input('hidden','Appraisal_No','',['class'=> 'form-control']); ?>
+        <?= Html::input('hidden','Employee_No','',['class'=> 'form-control']); ?>
+
+
+        <?= Html::submitButton('submit',['class' => 'btn btn-warning','style'=>'margin-top: 10px']) ?>
+
+        <?= Html::endForm() ?>
+    </div>
+
+<!--End gOAL REJECTION comment form-->
+
+
+
+<!---mID YEAR COMMENT REJECTION FORM -->
+
+    <div id="myrejform" style="display: none">
+
+        <?= Html::beginForm(['appraisal/rejectmy'],'post',['id'=>'my-reject-form']) ?>
+
+        <?= Html::textarea('comment','',['placeholder'=>'Mid-Year Rejection Comment','row'=> 4,'class'=>'form-control','required'=>true])?>
+
+        <?= Html::input('hidden','Appraisal_No','',['class'=> 'form-control','style'=>'margin-top: 10px']); ?>
+        <?= Html::input('hidden','Employee_No','',['class'=> 'form-control','style'=>'margin-top: 10px']); ?>
+
+
+        <?= Html::submitButton('submit',['class' => 'btn btn-warning','style'=>'margin-top: 10px']) ?>
+
+        <?= Html::endForm() ?>
+    </div>
+
+
+<!---END  mID YEAR COMMENT REJECTION FORM -->
+
+
+    <!---mID YEAR COMMENT REJECTION FORM -->
+
+    <div id="eyrejform" style="display: none">
+
+        <?= Html::beginForm(['appraisal/rejectey'],'post',['id'=>'ey-reject-form']) ?>
+
+        <?= Html::textarea('comment','',['placeholder'=>'End-Year Rejection Comment','row'=> 4,'class'=>'form-control','required'=>true])?>
+
+        <?= Html::input('hidden','Appraisal_No','',['class'=> 'form-control','style'=>'margin-top: 10px']); ?>
+        <?= Html::input('hidden','Employee_No','',['class'=> 'form-control','style'=>'margin-top: 10px']); ?>
+
+
+        <?= Html::submitButton('Reject EY Appraisal',['class' => 'btn btn-warning','style'=>'margin-top: 10px']) ?>
+
+        <?= Html::endForm() ?>
+    </div>
+
+
+    <!---END  mID YEAR COMMENT REJECTION FORM -->
 
 <?php
 
@@ -692,6 +761,130 @@ $script = <<<JS
     //select2
     
     $('.peer').select2();
+    
+    //Pop up the goals Rejection comment form Modal
+    
+    $('.reject').on('click', function(e){
+        e.preventDefault();
+        const form = $('#rejform').html(); 
+        const Appraisal_No = $(this).attr('rel');
+        const Employee_No = $(this).attr('rev');
+        
+        console.log('Appraisal No: '+Appraisal_No);
+        console.log('Employee No: '+Employee_No);
+        
+        //Display the rejection comment form
+        $('.modal').modal('show')
+                        .find('.modal-body')
+                        .append(form);
+        
+        //populate relevant input field with code unit required params
+                
+        $('input[name=Appraisal_No]').val(Appraisal_No);
+        $('input[name=Employee_No]').val(Employee_No);
+        
+        //Submit Rejection form and get results in json    
+        $('form#reject-form').on('submit', function(e){
+            e.preventDefault()
+            const data = $(this).serialize();
+            const url = $(this).attr('action');
+            $.post(url,data).done(function(msg){
+                    $('.modal').modal('show')
+                    .find('.modal-body')
+                    .html(msg.note);
+        
+                },'json');
+        });
+        
+        
+    });//End click event on  GOals rejection-button click
+    
+    
+    
+    
+    //Click event on M.Y aAppraisal rejection button: modal form
+    
+    
+    $('.rejectmy').on('click', function(e){
+        e.preventDefault();
+        const form = $('#myrejform').html(); 
+        const Appraisal_No = $(this).attr('rel');
+        const Employee_No = $(this).attr('rev');
+        
+        console.log('Appraisal No: '+Appraisal_No);
+        console.log('Employee No: '+Employee_No);
+        
+        //Display the rejection comment form
+        $('.modal').modal('show')
+                        .find('.modal-body')
+                        .append(form);
+        
+        //populate relevant input field with code unit required params
+                
+        $('input[name=Appraisal_No]').val(Appraisal_No);
+        $('input[name=Employee_No]').val(Employee_No);
+        
+        //Submit Rejection form and get results in json    
+        $('form#my-reject-form').on('submit', function(e){
+            e.preventDefault()
+            const data = $(this).serialize();
+            const url = $(this).attr('action');
+            $.post(url,data).done(function(msg){
+                    $('.modal').modal('show')
+                    .find('.modal-body')
+                    .html(msg.note);
+        
+                },'json');
+        });
+        
+        
+    });
+    
+    
+    
+    //End Click event on M.Y aAppraisal rejection button
+    
+    
+    //Rejecting end year Appraisal comment
+    
+    $('.rejectey').on('click', function(e){
+        e.preventDefault();
+        const form = $('#eyrejform').html(); 
+        const Appraisal_No = $(this).attr('rel');
+        const Employee_No = $(this).attr('rev');
+        
+        console.log('Appraisal No: '+Appraisal_No);
+        console.log('Employee No: '+Employee_No);
+        
+        //Display the rejection comment form
+        $('.modal').modal('show')
+                        .find('.modal-body')
+                        .append(form);
+        
+        //populate relevant input field with code unit required params
+                
+        $('input[name=Appraisal_No]').val(Appraisal_No);
+        $('input[name=Employee_No]').val(Employee_No);
+        
+        //Submit Rejection form and get results in json    
+        $('form#ey-reject-form').on('submit', function(e){
+            e.preventDefault()
+            const data = $(this).serialize();
+            const url = $(this).attr('action');
+            $.post(url,data).done(function(msg){
+                    $('.modal').modal('show')
+                    .find('.modal-body')
+                    .html(msg.note);
+        
+                },'json');
+        });
+        
+        
+    });
+    
+    //End Rejecting end year Appraisal comment
+    
+    
     
         
     });//end jquery

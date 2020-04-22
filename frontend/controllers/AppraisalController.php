@@ -54,6 +54,7 @@ class AppraisalController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['get'],
+                    'reject' => ['POST']
                 ],
             ],
             'contentNegotiator' =>[
@@ -882,26 +883,31 @@ class AppraisalController extends Controller
 
     }
 
-    public function actionReject($appraisalNo,$employeeNo)
+    public function actionReject()
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $appraisalNo = Yii::$app->request->post('Appraisal_No');
+        $employeeNo = Yii::$app->request->post('Employee_No');
         $data = [
-            'appraisalNo' => $appraisalNo,
-            'employeeNo' => $employeeNo,
+            'appraisalNo' => Yii::$app->request->post('Appraisal_No'),
+            'employeeNo' => Yii::$app->request->post('Employee_No'),
             'sendEmail' => 0,
             'approvalURL' => 1,
-            'rejectionComments' => 'This is Rejected .', //Yii::$app->request->post('rejectionComments')
+            'rejectionComments' => Yii::$app->request->post('comment')
         ];
 
         $result = Yii::$app->navhelper->IanSendGoalSettingBackToAppraisee($service,$data);
+        //Response of this action is json only
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         if(!is_string($result)){
-            Yii::$app->session->setFlash('success', 'Perfomance Appraisal Goals Rejected and Sent Back to Appraisee Successfully.', true);
-            return $this->redirect(['viewsubmitted','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
+            //Yii::$app->session->setFlash('success', 'Perfomance Appraisal Goals Rejected and Sent Back to Appraisee Successfully.', true);
+            return ['note' => '<div class="alert alert-success alert-dismissable">Perfomance Appraisal Goals Rejected and Sent Back to Appraisee Successfully.</div>'];
         }else{
 
-            Yii::$app->session->setFlash('error', 'Error Rejecting Performance Appraisal Goals : '. $result);
-            return $this->redirect(['viewsubmitted','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
+           // Yii::$app->session->setFlash('error', 'Error Rejecting Performance Appraisal Goals : '. $result);
+            return ['note' => '<div class="alert alert-danger alert-dismissable">Error Rejecting Performance Appraisal Goals </div>'];
+
 
         }
 
@@ -961,26 +967,28 @@ class AppraisalController extends Controller
 
     //Reject Mid-Year Appraisal
 
-    public function actionRejectmy($appraisalNo,$employeeNo)
+    public function actionRejectmy()
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
         $data = [
-            'appraisalNo' => $appraisalNo,
-            'employeeNo' => $employeeNo,
+            'appraisalNo' => Yii::$app->request->post('Appraisal_No'),
+            'employeeNo' => Yii::$app->request->post('Employee_No'),
             'sendEmail' => 0,
             'approvalURL' => 1, //Ask korir to change this to text currently set to int
-            'rejectionComments' => 'This is Rejected .', //Yii::$app->request->post('rejectionComments')
+            'rejectionComments' => Yii::$app->request->post('comment')
         ];
 
         $result = Yii::$app->navhelper->IanSendMYAppraisaBackToAppraisee($service,$data);
-
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         if(!is_string($result)){
-            Yii::$app->session->setFlash('success', 'Mid Year Appraisal Rejected and Sent Back to Appraisee Successfully.', true);
-            return $this->redirect(['viewsubmitted','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
+            //Yii::$app->session->setFlash('success', 'Mid Year Appraisal Rejected and Sent Back to Appraisee Successfully.', true);
+            //return $this->redirect(['viewsubmitted','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
+            return ['note' => '<div class="alert alert-success alert-dismissable">Mid Year Appraisal Rejected and Sent Back to Appraisee Successfully.</div>'];
         }else{
 
-            Yii::$app->session->setFlash('error', 'Error Rejecting Mid Year Appraisal : '. $result);
-            return $this->redirect(['viewsubmitted','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
+            //Yii::$app->session->setFlash('error', 'Error Rejecting Mid Year Appraisal : '. $result);
+            //return $this->redirect(['viewsubmitted','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
+            return ['note' => '<div class="alert alert-danger alert-dismissable">Error Rejecting Mid Year Appraisal : '. $result.'</div>'];
 
         }
 
@@ -1040,27 +1048,28 @@ class AppraisalController extends Controller
 
     //Reject End-Year Appraisal
 
-    public function actionRejectey($appraisalNo,$employeeNo)
+    public function actionRejectey()
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
         $data = [
-            'appraisalNo' => $appraisalNo,
-            'employeeNo' => $employeeNo,
+            'appraisalNo' => Yii::$app->request->post('Appraisal_No'),
+            'employeeNo' => Yii::$app->request->post('Employee_No'),
             'sendEmail' => 0,
             'approvalURL' => 1, //Ask korir to change this to text currently set to int
-            'rejectionComments' => 'This is Rejected .', //Yii::$app->request->post('rejectionComments')
+            'rejectionComments' => Yii::$app->request->post('comment')
         ];
 
         $result = Yii::$app->navhelper->IanSendEYAppraisaBackToAppraisee($service,$data);
-
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         if(!is_string($result)){
-            Yii::$app->session->setFlash('success', 'End Year Appraisal Rejected and Sent Back to Appraisee Successfully.', true);
-            return $this->redirect(['viewsubmitted','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
+            //Yii::$app->session->setFlash('success', 'End Year Appraisal Rejected and Sent Back to Appraisee Successfully.', true);
+            //return $this->redirect(['viewsubmitted','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
+            return ['note' => '<div class="alert alert-success alert-dismissable">End Year Appraisal Rejected and Sent Back to Appraisee Successfully.</div>'];
         }else{
 
-            Yii::$app->session->setFlash('error', 'Error Rejecting End Year Appraisal : '. $result);
-            return $this->redirect(['viewsubmitted','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-
+            //Yii::$app->session->setFlash('error', 'Error Rejecting End Year Appraisal : '. $result);
+            //return $this->redirect(['viewsubmitted','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
+            return ['note' => '<div class="alert  alert-danger alert-dismissable">Error Rejecting End Year Appraisal : '. $result .'</div>'];
         }
 
     }

@@ -3,6 +3,7 @@ namespace common\library;
 use yii;
 use yii\base\Component;
 use common\models\Services;
+use yii\web\Response;
 //http://app-svr.rbss.com:7047/BC130/WS/RBA UAT/Page/Recruitment_Needs
 class Navhelper extends Component{
     //read data-> pass filters as get params
@@ -29,7 +30,7 @@ class Navhelper extends Component{
             }
         }
 
-        //exit(Yii::$app->navision->isUp($soapWsdl,$creds));
+
         if(!Yii::$app->navision->isUp($soapWsdl,$creds)) {
             throw new \yii\web\HttpException(503, 'Service unavailable');
 

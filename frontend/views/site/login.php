@@ -9,6 +9,9 @@ use yii\bootstrap\ActiveForm;
 
 
 $this->params['breadcrumbs'][] = $this->title;
+if(Yii::$app->session->hasFlash('error')){
+    print '<div class="alert alert-danger">'.Yii::$app->session->getFlash('error').'</div>';
+}
 ?>
 
 

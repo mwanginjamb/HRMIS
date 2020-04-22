@@ -90,20 +90,28 @@ return [
         'AppraisalList' => 'AppraisalList', //60007
         'AppraisalCard' => 'AppraisalCard',//60008
         'EmployeeAppraisalKPI' => 'EmployeeAppraisalKPI', //60010
-        'SubmittedAppraisals' => 'SubmittedAppraisals', //60012 --->Not taken to live server
-        'ApprovedAppraisals' => 'ApprovedAppraisals', //60013 --> Not taken to live server
-        'MYAppraiseeList' => 'MYAppraiseeList',//60014 -->Not Taken to live server
-        'MYSupervisorList' => 'MYSupervisorList',//60015 -->Not Taken to live server
-        'MYApprovedList' => 'MYApprovedList',//60016 --> Not Taken to live server (MY CLOSED)
-        'EYAppraiseeList' => 'EYAppraiseeList',//60017 -->Not Taken to live server
-        'EYSupervisorList' => 'EYSupervisorList',//60018 -->Not Taken to live server
-        'EYPeer1List' => 'EYPeer1List',//60019 -->Not Taken to live server
-        'EYPeer2List' => 'EYPeer2List',//60020 -->Not Taken to live server
-        'EYAgreementList' => 'EYAgreementList',//60021 -->Not Taken to live server
-        'ClosedAppraisalsList' => 'ClosedAppraisalsList',//60022 -->Not Taken to live server
+        'SubmittedAppraisals' => 'SubmittedAppraisals', //60012
+        'ApprovedAppraisals' => 'ApprovedAppraisals', //60013
+        'MYAppraiseeList' => 'MYAppraiseeList',//60014
+        'MYSupervisorList' => 'MYSupervisorList',//60015
+        'MYApprovedList' => 'MYApprovedList',//60016
+        'EYAppraiseeList' => 'EYAppraiseeList',//60017
+        'EYSupervisorList' => 'EYSupervisorList',//60018
+        'EYPeer1List' => 'EYPeer1List',//60019
+        'EYPeer2List' => 'EYPeer2List',//60020
+        'EYAgreementList' => 'EYAgreementList',//60021
+        'ClosedAppraisalsList' => 'ClosedAppraisalsList',//60022
 
-        'AppraisalWorkflow' => 'AppraisalWorkflow', // 50020 ---> Code Unit : not published on live
-        'PerformanceLevel' => 'PerformanceLevel',//60037 -> Not published on live
+        'CareerDevelopmentPlan' => 'CareerDevelopmentPlan', //60038 -->Not Taken to live server
+        'CareerDevStrengths' => 'CareerDevStrengths', //60039 -->Not Taken to live server
+        'FurtherDevAreas' => 'FurtherDevAreas', //60040 -->Not Taken to live server
+        'WeeknessDevPlan' => 'WeeknessDevPlan', //60041 -->Not Taken to live server
+
+
+
+
+        'AppraisalWorkflow' => 'AppraisalWorkflow', // 50020 ---> Code Unit
+        'PerformanceLevel' => 'PerformanceLevel',//60037 page
 
         'EmployeeAppraisalKRA' => 'EmployeeAppraisalKRA',//60009
         'TrainingPlan' => 'TrainingPlan', //60036
