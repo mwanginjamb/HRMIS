@@ -14,6 +14,10 @@ use yii\helpers\Html;
 $this->title = 'Add Training Plan Line';
 $this->params['breadcrumbs'][] = ['label' => 'KRA Evaluation', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$model->Employee_No = Yii::$app->request->get('Employee_No');
+$model->Appraisal_No = Yii::$app->request->get('Appraisal_No');
+$model->Goal_Line_No = Yii::$app->request->get('Goal_Line_No');
+$model->isNewRecord = true;
 ?>
 <div class="leave-document-create">
 

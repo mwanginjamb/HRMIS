@@ -459,7 +459,11 @@ Yii::$app->session->set('isSupervisor',false);
         <div class="card-header">
             <h4 class="card-title">Career Development Plan</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <?= Html::a('<i class="fas fa-plus"></i> Add New',['learningassessment/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-primary add-learning-assessment']) ?>
+            <?= Html::a('<i class="fas fa-plus"></i> Add New',['careerdevelopmentplan/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' =>$model->Employee_No ],
+                [
+                    'class' => 'btn btn-xs btn-primary add-cdp',
+
+                ]) ?>
 
         </div>
         <div class="card-body">
@@ -468,9 +472,9 @@ Yii::$app->session->set('isSupervisor',false);
                 <thead>
                 <tr>
                     <th>Line No.</th>
-                    <th>Employee_No</th>
+                    <th>Employee No</th>
                     <th>Appraisal No</th>
-                    <th>Career Development_Goal</th>
+                    <th>Career Development Goal</th>
                     <th>Estimated Start Date</th>
                     <th>Estimate End Date</th>
                     <th>Duration</th>
@@ -484,18 +488,62 @@ Yii::$app->session->set('isSupervisor',false);
 
                 <?php if(property_exists($card->Career_Development_Plan,'Career_Development_Plan')){ ?>
                     <?php foreach($card->Career_Development_Plan->Career_Development_Plan as $cdp){ ?>
-                        <tr>
+                        <tr class="parent">
+                            <td><span>+</span></td>
                             <td><?= $cdp->Line_No ?></td>
-                            <!-- <td><?/*= $cdp->Employee_No */?></td>-->
+                            <td><?= $cdp->Employee_No ?></td>
                             <td><?= $cdp->Appraisal_No ?></td>
-                            <td><?= $cdp->Training_Action ?></td>
-                            <td><?= $cdp->Due_Date ?></td>
-                            <td><?= $cdp->Learning_Hours ?></td>
-                            <td><?= $cdp->Status_Mid_Year ?></td>
-                            <td><?= $cdp->Status_End_Year ?></td>
-                            <td><?= $cdp->Comments ?></td>
-                            <td><?= Html::a('<i class="fas fa-edit"></i> ',['learningcdpsment/update','Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?></td>
+                            <td><?= $cdp->Career_Development_Goal ?></td>
+                            <td><?= $cdp->Estimate_Start_Date ?></td>
+                            <td><?= $cdp->Estimate_End_Date ?></td>
+                            <td><?= $cdp->Duration ?></td>
+
+                            <td>
+                                <?= Html::a('<i class="fas fa-edit"></i> ',['learningcdpsment/update','Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?>
+                                <?= Html::a('<i class="fas fa-plus-square"></i> ',['careerdevelopmentstrength/create','Goal_Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add-cds', 'title'=>'Add Career Development Strength']) ?>
+                            </td>
                         </tr>
+                        <!--Start displaying children-->
+                        <tr class="child">
+                            <td colspan="11" >
+                                <table class="table table-hover table-borderless table-info">
+                                    <thead>
+                                    <tr >
+                                        <th>Line No</th>
+                                         <th>Appraisal No</th>
+                                         <th>Employee No</th>
+                                        <th>Strength</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php if(is_array($model->getCareerdevelopmentstrengths($cdp->Line_No))){
+
+                                        foreach($model->getCareerdevelopmentstrengths($cdp->Line_No) as $cds):  ?>
+                                            <tr>
+                                                <td><?= $cds->Line_No ?></td>
+                                                <td><?= $cds->Appraisal_No ?></td>
+                                                <td><?= $cds->Employee_No ?></td>
+                                                <td><?= $cds->Strength ?></td>
+                                                <td>
+                                                    <?= Html::a('<i class="fas fa-edit"></i> ',['learningcdpsment/update','Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?>
+                                                    <?= Html::a('<i class="fas fa-plus-square"></i> ',['careerdevelopmentstrength/create','Goal_Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add-cds', 'title'=>'Add Career Development Strength']) ?>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                        endforeach;
+                                    }
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <!--end displaying children-->
+
+
+
+
+
                     <?php } ?>
                 <?php }  ?>
                 </tbody>
@@ -512,7 +560,7 @@ Yii::$app->session->set('isSupervisor',false);
         <div class="card-header">
             <h4 class="card-title">Areas of Further Development</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <?= Html::a('<i class="fas fa-plus"></i> Add New',['learningcdpsment/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-primary add-learning-assessment']) ?>
+            <?= Html::a('<i class="fas fa-plus"></i> Add New',['furtherdevelopmentarea/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-primary add-fda']) ?>
 
         </div>
         <div class="card-body">
@@ -524,7 +572,6 @@ Yii::$app->session->set('isSupervisor',false);
                     <th>Employee No</th>
                     <th>Appraisal No</th>
                     <th>Weakness</th>
-
                     <th>Action</th>
 
 
@@ -534,14 +581,54 @@ Yii::$app->session->set('isSupervisor',false);
 
                 <?php if(property_exists($card->Areas_of_Further_Development,'Areas_of_Further_Development')){ ?>
                     <?php foreach($card->Areas_of_Further_Development->Areas_of_Further_Development as $fda){ ?>
-                        <tr>
+                        <tr class="parent">
+                            <td><span>+</span></td>
                             <td><?= $fda->Line_No ?></td>
                              <td><?= $fda->Employee_No ?></td>
                             <td><?= $fda->Appraisal_No ?></td>
                             <td><?= $fda->Weakness ?></td>
 
-                            <td><?= Html::a('<i class="fas fa-edit"></i> ',['learningfdasment/update','Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?></td>
+                            <td>
+                                <?= Html::a('<i class="fas fa-edit"></i> ',['learningfdasment/update','Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?>
+                                <?= Html::a('<i class="fas fa-plus-square"></i> ',['weeknessdevelopmentplan/create','Wekaness_Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add-wdp','Add a Weakness Development Plan.']) ?>
+                            </td>
                         </tr>
+                        <!--Start displaying children-->
+                        <tr class="child">
+                            <td colspan="11" >
+                                <table class="table table-hover table-borderless table-info">
+                                    <thead>
+                                    <tr >
+                                        <th>Line No</th>
+                                        <th>Appraisal No</th>
+                                        <th>Employee No</th>
+                                        <th>Development Plan</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php if(is_array($model->getWeaknessdevelopmentplan($fda->Line_No))){
+
+                                        foreach($model->getWeaknessdevelopmentplan($fda->Line_No) as $wdp):  ?>
+                                            <tr>
+                                                <td><?= $wdp->Line_No ?></td>
+                                                <td><?= $wdp->Appraisal_No ?></td>
+                                                <td><?= $wdp->Employee_No ?></td>
+                                                <td><?= $wdp->Development_Plan ?></td>
+                                                <td>
+                                                    <?= Html::a('<i class="fas fa-edit"></i> ',['learningcdpsment/update','Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?>
+                                                    <?= Html::a('<i class="fas fa-plus-square"></i> ',['careerdevelopmentstrength/create','Goal_Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add-cds', 'title'=>'Add Career Development Strength']) ?>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                        endforeach;
+                                    }
+                                    ?>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <!--end displaying children-->
                     <?php } ?>
                 <?php }  ?>
                 </tbody>
@@ -695,7 +782,63 @@ $script = <<<JS
             $(this).nextUntil('p.parent').slideToggle(100, function(){});
      });
     
-    
+        //Add Career Development Plan
+        
+        $('.add-cdp').on('click',function(e){
+            e.preventDefault();
+            var url = $(this).attr('href');
+           
+            
+            console.log('clicking...');
+            $('.modal').modal('show')
+                            .find('.modal-body')
+                            .load(url); 
+            
+         });//End Adding career development plan
+         
+         /*Add Career development Strength*/
+         
+         
+        $('.add-cds').on('click',function(e){
+            e.preventDefault();
+            var url = $(this).attr('href');
+            
+            $('.modal').modal('show')
+                            .find('.modal-body')
+                            .load(url); 
+            
+         });
+         
+         /*End Add Career development Strength*/
+         
+         
+         /* Add further development Areas */
+         
+            $('.add-fda').on('click',function(e){
+            e.preventDefault();
+            var url = $(this).attr('href');
+                       
+            console.log('clicking...');
+            $('.modal').modal('show')
+                            .find('.modal-body')
+                            .load(url); 
+            
+         });
+         
+         /* End Add further development Areas */
+         
+         /*Add Weakness Development Plan*/
+             $('.add-wdp').on('click',function(e){
+            e.preventDefault();
+            var url = $(this).attr('href');
+                       
+            console.log('clicking...');
+            $('.modal').modal('show')
+                            .find('.modal-body')
+                            .load(url); 
+            
+         });
+         /*End Add Weakness Development Plan*/
     
         
     });//end jquery

@@ -14,6 +14,9 @@ use yii\helpers\Html;
 $this->title = 'Add Career Development plan Line';
 $this->params['breadcrumbs'][] = ['label' => 'Career Dev Plan', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$model->Employee_No = Yii::$app->request->get('Employee_No');
+$model->Appraisal_No = Yii::$app->request->get('Appraisal_No');
+$model->isNewRecord = true;
 ?>
 <div class="leave-document-create">
 

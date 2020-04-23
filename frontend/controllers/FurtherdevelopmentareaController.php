@@ -52,7 +52,7 @@ class FurtherdevelopmentareaController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['create','update'],
+                'only' => [''],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -78,7 +78,7 @@ class FurtherdevelopmentareaController extends Controller
 
 
             $result = Yii::$app->navhelper->postData($service,$model);
-
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             if(!is_string($result)){
 
                 return ['note' => '<div class="alert alert-success">Further Development Line Added Successfully</div>' ];
@@ -125,7 +125,8 @@ class FurtherdevelopmentareaController extends Controller
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Furtherdevelopmentareas'],$model) ){
             $result = Yii::$app->navhelper->updateData($service,$model);
 
-            //Yii::$app->recruitment->printrr($result);
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             if(!is_string($result)){
 
                 return ['note' => '<div class="alert alert-success">Further Devement Area Line Updated Successfully. </div>'];

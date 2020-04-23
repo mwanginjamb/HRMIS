@@ -52,7 +52,7 @@ class WeeknessdevelopmentplanController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['create','update'],
+                'only' => [''],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -78,14 +78,14 @@ class WeeknessdevelopmentplanController extends Controller
 
 
             $result = Yii::$app->navhelper->postData($service,$model);
-
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             if(is_object($result)){
 
-                return ['note' => '<div class="alert alert-success">Weekness Development Plan Line Added Successfully. </div>'];
+                return ['note' => '<div class="alert alert-success">Weakness Development Plan Line Added Successfully. </div>'];
 
             }else{
 
-                return ['note' => '<div class="alert alert-danger">Error Adding Weekness Development Plan Line : '.$result.'</div>' ];
+                return ['note' => '<div class="alert alert-danger">Error Adding Weakness Development Plan Line : '.$result.'</div>' ];
 
             }
 
@@ -125,13 +125,13 @@ class WeeknessdevelopmentplanController extends Controller
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Weeknessdevelopmentplan'],$model) ){
             $result = Yii::$app->navhelper->updateData($service,$model);
 
-            //Yii::$app->recruitment->printrr($result);
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             if(!is_string($result)){
 
-                return ['note' => '<div class="alert alert-success">Weekness Development Plan Line Updated Successfully. </div>' ];
+                return ['note' => '<div class="alert alert-success">Weakness Development Plan Line Updated Successfully. </div>' ];
             }else{
 
-                return ['note' => '<div class="alert alert-danger">Error Updating Weekness Development Plan Line: '.$result.'</div>'];
+                return ['note' => '<div class="alert alert-danger">Error Updating Weakness Development Plan Line: '.$result.'</div>'];
             }
 
         }

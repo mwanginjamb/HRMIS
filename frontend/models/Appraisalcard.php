@@ -87,6 +87,29 @@ public $Learning_Assesment_Competenc;
         return $behaviours;
     }
 
+    public function getCareerdevelopmentstrengths($Goal_Line_No){
+        $service = Yii::$app->params['ServiceName']['CareerDevStrengths'];
+        $filter = [
+            'Appraisal_Code' => $this->Appraisal_No,
+            'Goal_Line_No' => $Goal_Line_No
+        ];
+
+        $result = Yii::$app->navhelper->getData($service, $filter);
+        return $result;
+    }
+
+    public function getWeaknessdevelopmentplan($Wekaness_Line_No){
+        $service = Yii::$app->params['ServiceName']['WeeknessDevPlan'];
+        $filter = [
+            'Appraisal_Code' => $this->Appraisal_No,
+            'Wekaness_Line_No' => $Wekaness_Line_No
+        ];
+
+        $result = Yii::$app->navhelper->getData($service, $filter);
+        return $result;
+    }
+
+
     //get supervisor status
 
     public function isSupervisor($Employee_User_Id,$Supervisor_User_Id)

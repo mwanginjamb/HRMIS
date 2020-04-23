@@ -16,6 +16,8 @@ public $Line_No;
 public $Appraisal_No;
 public $Employee_No;
 public $Weakness;
+public $isNewRecord;
+public $Key;
 
     public function rules()
     {
@@ -27,7 +29,7 @@ public $Weakness;
     public function attributeLabels()
     {
         return [
-
+            'Weakness' => 'Further Development Area'
         ];
     }
 }

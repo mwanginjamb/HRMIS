@@ -11,9 +11,13 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\AgendaDocument */
 
-$this->title = 'Add Weekness Development Plan Line';
+$this->title = 'Add Weakness Development Plan Line';
 $this->params['breadcrumbs'][] = ['label' => 'KRA Evaluation', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$model->Employee_No = Yii::$app->request->get('Employee_No');
+$model->Appraisal_No = Yii::$app->request->get('Appraisal_No');
+$model->Wekaness_Line_No = Yii::$app->request->get('Wekaness_Line_No');
+$model->isNewRecord = true;
 ?>
 <div class="leave-document-create">
 

@@ -18,6 +18,8 @@ public $Appraisal_No;
 public $Employee_No;
 public $Development_Plan;
 public $Wekaness_Line_No;
+public $Key;
+public $isNewRecord;
 
     public function rules()
     {

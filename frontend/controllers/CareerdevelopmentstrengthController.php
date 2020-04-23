@@ -53,7 +53,7 @@ class CareerdevelopmentstrengthController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['create','update'],
+                'only' => [''],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -69,7 +69,7 @@ class CareerdevelopmentstrengthController extends Controller
 
     }
 
-    public function actionCreate($Appraisal_No,$Employee_No){
+    public function actionCreate(){
 
         $model = new Careerdevelopmentstrength() ;
         $service = Yii::$app->params['ServiceName']['CareerDevStrengths'];
@@ -78,7 +78,7 @@ class CareerdevelopmentstrengthController extends Controller
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Careerdevelopmentstrength'],$model)  ){
 
             $result = Yii::$app->navhelper->postData($service,$model);
-
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             if(is_object($result)){
 
                 return ['note' => '<div class="alert alert-success">Career Development Strength Line Added Successfully</div>'];
@@ -125,7 +125,7 @@ class CareerdevelopmentstrengthController extends Controller
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Careerdevelopmentstrength'],$model) ){
             $result = Yii::$app->navhelper->updateData($service,$model);
 
-            //Yii::$app->recruitment->printrr($result);
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             if(!empty($result)){
 
                 return ['note' => '<div class="alert alert-success">Career Development Strength Updated Successfully.</div>'];

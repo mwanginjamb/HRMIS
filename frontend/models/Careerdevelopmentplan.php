@@ -20,6 +20,7 @@ public $Career_Development_Goal;
 public $Estimate_Start_Date;
 public $Estimate_End_Date;
 public $Duration;
+public $isNewRecord;
 
     public function rules()
     {

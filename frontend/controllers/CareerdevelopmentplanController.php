@@ -53,7 +53,7 @@ class CareerdevelopmentplanController extends Controller
             ],
             'contentNegotiator' =>[
                 'class' => ContentNegotiator::class,
-                'only' => ['create','update'],
+                'only' => [''],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -69,7 +69,7 @@ class CareerdevelopmentplanController extends Controller
 
     }
 
-    public function actionCreate($Appraisal_No,$Employee_No){
+    public function actionCreate(){
 
         $model = new Careerdevelopmentplan() ;
         $service = Yii::$app->params['ServiceName']['CareerDevelopmentPlan'];
@@ -78,7 +78,7 @@ class CareerdevelopmentplanController extends Controller
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Careerdevelopmentplan'],$model)  ){
 
             $result = Yii::$app->navhelper->postData($service,$model);
-
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             if(is_object($result)){
 
                 return ['note' => '<div class="alert alert-success">Career Development Plan Line Added Successfully. </div>' ];
@@ -114,7 +114,7 @@ class CareerdevelopmentplanController extends Controller
             'Appraisal_No' => Yii::$app->request->get('Appraisal_No')
         ];
         $result = Yii::$app->navhelper->getData($service,$filter);
-
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         if(is_array($result)){
             //load nav result to model
             $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;//$this->loadtomodeEmployee_Nol($result[0],$Expmodel);
