@@ -499,7 +499,7 @@ Yii::$app->session->set('isSupervisor',false);
                             <td><?= $cdp->Duration ?></td>
 
                             <td>
-                                <?= Html::a('<i class="fas fa-edit"></i> ',['learningcdpsment/update','Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?>
+                                <?= Html::a('<i class="fas fa-edit"></i> ',['careerdevelopmentplan/update','Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?>
                                 <?= Html::a('<i class="fas fa-plus-square"></i> ',['careerdevelopmentstrength/create','Goal_Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add-cds', 'title'=>'Add Career Development Strength']) ?>
                             </td>
                         </tr>
@@ -526,8 +526,8 @@ Yii::$app->session->set('isSupervisor',false);
                                                 <td><?= $cds->Employee_No ?></td>
                                                 <td><?= $cds->Strength ?></td>
                                                 <td>
-                                                    <?= Html::a('<i class="fas fa-edit"></i> ',['learningcdpsment/update','Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?>
-                                                    <?= Html::a('<i class="fas fa-plus-square"></i> ',['careerdevelopmentstrength/create','Goal_Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add-cds', 'title'=>'Add Career Development Strength']) ?>
+                                                    <?= Html::a('<i class="fas fa-edit"></i> ',['careerdevelopmentstrength/update','Line_No'=> $cds->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning','title' => 'Update Strength']) ?>
+                                                    <?= Html::a('<i class="fas fa-trash"></i> ',['careerdevelopmentstrength/delete','Key'=> $cds->Key],['class' => 'btn btn-xs btn-outline-primary delete', 'title'=>'Delete Career Development Strength']) ?>
                                                 </td>
                                             </tr>
                                             <?php
@@ -589,7 +589,7 @@ Yii::$app->session->set('isSupervisor',false);
                             <td><?= $fda->Weakness ?></td>
 
                             <td>
-                                <?= Html::a('<i class="fas fa-edit"></i> ',['learningfdasment/update','Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?>
+                                <?= Html::a('<i class="fas fa-edit"></i> ',['furtherdevelopmentarea/update','Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?>
                                 <?= Html::a('<i class="fas fa-plus-square"></i> ',['weeknessdevelopmentplan/create','Wekaness_Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add-wdp','Add a Weakness Development Plan.']) ?>
                             </td>
                         </tr>
@@ -616,8 +616,8 @@ Yii::$app->session->set('isSupervisor',false);
                                                 <td><?= $wdp->Employee_No ?></td>
                                                 <td><?= $wdp->Development_Plan ?></td>
                                                 <td>
-                                                    <?= Html::a('<i class="fas fa-edit"></i> ',['learningcdpsment/update','Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?>
-                                                    <?= Html::a('<i class="fas fa-plus-square"></i> ',['careerdevelopmentstrength/create','Goal_Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add-cds', 'title'=>'Add Career Development Strength']) ?>
+                                                    <?= Html::a('<i class="fas fa-edit"></i> ',['weeknessdevelopmentplan/update','Line_No'=> $wdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning','title'=> 'Update Weakness Development Plan']) ?>
+                                                    <?= Html::a('<i class="fas fa-trash"></i> ',['weeknessdevelopmentplan/delete','Key'=> $wdp->Key],['class' => 'btn btn-xs btn-outline-primary delete', 'title'=>'Delete Weakness Development Plan']) ?>
                                                 </td>
                                             </tr>
                                             <?php
@@ -676,6 +676,17 @@ $script = <<<JS
     $(function(){
       
         
+     /*Deleting Records*/
+     
+     $('.delete').on('click',function(e){
+         e.preventDefault();
+         var url = $(this).attr('href');
+         $.get(url).done(function(msg){
+             $('.modal').modal('show')
+                    .find('.modal-body')
+                    .html(msg.note);
+         },'json');
+     });
       
     
     /*Evaluate KRA*/

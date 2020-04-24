@@ -114,7 +114,7 @@ class CareerdevelopmentplanController extends Controller
             'Appraisal_No' => Yii::$app->request->get('Appraisal_No')
         ];
         $result = Yii::$app->navhelper->getData($service,$filter);
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
         if(is_array($result)){
             //load nav result to model
             $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;//$this->loadtomodeEmployee_Nol($result[0],$Expmodel);
@@ -127,6 +127,7 @@ class CareerdevelopmentplanController extends Controller
             $result = Yii::$app->navhelper->updateData($service,$model);
 
             //Yii::$app->recruitment->printrr($result);
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             if(!is_string($result)){
 
                 return ['note' => '<div class="alert alert-success ">Career Development Plan Line Updated Successfully</div>'];

@@ -150,12 +150,11 @@ class WeeknessdevelopmentplanController extends Controller
     public function actionDelete(){
         $service = Yii::$app->params['ServiceName']['WeeknessDevPlan'];
         $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         if(!is_string($result)){
-            Yii::$app->session->setFlash('success','Work Experience Purged Successfully .',true);
-            return $this->redirect(['index']);
+            return ['note' => '<div class="alert alert-success">Record Purged Successfully</div>'];
         }else{
-            Yii::$app->session->setFlash('error','Error Purging Work Experience: '.$result,true);
-            return $this->redirect(['index']);
+            return ['note' => '<div class="alert alert-danger">Error Purging Record: '.$result.'</div>' ];
         }
     }
 
