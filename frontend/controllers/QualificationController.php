@@ -25,6 +25,7 @@ use kartik\mpdf\Pdf;
 
 class QualificationController extends Controller
 {
+    public  $metadata = [];
     public function behaviors()
     {
         return [
@@ -88,6 +89,13 @@ class QualificationController extends Controller
             $model->Employee_No = Yii::$app->recruitment->getProfileID();
 
              if(!empty($_FILES['Qualification']['name']['imageFile'])){
+
+                 $this->metadata = [
+                     'profileid' => $model->Employee_No,
+                     'documenttype' => 'Academic Qualification',
+                     'description' => $model->Description,
+                 ];
+                Yii::$app->session->set('metadata',$this->metadata);
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
                 $model->upload();
             }
@@ -142,6 +150,12 @@ class QualificationController extends Controller
 
             $model->Employee_No = Yii::$app->recruitment->getProfileID();
              if(!empty($_FILES['Qualification']['name']['imageFile'])){
+                 $this->metadata = [
+                     'profileid' => $model->Employee_No,
+                     'documenttype' => 'Professional Qualification',
+                     'description' => $model->Description,
+                 ];
+                 Yii::$app->session->set('metadata',$this->metadata);
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
                 $model->upload();
             }
@@ -199,6 +213,13 @@ class QualificationController extends Controller
             $model->Qualification_Code = $code;
             $model->Description =  $desc;
 
+            $this->metadata = [
+                'profileid' => $model->Employee_No,
+                'documenttype' => 'Academic Qualification',
+                'description' => $model->Description,
+            ];
+            Yii::$app->session->set('metadata',$this->metadata);
+
              if(!empty($_FILES['Qualification']['name']['imageFile'])){
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
                 $model->upload();
@@ -250,6 +271,13 @@ class QualificationController extends Controller
             $model->Description = $desc;
 
              if(!empty($_FILES['Qualification']['name']['imageFile'])){
+
+                 $this->metadata = [
+                     'profileid' => $model->Employee_No,
+                     'documenttype' => 'Academic Qualification',
+                     'description' => $model->Description,
+                 ];
+                 Yii::$app->session->set('metadata',$this->metadata);
                 $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
                 $model->upload();
             }
@@ -575,12 +603,13 @@ class QualificationController extends Controller
 
     public function actionDownload($path){
         $base = basename($path);
-        $ctx = Yii::$app->recruitment->connectWithAppOnlyToken(
+       /* $ctx = Yii::$app->recruitment->connectWithAppOnlyToken(
             Yii::$app->params['sharepointUrl'],
             Yii::$app->params['clientID'],
             Yii::$app->params['clientSecret']
-        );
-        $fileUrl = '/Mydocs/'.$base;
+        );*/
+        $ctx = Yii::$app->recruitment->connectWithUserCredentials(Yii::$app->params['sharepointUrl'],Yii::$app->params['sharepointUsername'],Yii::$app->params['sharepointPassword']);
+        $fileUrl = '/'.Yii::$app->params['library'].'/'.$base;
         $targetFilePath = './qualifications/download.pdf';
         $resource = Yii::$app->recruitment->downloadFile($ctx,$fileUrl,$targetFilePath);
 

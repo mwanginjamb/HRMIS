@@ -22,10 +22,10 @@ return [
     'adServer' => 'KRB-SVR7.KRBHQS.GO.KE', //Active directory domain controller
 
     //sharepoint config
-    'sharepointUrl' => 'https://ackads.sharepoint.com',
-    'sharepointUsername' => 'francis@ackads.onmicrosoft.com',
-    'sharepointPassword' => '@crm1220#*',
-    'library' => 'Mydocs',
+    'sharepointUrl' => 'https://aaofsciences.sharepoint.com',//'https://ackads.sharepoint.com',
+    'sharepointUsername' => 'Navision@aasciences.africa',//'francis@ackads.onmicrosoft.com',
+    'sharepointPassword' => 'Nav9orta7',//'@crm1220#*',
+    'library' => 'Portal',//'Mydocs',
     'clientID' => '7e92ce54-e4bf-491a-bef6-eb94044ce297',
     'clientSecret' => 'Q6UJkB3bRlPkGBjWNgrQVCyyjL2vgi5rtP7THpLwJ+s=',
 

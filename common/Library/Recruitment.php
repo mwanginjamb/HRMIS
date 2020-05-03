@@ -308,19 +308,22 @@ class Recruitment extends Component
     public function sharepoint_attach($filepath)
     {  //read list
 
-        $Url = Yii::$app->params['sharepointUrl'];//"http://rbadev-shrpnt";
-        $username = Yii::$app->params['sharepointUsername'];//'rbadev\administrator';
-        $password = Yii::$app->params['sharepointPassword']; //'rba123!!';
+      /* if(Yii::$app->session->has('metadata')){
+           print '<pre>';
+           print_r(Yii::$app->session->get('metadata'));
+           exit;
+       }*/
         $localPath = $filepath;
         $targetLibraryTitle = \Yii::$app->params['library'];
 
         try {
 
-            $ctx = $this->connectWithAppOnlyToken(
+            /*$ctx = $this->connectWithAppOnlyToken(
                 Yii::$app->params['sharepointUrl'],
                 Yii::$app->params['clientID'],
                 Yii::$app->params['clientSecret']
-            );
+            );*/
+            $ctx = $this->connectWithUserCredentials(Yii::$app->params['sharepointUrl'],Yii::$app->params['sharepointUsername'],Yii::$app->params['sharepointPassword']);
             $site = $ctx->getSite();
 
 
@@ -355,11 +358,11 @@ class Recruitment extends Component
         $ctx->executeQuery();
         print "File {$uploadFile->getProperty('Name')} has been uploaded\r\n";
 
-
+        $metadata = Yii::$app->session->get('metadata');
         $uploadFile->getListItemAllFields()->setProperty('Title', basename($localFilePath));
-        $uploadFile->getListItemAllFields()->setProperty('Profileid', 'App123');
-       // $uploadFile->getListItemAllFields()->setProperty('RequiredDocumentID', $metadata['RequiredDocumentID']);
-        //$uploadFile->getListItemAllFields()->setProperty('RequiredDocumentName', $metadata['RequiredDocumentName']);
+        $uploadFile->getListItemAllFields()->setProperty('profileid', $metadata['profileid']);
+        $uploadFile->getListItemAllFields()->setProperty('documenttype', $metadata['documenttype']);
+        $uploadFile->getListItemAllFields()->setProperty('description', $metadata['description']);
         $uploadFile->getListItemAllFields()->update();
         $ctx->executeQuery();
     }
@@ -411,6 +414,23 @@ class Recruitment extends Component
     function downloadFile(ClientRuntimeContext $ctx, $fileUrl, $targetFilePath){
 
         try {
+
+            /*Test
+            $files = $ctx->getWeb()->getFolderByServerRelativeUrl('Portal')->getFiles();
+
+            $ctx->load($files);
+            $ctx->executeQuery();
+
+            //print files info
+
+            foreach ($files->getData() as $file) {
+                print "File name: '{$file->getProperty("ServerRelativeUrl")}'\r\n";
+            }
+            exit;
+            /*End Test*/
+
+
+
             $fileContent = \Office365\PHP\Client\SharePoint\File::openBinary($ctx, $fileUrl);
             //file_put_contents($targetFilePath, $fileContent);
             return base64_encode($fileContent);
