@@ -229,6 +229,8 @@ Yii::$app->session->set('isSupervisor',false);
                                                 <th>Employee No</th>-->
                                                 <th>Objective</th>
                                                 <th>Due Date</th>
+                                                <th> <?= ($model->Goal_Setting_Status == 'New')?Html::a('<i class="fas fa-plus"></i>',['employeeappraisalkpi/create','Appraisal_No'=> $k->Appraisal_No,'Employee_No' => $k->Employee_No,'KRA_Line_No' => $k->Line_No],['class' => 'btn btn-xs btn-success add-objective','title' => 'Add Objective / KPI']):'' ?>
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -242,6 +244,12 @@ Yii::$app->session->set('isSupervisor',false);
                                                 <td><?/*= $kpi->Employee_No */?></td>-->
                                                 <td><?= $kpi->Objective ?></td>
                                                 <td><?= $kpi->Due_Date ?></td>
+                                                <td>
+                                                    <?= ($model->Goal_Setting_Status == 'New')?Html::a('<i class="fas fa-edit"></i> ',['employeeappraisalkpi/update','Appraisal_No'=> $kpi->Appraisal_No,'Employee_No' => $kpi->Employee_No,'KRA_Line_No' => $kpi->KRA_Line_No,'Line_No' => $kpi->Line_No],['class' => 'btn btn-xs btn-primary add-objective', 'title' => 'Update Objective /KPI']):'' ?>
+                                                    <?= ($model->Goal_Setting_Status == 'New')? Html::a('<i class="fa fa-trash"></i>',['employeeappraisalkpi/delete','Key' => $kpi->Key],['class'=> 'btn btn-xs btn-danger delete-objective','title' => 'Delete Objective']):'' ?>
+
+                                                </td>
+
                                             </tr>
                                     <?php
                                             endforeach;
@@ -678,8 +686,13 @@ $script = <<<JS
         
      /*Deleting Records*/
      
-     $('.delete').on('click',function(e){
+     $('.delete, .delete-objective').on('click',function(e){
          e.preventDefault();
+           var secondThought = confirm("Are you sure you want to delete this record ?");
+           if(!secondThought){//if user says no, kill code execution
+                return;
+           }
+           
          var url = $(this).attr('href');
          $.get(url).done(function(msg){
              $('.modal').modal('show')
@@ -752,9 +765,9 @@ $script = <<<JS
 
      });
       
-      /*Update Learning Assessment*/
+      /*Update Learning Assessment and Add/update employee objectives/kpis */
       
-      $('.update-learning').on('click',function(e){
+      $('.update-learning, .add-objective').on('click',function(e){
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');

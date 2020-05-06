@@ -392,21 +392,21 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>appraisal" class="nav-link <?= currentaction('appraisal','index')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Appraisal List</p>
+                                        <p> Goal Setting</p>
                                     </a>
                                 </li>
                     <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>appraisal/submitted" class="nav-link <?= currentaction('appraisal','submitted')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
-                                        <p>Submitted Appraisals </p>
+                                        <p>Submitted Goals List </p>
                                     </a>
                                 </li>
                     <?php endif; ?>
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>appraisal/approvedappraisals" class="nav-link <?= currentaction('appraisal','approvedappraisals')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
-                                        <p>Approved (Appraisee)</p>
+                                        <p>Approved Goals </p>
                                     </a>
                                 </li>
                     <?php if(Yii::$app->user->identity->isSupervisor()):  ?>

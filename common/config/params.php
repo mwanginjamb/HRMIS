@@ -89,7 +89,7 @@ return [
         'AppraisalProficiencyLevel' => 'AppraisalProficiencyLevel', //60025
         'AppraisalList' => 'AppraisalList', //60007
         'AppraisalCard' => 'AppraisalCard',//60008
-        'EmployeeAppraisalKPI' => 'EmployeeAppraisalKPI', //60010
+        'EmployeeAppraisalKPI' => 'EmployeeAppraisalKPI', //60010 --->Employee objectives
         'SubmittedAppraisals' => 'SubmittedAppraisals', //60012
         'ApprovedAppraisals' => 'ApprovedAppraisals', //60013
         'MYAppraiseeList' => 'MYAppraiseeList',//60014
