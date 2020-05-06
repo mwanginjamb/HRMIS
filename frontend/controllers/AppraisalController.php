@@ -227,7 +227,7 @@ class AppraisalController extends Controller
         $appraisals = \Yii::$app->navhelper->getData($service,$filter);
         $result = [];
 
-
+        //Yii::$app->recruitment->printrr($filter);
         if(is_array($appraisals)){
             foreach($appraisals as $req){
 
@@ -831,6 +831,74 @@ class AppraisalController extends Controller
             'card' => $appraisal[0],
             'peers' =>  ArrayHelper::map($this->getEmployees(),'No','Full_Name'),
         ]);
+    }
+
+    //set peer1
+
+    public function actionSetpeer1(){
+        $service = Yii::$app->params['ServiceName']['AppraisalCard'];
+        $model = new Appraisalcard();
+
+        $filter = [
+            'Appraisal_No' => Yii::$app->request->post('Appraisal_No'),
+            //'Employee_No' => Yii::$app->request->get('Employee_No')
+        ];
+
+        $appraisal = Yii::$app->navhelper->getData($service, $filter);
+        $model = Yii::$app->navhelper->loadmodel($appraisal[0],$model);
+        $model->Peer_1_Employee_No = Yii::$app->request->post('Employee_No');
+        //Update
+        $result = Yii::$app->navhelper->updateData($service,$model);
+
+        //Yii::$app->recruitment->printrr($result);
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if(!is_string($result)){
+            //Yii::$app->session->setFlash('success', 'Perfomance Appraisal Goals Rejected and Sent Back to Appraisee Successfully.', true);
+            return ['note' => '<div class="alert alert-success alert-dismissable">Peer Set Successfully.</div>'];
+        }else{
+
+            // Yii::$app->session->setFlash('error', 'Error Rejecting Performance Appraisal Goals : '. $result);
+            return ['note' => '<div class="alert alert-danger alert-dismissable">Error Setting Peer. </div>'];
+
+
+        }
+
+
+    }
+
+    //Set Peer 2
+    public function actionSetpeer2(){
+        $service = Yii::$app->params['ServiceName']['AppraisalCard'];
+        $model = new Appraisalcard();
+
+        $filter = [
+            'Appraisal_No' => Yii::$app->request->post('Appraisal_No'),
+            //'Employee_No' => Yii::$app->request->get('Employee_No')
+        ];
+
+        $appraisal = Yii::$app->navhelper->getData($service, $filter);
+        $model = Yii::$app->navhelper->loadmodel($appraisal[0],$model);
+        $model->Peer_2_Employee_No = Yii::$app->request->post('Employee_No');
+        //Update
+        $result = Yii::$app->navhelper->updateData($service,$model);
+
+        //Yii::$app->recruitment->printrr($result);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if(!is_string($result)){
+            //Yii::$app->session->setFlash('success', 'Perfomance Appraisal Goals Rejected and Sent Back to Appraisee Successfully.', true);
+            return ['note' => '<div class="alert alert-success alert-dismissable">Peer 2 Set Successfully.</div>'];
+        }else{
+
+            // Yii::$app->session->setFlash('error', 'Error Rejecting Performance Appraisal Goals : '. $result);
+            return ['note' => '<div class="alert alert-danger alert-dismissable">Error Setting Peer 2 </div>'];
+
+
+        }
+
+
     }
 
     //Submit Appraisal to supervisor

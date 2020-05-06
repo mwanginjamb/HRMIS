@@ -98,3 +98,21 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 </div>
+
+<?php
+$script = <<<JS
+ //Submit Rejection form and get results in json    
+        $('form').on('submit', function(e){
+            e.preventDefault()
+            const data = $(this).serialize();
+            const url = $(this).attr('action');
+            $.post(url,data).done(function(msg){
+                    $('.modal').modal('show')
+                    .find('.modal-body')
+                    .html(msg.note);
+        
+                },'json');
+        });
+JS;
+
+$this->registerJs($script);

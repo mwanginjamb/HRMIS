@@ -217,6 +217,44 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                                <?= $form->field($model, 'Level_Grade')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
+                               <?= $form->field($model, 'Appraisal_No')->hiddenInput(['readonly'=> true, 'disabled'=>true])->label(false) ?>
+                               <!---select peers-->
+
+                               <?= $form->field($model, 'Peer_1_Employee_No')->dropDownList($peers,[
+                               'prompt' => 'Select Peer 1 ',
+                               'class' => 'form-control',
+                               'onchange' => '
+                               $.post($("input[name=absolute]").val()+"appraisal/setpeer1",{"Employee_No": $(this).val(),"Appraisal_No": $("#appraisalcard-appraisal_no").val() },function(data){
+                               }).done(function(msg){
+                               //location.reload();
+                                    $(".modal").modal("show")
+                                   .find(".modal-body")
+                                   .html(msg.note);
+                               },"json");
+                               '
+                               ,
+                               ])
+                               ?>
+
+
+                               <?= $form->field($model, 'Peer_2_Employee_No')->dropDownList($peers,[
+                                   'prompt' => 'Select Peer 1 ',
+                                   'class' => 'form-control',
+                                   'onchange' => '
+                               $.post($("input[name=absolute]").val()+"appraisal/setpeer2",{"Employee_No": $(this).val(),"Appraisal_No": $("#appraisalcard-appraisal_no").val() },function(data){
+                               }).done(function(msg){
+                               //location.reload();
+                                    $(".modal").modal("show")
+                                   .find(".modal-body")
+                                   .html(msg.note);
+                               },"json");
+                               '
+                                   ,
+                               ])
+                               ?>
+
+                               <!--End selecting peers -->
+
 
                                <?= $form->field($model, 'Job_Title')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                <?= $form->field($model, 'Function_Team')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
@@ -245,7 +283,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                <?= ($model->EY_Appraisal_Status == 'eer_1_Level')?
                                    $form->field($model, 'Peer_1_Employee_Name')->dropDownList($peers,['prompt'=>'Select Peer 1'])
                                    :$form->field($model, 'Peer_1_Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                               <?= ($model->EY_Appraisal_Status == 'eer_2_Level')?$form->field($model, 'Peer_2_Employee_Name')->dropDownList($peers,['prompt'=>'Select Peer 2','class'=>'peer'])
+                               <?= ($model->EY_Appraisal_Status == 'Peer_2_Level')?$form->field($model, 'Peer_2_Employee_Name')->dropDownList($peers,['prompt'=>'Select Peer 2','class'=>'peer'])
                                :$form->field($model, 'Peer_2_Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
 
@@ -297,7 +335,15 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($card->Employee_Appraisal_KRAs->Employee_Appraisal_KRAs as $k){ ?>
+                            <?php foreach($card->Employee_Appraisal_KRAs->Employee_Appraisal_KRAs as $k){
+                                if(!empty($k->Perfomance_Level) && $k->Perfomance_Level == 1){
+                                    $pl = 'On Track';
+                                }elseif(!empty($k->Perfomance_Level)&& $k->Perfomance_Level == 2){
+                                    $pl = 'Off Track';
+                                }else{
+                                    $pl = 'Not Set';
+                                }
+                                ?>
 
                                 <tr class="parent">
 
@@ -305,13 +351,13 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                     <td><?= $k->Appraisal_No ?></td>
                                     <td><?= $k->Employee_No ?></td>
                                     <td><?= $k->KRA ?></td>
-                                    <td><?= !empty($k->Perfomance_Level)?$k->Perfomance_Level: 'Not Set' ?></td>
+                                    <td><?= !empty($k->Perfomance_Level)?$pl: 'Not Set' ?></td>
                                     <td><?= !empty($k->Perfomance_Comment)?$k->Perfomance_Comment: 'Not Set' ?></td>
                                     <td><?= !empty($k->Appraisee_Self_Rating)?$k->Appraisee_Self_Rating: 'Not Set' ?></td>
                                     <td><?= !empty($k->Appraiser_Rating)?$k->Appraiser_Rating: 'Not Set' ?></td>
                                     <td><?= !empty($k->Agreed_Rating)?$k->Agreed_Rating: 'Not Set' ?></td>
                                     <td><?= !empty($k->Rating_Comments)?$k->Rating_Comments: 'Not Set' ?></td>
-                                    <td><?= Html::a('Evaluate',['appraisalkra/update','Line_No'=> $k->Line_No,'Appraisal_No' => $k->Appraisal_No,'Employee_No' => $k->Employee_No ],['class' => ' evalkra btn btn-info btn-xs'])?></td>
+                                    <td><?= ($model->EY_Appraisal_Status == 'Supervisor_Level')?Html::a('Evaluate',['appraisalkra/update','Line_No'=> $k->Line_No,'Appraisal_No' => $k->Appraisal_No,'Employee_No' => $k->Employee_No ],['class' => ' evalkra btn btn-info btn-xs']):'' ?></td>
                                 </tr>
                                 <tr class="child">
                                     <td colspan="11" >
@@ -644,7 +690,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
     <!---END  mID YEAR COMMENT REJECTION FORM -->
-
+    <input type="hidden" name="absolute" value="<?= $absoluteUrl ?>">
 <?php
 
 $script = <<<JS
@@ -884,7 +930,10 @@ $script = <<<JS
     
     //End Rejecting end year Appraisal comment
     
+    //select 2
     
+    $('#appraisalcard-peer_1_employee_no').select2();
+    $('#appraisalcard-peer_2_employee_no').select2();
     
         
     });//end jquery

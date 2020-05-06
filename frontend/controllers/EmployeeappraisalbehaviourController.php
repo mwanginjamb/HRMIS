@@ -131,7 +131,7 @@ class EmployeeappraisalbehaviourController extends Controller
             $result = Yii::$app->navhelper->updateData($service,$model);
 
             //Yii::$app->recruitment->printrr($result);
-            if(!empty($result)){
+            /*if(!empty($result)){
                 Yii::$app->session->setFlash('success','Employee Appraisal Competence Evaluated Successfully',true);
 
                 $evaluator = ['Peer_1_Level','Peer_2_Level','Supervisor_Level'];
@@ -144,6 +144,14 @@ class EmployeeappraisalbehaviourController extends Controller
             }else{
                 Yii::$app->session->setFlash('error','Error Evaluating Employee Appraisal Competence : '.$result,true);
                 return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_Code]);
+            }*/
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            if(!is_string($result)){
+
+                return ['note' => '<div class="alert alert-success">Employee Appraisal Competence Evaluated Successfully </div>' ];
+            }else{
+
+                return ['note' => '<div class="alert alert-danger">Error Evaluating Employee Appraisal Competence : '.$result.'</div>'];
             }
 
         }

@@ -202,7 +202,16 @@ Yii::$app->session->set('isSupervisor',false);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($card->Employee_Appraisal_KRAs->Employee_Appraisal_KRAs as $k){ ?>
+                            <?php foreach($card->Employee_Appraisal_KRAs->Employee_Appraisal_KRAs as $k){
+
+                                if(!empty($k->Perfomance_Level) && $k->Perfomance_Level == 1){
+                                    $pl = 'On Track';
+                                }elseif(!empty($k->Perfomance_Level) && $k->Perfomance_Level == 2){
+                                    $pl = 'Off Track';
+                                }else{
+                                    $pl = 'Not Set';
+                                }
+                                ?>
 
                                 <tr class="parent">
 
@@ -210,13 +219,13 @@ Yii::$app->session->set('isSupervisor',false);
                                     <td><?= $k->Appraisal_No ?></td>
                                     <td><?= $k->Employee_No ?></td>
                                     <td><?= $k->KRA ?></td>
-                                    <td><?= !empty($k->Perfomance_Level)?$k->Perfomance_Level: 'Not Set' ?></td>
+                                    <td><?= !empty($k->Perfomance_Level)?$pl: 'Not Set' ?></td>
                                     <td><?= !empty($k->Perfomance_Comment)?$k->Perfomance_Comment: 'Not Set' ?></td>
                                     <td><?= !empty($k->Appraisee_Self_Rating)?$k->Appraisee_Self_Rating: 'Not Set' ?></td>
                                     <td><?= !empty($k->Appraiser_Rating)?$k->Appraiser_Rating: 'Not Set' ?></td>
                                     <td><?= !empty($k->Agreed_Rating)?$k->Agreed_Rating: 'Not Set' ?></td>
                                     <td><?= !empty($k->Rating_Comments)?$k->Rating_Comments: 'Not Set' ?></td>
-                                    <td><?= Html::a('Evaluate',['appraisalkra/update','Line_No'=> $k->Line_No,'Appraisal_No' => $k->Appraisal_No,'Employee_No' => $k->Employee_No ],['class' => ' evalkra btn btn-info btn-xs'])?></td>
+                                    <td><?=($model->Goal_Setting_Status == 'Approved' && $model->MY_Appraisal_Status == 'Appraisee_Level')?Html::a('Evaluate',['appraisalkra/update','Line_No'=> $k->Line_No,'Appraisal_No' => $k->Appraisal_No,'Employee_No' => $k->Employee_No ],['class' => ' evalkra btn btn-info btn-xs']):''?></td>
                                 </tr>
                                 <tr class="child">
                                     <td colspan="11" >
