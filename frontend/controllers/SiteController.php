@@ -303,6 +303,7 @@ class SiteController extends Controller
             'User_ID' => $userID
         ];
         $supervisor = \Yii::$app->navhelper->getData($service,$filter);
+        //Yii::$app->recruitment->printrr($filter);
         return $supervisor[0];
     }
 

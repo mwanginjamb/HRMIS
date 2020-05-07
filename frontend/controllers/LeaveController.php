@@ -104,10 +104,16 @@ class LeaveController extends Controller
         $success = false;
 
         if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
+            //Retrieve the leave again to use the new key in the model
+            $leave = Yii::$app->navhelper->getData($service,['Application_No' => $model->Application_No]);
 
-            $result = Yii::$app->navhelper->updateData($service,Yii::$app->request->post()['Leave']);
+            if(is_array($leave)){// A get request returns an array of objects
+                $model->Key = $leave[0]->Key;
+                $result = Yii::$app->navhelper->updateData($service,$model);
+            }
 
-            if(is_object($result)){
+
+            if(is_object($result)){// an update request result would be a single object
 
                 Yii::$app->session->setFlash('success','Leave request Created Successfully',true);
                 return $this->redirect(['view','ApplicationNo' => $result->Application_No]);
@@ -131,6 +137,25 @@ class LeaveController extends Controller
         ]);
     }
 
+    public function actionSetdays(){
+        $model = new Leave();
+        $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
+
+        $data = [
+            'Application_No' => Yii::$app->request->post('Application_No'),
+            'Leave_Code' => Yii::$app->request->post('Leave_Code'),
+            'Total_No_Of_Days' => Yii::$app->request->post('Total_No_Of_Days'),
+            'Key' => Yii::$app->request->post('Key'),
+            'Start_Date' => Yii::$app->request->post('Start_Date'),
+        ];
+
+        $result = Yii::$app->navhelper->updateData($service,$data);
+
+        Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
+
+        return $result;
+
+    }
 
     public function actionUpdate($ApplicationNo){
         $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
