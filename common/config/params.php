@@ -80,6 +80,7 @@ return [
         'JobExperience' => 'JobExperience',//69004
         'HRqualifications' => 'HRqualifications', //5205
         'JobApplicantRequirementEntries' => 'JobApplicantRequirementEntries', //55065
+        'HRJobApplicationsCard'=>'HRJobApplicationsCard',//70021
 
         'Countries' => 'Countries', //10
         'Religion' => 'Religion', //70085

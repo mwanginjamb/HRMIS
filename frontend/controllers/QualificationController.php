@@ -64,13 +64,17 @@ class QualificationController extends Controller
     }
 
     public function actionIndex(){
-
+        if(Yii::$app->session->has('mode') && Yii::$app->session->get('mode') == 'external'){
+            $this->layout = 'external';
+        }
         return $this->render('index');
 
     }
 
      public function actionProfessional(){
-
+         if(Yii::$app->session->has('mode') && Yii::$app->session->get('mode') == 'external'){
+             $this->layout = 'external';
+         }
         return $this->render('professional');
 
     }
@@ -392,7 +396,9 @@ class QualificationController extends Controller
         $service = Yii::$app->params['ServiceName']['qualifications'];
 
         $filter = [
-            'Qualification_Code' => 'ACADEMIC'
+            'Qualification_Code' => 'ACADEMIC',
+            'Employee_No' => \Yii::$app->recruitment->getProfileID()
+
         ];
         $qualifications = \Yii::$app->navhelper->getData($service,$filter);
 
@@ -446,7 +452,8 @@ class QualificationController extends Controller
         $service = Yii::$app->params['ServiceName']['qualifications'];
 
         $filter = [
-            'Qualification_Code' => 'PROFESSIONAL'
+            'Qualification_Code' => 'PROFESSIONAL',
+            'Employee_No' => \Yii::$app->recruitment->getProfileID()
         ];
         $qualifications = \Yii::$app->navhelper->getData($service,$filter);
 

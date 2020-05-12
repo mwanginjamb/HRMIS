@@ -55,13 +55,13 @@ use yii\widgets\ActiveForm;
                                     <?= $form->field($model, 'Phone_No')->textInput(['max-length' => 10]) ?>
                                 </tr>
                                 <tr>
-                                    <?= $form->field($model, 'Key')->textInput(['readonly' => true]) ?>
+                                    <?= $form->field($model, 'Key')->hiddenInput(['readonly' => true])->label(false) ?>
                                 </tr>
                                 <tr>
-                                    <?= $form->field($model, 'Line_No')->textInput(['readonly' => true,'disabled' => true]) ?>
+                                    <?= $form->field($model, 'Line_No')->hiddenInput(['readonly' => true,'disabled' => true])->label(false) ?>
                                 </tr>
                                 <tr>
-                                    <?= $form->field($model, 'Application_No')->textInput(['readonly' => true]) ?>
+                                    <?= $form->field($model, 'Application_No')->hiddenInput(['readonly' => true])->label(false) ?>
                                 </tr>
 
 

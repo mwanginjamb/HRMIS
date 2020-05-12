@@ -53,6 +53,43 @@ exit;*/
             <div class="card-body">
 
             <?php if(is_array($requirements)){ ?>
+
+                <p>Upload a coverletter and a CV</p>
+                <!--UPLOAD CV AND COVERLETTER -->
+
+                <table class="table">
+                <?php $form = ActiveForm::begin(['action' => Yii::$app->recruitment->absoluteUrl().'cv/upload'],['options' => ['enctype' => 'multipart/form-data']]) ?>
+
+                    <tr>
+                        <td>
+                            <?= $form->field($cvmodel, 'imageFile')->fileInput() ?>
+                        </td>
+                        <td>
+                            <button class="btn btn-outline-primary">Submit</button>
+                        </td>
+                    </tr>
+                <?php ActiveForm::end() ?>
+                </table>
+
+            <table class="table">
+                <?php $form = ActiveForm::begin(['action' => Yii::$app->recruitment->absoluteUrl().'coverletter/upload'],['options' => ['enctype' => 'multipart/form-data']]) ?>
+                <tr>
+                    <td>
+                        <?= $form->field($covermodel, 'imageFile')->fileInput() ?>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-primary">Submit</button>
+                    </td>
+
+
+                </tr>
+                <?php ActiveForm::end() ?>
+
+            </table>
+
+                <!--END TESTIMONIAL UPLOAD-->
+
+
                 <h4 class="alert alert-info">Kindly, Mark if you meet following qualifications.</h4>
 
                 <table class="table table-hover table-bordered">
@@ -87,9 +124,9 @@ exit;*/
                 <table class="table" border="0">
                     <tr>
                         <td>
-                            <p>Briefly put down a letter of motivation (Less than 250 characters)</p>
+                            <!--<p>Briefly put down a letter of motivation (Less than 250 characters)</p>-->
                              <?php $form = ActiveForm::begin(); ?>
-                                    <?= $form->field($model, 'Motivation')->textarea(['rows'=>4,'max-length' => 250]) ?>
+                                    <?php $form->field($model, 'Motivation')->textarea(['rows'=>4,'max-length' => 250]) ?>
 
                         </td>
                     </tr>
@@ -107,6 +144,8 @@ exit;*/
                         <?php ActiveForm::end(); ?>
                     </tr>
                 </table>
+
+
 
     <?php } ?>
 
@@ -143,7 +182,10 @@ $script = <<<JS
         $('input[name=requirement]').on('click', function(){
             var key = $(this).attr('rel');
             var Line_No = $(this).attr('rev');
-            $.post(absolute+'recruitment/requirementscheck',{"Key": key,"Line_No": Line_No });
+            $.post(absolute+'recruitment/requirementscheck',{"Key": key,"Line_No": Line_No }).done(function(msg){
+                console.log(msg);
+            });
+            
             
             location.reload();
         });

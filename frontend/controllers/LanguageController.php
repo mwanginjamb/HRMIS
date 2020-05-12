@@ -220,7 +220,8 @@ class LanguageController extends Controller
 
     public function actionGetlanguage(){
         $service = Yii::$app->params['ServiceName']['applicantLanguages'];
-        $languages = \Yii::$app->navhelper->getData($service);
+        $filter = ['Applicant_No' => \Yii::$app->recruitment->getProfileID()];
+        $languages = \Yii::$app->navhelper->getData($service,$filter);
 
         $result = [];
         $count = 0;

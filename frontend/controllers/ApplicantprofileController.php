@@ -66,13 +66,21 @@ class ApplicantprofileController extends Controller
     public function actionIndex(){
 
 
+
         return $this->render('index');
 
     }
 
     public function actionCreate(){
 
+        if(Yii::$app->session->has('mode') && Yii::$app->session->get('mode') == 'external'){
+            $this->layout = 'external';
+        }
 
+        if(Yii::$app->session->has('ProfileID') || Yii::$app->recruitment->hasProfile(Yii::$app->session->get('ProfileID')))
+        {
+            return $this->redirect(['update','No' =>Yii::$app->session->get('ProfileID') ]);
+        }
         $model = new Applicantprofile();
 
         if(!Yii::$app->user->isGuest){//If it's an employee making an application , populate profile form with their employee data where relevant
@@ -158,6 +166,23 @@ class ApplicantprofileController extends Controller
 
 
     public function actionUpdate($No){
+
+        //Remove Requirement entries if found persistent
+
+        if(Yii::$app->session->has('requirements')){
+            Yii::$app->session->remove('requirements');
+        }
+
+        //Remove Applicant No if found persistent
+        if(Yii::$app->session->has('Job_Application_No')){
+            Yii::$app->session->remove('Job_Application_No');
+        }
+
+        //Yii::$app->recruitment->printrr($_SESSION);
+        //Check Applicant access mode (Internal or external) then serve right layout
+        if(Yii::$app->session->has('mode') && Yii::$app->session->get('mode') == 'external'){
+            $this->layout = 'external';
+        }
         $service = Yii::$app->params['ServiceName']['applicantProfile'];
 
         $filter = [

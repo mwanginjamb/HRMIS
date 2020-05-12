@@ -815,6 +815,20 @@ class Navision extends Component
 
     }
 
+    //Generate Appraisal Report
+
+    public function IanGenerateAppraisalReport($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanGenerateAppraisalReport($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
 
 
 

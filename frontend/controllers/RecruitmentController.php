@@ -11,6 +11,8 @@ namespace frontend\controllers;
 
 use common\models\HrloginForm;
 use common\models\SignupForm;
+use frontend\models\Coverletter;
+use frontend\models\Cv;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use frontend\models\Applicantprofile;
@@ -170,6 +172,12 @@ class RecruitmentController extends Controller
     }
 
     public function actionView($Job_ID){
+       if(Yii::$app->request->post() && Yii::$app->request->post('type') == 'External'){
+           $this->layout = 'external';
+           Yii::$app->session->set('mode','external');
+       }else{
+           Yii::$app->session->set('mode','internal');
+       }
         $service = Yii::$app->params['ServiceName']['JobsCard'];
 
         $filter = [
@@ -267,6 +275,7 @@ class RecruitmentController extends Controller
     }
 
     public function actionExternalvacancies(){
+        $this->layout = 'external';
         return $this->render('externalvacancies');
     }
 
@@ -306,7 +315,13 @@ class RecruitmentController extends Controller
         foreach($requisitions as $req){
             $RequisitionType = Yii::$app->recruitment->getRequisitionType($req->Job_ID);
             if(($req->No_of_Posts >= 0 && !empty($req->Job_Description) && !empty($req->Job_ID)) && ($RequisitionType == 'External' ) ) {
-                $Viewlink = Html::a('Apply', ['view', 'Job_ID' => $req->Job_ID], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Viewlink = Html::a('Apply', ['view', 'Job_ID' => $req->Job_ID], [
+                    'class' => 'btn btn-outline-primary btn-xs',
+                    'data' => [
+                        'params' => ['type' => 'External'],
+                        'method' => 'post',
+                    ],
+                ]);
 
                 $result['data'][] = [
                     'Job_ID' => !empty($req->Job_ID) ? $req->Job_ID : 'Not Set',
@@ -407,11 +422,18 @@ class RecruitmentController extends Controller
     public function actionSubmit(){
 
         $model = new Applicantprofile();
+
         //get Applicant No
         $ApplicationNo = Yii::$app->recruitment->getProfileID();
 
         $requirements = '';
 
+        //Refresh the Job Applicant Requirements on each update
+        if(Yii::$app->session->has('Job_Application_No')){
+            $requirements = $this->getRequiremententries();
+            Yii::$app->session->set('requirements',$requirements);
+            //Yii::$app->recruitment->printrr($requirements);
+        }
         if(Yii::$app->request->isPost){
 
             if(!empty(Yii::$app->request->post()['Applicantprofile']['Motivation'])){ //Update motivation letter
@@ -432,11 +454,23 @@ class RecruitmentController extends Controller
                 'applicantNo' => $ApplicationNo,
                 'requisitionNo' => Yii::$app->session->get('REQUISITION_NO'),
             ];
+
             $result = Yii::$app->navhelper->SubmitJobApplication($service,$data); // This code unit should return  the Job_Applicant_No so as to generate jobrequirement entries.
             //Remove sessions set within the process
             Yii::$app->session->remove('REQUISITION_NO');
-            //print_r($result); exit;
-            $requirements = $this->getRequiremententries($result['return_value']);
+
+            if(is_array($result)){
+                //store Job Applicant Number
+                Yii::$app->session->set('Job_Application_No',$result['return_value']);
+
+                $requirements = $this->getRequiremententries();
+                //store requirements in a session
+                Yii::$app->session->set('requirements',$requirements);
+
+
+            }
+
+
 
             if(!is_string($result)){
                 Yii::$app->session->setFlash('success', 'Congratulations, Job Application submitted successfully.', true);
@@ -447,14 +481,19 @@ class RecruitmentController extends Controller
         
 
 
-        return $this->render('submit',['model' => $model,'requirements' => $requirements]);
+        return $this->render('submit',[
+            'model' => $model,
+            'requirements' => (Yii::$app->session->has('requirements'))?Yii::$app->session->get('requirements'):'',
+            'cvmodel' => new Cv(),
+            'covermodel' => new Coverletter()
+        ]);
 
     }
 
-    public function getRequiremententries($Job_Applicant_No){
+    public function getRequiremententries(){
         $requirementEntriesService = Yii::$app->params['ServiceName']['JobApplicantRequirementEntries'];
         $reqFilter = [
-            'Job_Applicant_No' => $Job_Applicant_No,
+            'Job_Applicant_No' =>  (Yii::$app->session->has('Job_Application_No'))?Yii::$app->session->get('Job_Application_No'):'',
         ];
         $requirements = Yii::$app->navhelper->getData($requirementEntriesService, $reqFilter);
         return $requirements;
@@ -469,8 +508,10 @@ class RecruitmentController extends Controller
         ];
 
         $result = Yii::$app->navhelper->updateData($service,$data);
-        return($result);
+        Yii::$app->session->setFlash('success','Job Requirement Specification Updated Successfully.');
+        return $result;
     }
+
 
     public function loadtomodel($obj,$model){
 

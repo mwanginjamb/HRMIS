@@ -224,7 +224,8 @@ class RefereeController extends Controller
 
     public function actionGetreferee(){
         $service = Yii::$app->params['ServiceName']['referees'];
-        $referees = \Yii::$app->navhelper->getData($service);
+        $filter = ['Application_No' => \Yii::$app->recruitment->getProfileID()];
+        $referees = \Yii::$app->navhelper->getData($service,$filter);
 
         $result = [];
         $count = 0;

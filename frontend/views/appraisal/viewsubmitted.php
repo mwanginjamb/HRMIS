@@ -136,22 +136,44 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                     </div>
 
                     <div class="col-md-3">
+
                     </div>
 
                     <div class="col-md-3">
+
                         <?= ($model->EY_Appraisal_Status == 'Supervisor_Level')? Html::a('<i class="fas fa-play"></i> Send Peer2',['sendpeer2','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                                'class' => 'btn btn-app bg-warning pull-right',
-                                'title' => 'Reject Mid-Year Appraisal',
-                                'data' => [
+                            'class' => 'btn btn-app bg-warning pull-right',
+                            'title' => 'Reject Mid-Year Appraisal',
+                            'data' => [
                                 'confirm' => 'Are you sure you want to send appraisal to peer 2?',
                                 'method' => 'post',]
-                            ]) :'';
+                        ]) :'';
+                        ?>
+
+
+                        <?=  ($model->EY_Appraisal_Status == 'Closed')?Html::a('<i class="fas fa-book-open"></i> P.A Report',['report','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                            'class' => 'btn btn-app bg-success  pull-right',
+                            'title' => 'Generate Performance Appraisal Report',
+                            'target'=> '_blank',
+                            'data' => [
+                                // 'confirm' => 'Are you sure you want to send appraisal to peer 2?',
+                                'params'=>[
+                                    'appraisalNo'=> $_GET['Appraisal_No'],
+                                    'employeeNo' => $_GET['Employee_No'],
+                                ],
+                                'method' => 'post',]
+                        ]):'';
                         ?>
 
                     </div>
 
                    
                 </div><!--end peer actions--->
+                <div class="row">
+                    <div class=" col-md-6 col-md-offset-3">
+
+                    </div>
+                </div>
 
                 <div class="row">
                     <div class="col-md-12">

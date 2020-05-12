@@ -221,7 +221,8 @@ class ExperienceController extends Controller
 
     public function actionGetexperience(){
         $service = Yii::$app->params['ServiceName']['experience'];
-        $experience = \Yii::$app->navhelper->getData($service);
+        $filter = ['Job_Application_No' => \Yii::$app->recruitment->getProfileID()];
+        $experience = \Yii::$app->navhelper->getData($service, $filter);
 
         $result = [];
         $count = 0;

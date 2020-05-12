@@ -25,11 +25,11 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-                    $form = ActiveForm::begin(['action'=> ['leave/create']]); ?>
+                    $form = ActiveForm::begin(); ?>
                 <div class="row">
                     <div class="col-md-6">
 
-                            <?= $form->field($model, 'Application_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            <?= $form->field($model, 'Application_No')->textInput(['readonly'=> true]) ?>
 
                             <?= $form->field($model, 'Application_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
@@ -44,7 +44,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-                            <?= $form->field($model, 'End_Date')->textInput(['type' => 'date','readonly'=> true]) ?>
+                            <?= $form->field($model, 'End_Date')->textInput(['type' => 'date','readonly'=> true,'disabled'=>true]) ?>
 
                             <?= $form->field($model, 'Days_Applied')->textInput(['readonly'=> true]) ?>
 
@@ -100,7 +100,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <div class="row">
 
                     <div class="form-group">
-                        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+                        <?= Html::submitButton('Apply', ['class' => 'btn btn-success']) ?>
                     </div>
 
 

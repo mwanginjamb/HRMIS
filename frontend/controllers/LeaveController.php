@@ -77,24 +77,26 @@ class LeaveController extends Controller
         $model = new Leave();
         $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
 
-        if(\Yii::$app->request->get('create') ){
-            //make an initial empty request to nav
-            $req = Yii::$app->navhelper->postData($service,[]);
+        if(\Yii::$app->request->get('create')){
+            if(empty(Yii::$app->request->post()['Leave'])) {
+                //make an initial empty request to nav
+                $req = Yii::$app->navhelper->postData($service, []);
 
-            if(is_string($req)){  // A string response is a fucking error
-                Yii::$app->session->setFlash('error','Error : '.$req,true);
-                return $this->redirect(['index']);
+                if (is_string($req)) {  // A string response is a fucking error
+                    Yii::$app->session->setFlash('error', 'Error : ' . $req, true);
+                    return $this->redirect(['index']);
+                }
+
+
+                $modeldata = (get_object_vars($req));
+                foreach ($modeldata as $key => $val) {
+                    if (is_object($val)) continue;
+                    $model->$key = $val;
+                }
+
+                $model->Start_Date = date('Y-m-d');
+                $model->End_Date = date('Y-m-d');
             }
-
-
-            $modeldata = (get_object_vars($req)) ;
-            foreach($modeldata as $key => $val){
-                if(is_object($val)) continue;
-                $model->$key = $val;
-            }
-
-            $model->Start_Date = date('Y-m-d');
-            $model->End_Date = date('Y-m-d');
 
         }
 
@@ -103,7 +105,9 @@ class LeaveController extends Controller
         $message = "";
         $success = false;
 
-        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
+        if(Yii::$app->request->post() && !empty(Yii::$app->request->post()['Leave']) ){
+            Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Leave'],$model);
+            //Yii::$app->recruitment->printrr($model);
             //Retrieve the leave again to use the new key in the model
             $leave = Yii::$app->navhelper->getData($service,['Application_No' => $model->Application_No]);
 
@@ -115,8 +119,10 @@ class LeaveController extends Controller
 
             if(is_object($result)){// an update request result would be a single object
 
+
                 Yii::$app->session->setFlash('success','Leave request Created Successfully',true);
-                return $this->redirect(['view','ApplicationNo' => $result->Application_No]);
+                $this->actionApprovalRequest($result->Application_No);
+                return $this->redirect(['index']);
 
             }else{
 
@@ -141,6 +147,7 @@ class LeaveController extends Controller
         $model = new Leave();
         $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
 
+
         $data = [
             'Application_No' => Yii::$app->request->post('Application_No'),
             'Leave_Code' => Yii::$app->request->post('Leave_Code'),
@@ -148,6 +155,13 @@ class LeaveController extends Controller
             'Key' => Yii::$app->request->post('Key'),
             'Start_Date' => Yii::$app->request->post('Start_Date'),
         ];
+
+        $leave = Yii::$app->navhelper->getData($service,['Application_No' => Yii::$app->request->post('Application_No')]);
+
+        if(is_array($leave)){
+            $data['Key'] = $leave[0]->Key;
+        }
+
 
         $result = Yii::$app->navhelper->updateData($service,$data);
 
@@ -178,12 +192,19 @@ class LeaveController extends Controller
 
 
         if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
-            $result = Yii::$app->navhelper->updateData($model);
+            //Retrieve the leave again to use the new key in the model
+            $leave = Yii::$app->navhelper->getData($service,['Application_No' => $model->Application_No]);
+            if(is_array($leave)){
+                $model->Key = $leave[0]->Key;
+            }
+            $result = Yii::$app->navhelper->updateData($service,$model);
 
 
             if(!empty($result)){
+                //Yii::$app->recruitment->printrr($result);
                 Yii::$app->session->setFlash('success','Leave request Updated Successfully',true);
-                return $this->redirect(['view','ApplicationNo' => $result->Application_No]);
+                $this->actionApprovalRequest($result->Application_No);
+                return $this->redirect(['index']);
             }else{
                 Yii::$app->session->setFlash('error','Error Updating Leave Request : '.$result,true);
                 return $this->redirect(['index']);
@@ -224,7 +245,11 @@ class LeaveController extends Controller
 
     public function actionApprovalRequest($app){
         $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
-        $data = ['applicationNo' => $app];
+        $data = [
+            'applicationNo' => $app,
+            'approvalUrl' => \yii\helpers\Url::home(true).'approvals/',
+            'sendMail' => 1,
+        ];
 
         $request = Yii::$app->navhelper->SendLeaveApprovalRequest($service, $data);
 

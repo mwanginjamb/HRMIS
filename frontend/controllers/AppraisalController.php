@@ -1268,5 +1268,45 @@ class AppraisalController extends Controller
         return $res;
     }
 
+    //Generate Appraisal Report
+
+    public function actionReport(){
+
+        $service = Yii::$app->params['ServiceName']['PortalReports'];
+
+        if(Yii::$app->request->post()){
+
+            $data = [
+                'appraisalNo' =>Yii::$app->request->post('appraisalNo'),
+                'employeeNo' => Yii::$app->request->post('employeeNo')
+            ];
+            $path = Yii::$app->navhelper->IanGenerateAppraisalReport($service,$data);
+            //Yii::$app->recruitment->printrr($path);
+            if(!is_file($path['return_value'])){
+
+                return $this->render('report',[
+                    'report' => false,
+                    'message' => $path['return_value']
+                ]);
+            }
+            $binary = file_get_contents($path['return_value']); //fopen($path['return_value'],'rb');
+            $content = chunk_split(base64_encode($binary));
+            //delete the file after getting it's contents --> This is some house keeping
+            unlink($path['return_value']);
+
+            // Yii::$app->recruitment->printrr($path);
+            return $this->render('report',[
+                'report' => true,
+                'content' => $content,
+            ]);
+        }
+
+        return $this->render('report',[
+            'report' => false,
+        ]);
+
+    }
+
+
 
 }

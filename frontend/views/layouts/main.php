@@ -45,9 +45,11 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
                 </li>
+                <?php if(!Yii::$app->user->isGuest): ?>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="<?= $absoluteUrl ?>site" class="nav-link">Home</a>
                 </li>
+                <?php endif; ?>
                 <!--<li class="nav-item d-none d-sm-inline-block">
                     <a href="#" class="nav-link">Contact</a>
                 </li>-->
@@ -170,7 +172,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
 
                         <div class="dropdown-divider"></div>
 
-                        <?= Html::a('<i class="fas fa-user"></i> Profile','employee/',['class'=> 'dropdown-item']); ?>
+                        <?= Html::a('<i class="fas fa-user"></i> Profile',['./employee'],['class'=> 'dropdown-item']); ?>
 
 
                     </div>
