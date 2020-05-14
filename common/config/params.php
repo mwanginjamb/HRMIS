@@ -1,6 +1,6 @@
 <?php
 return [
-    'adminEmail' => 'admin@example.com',
+    'adminEmail' => 'customer@softeboard.com',
     'supportEmail' => 'customer@softeboard.com',
     'senderEmail' => 'customer@softeboard.com',
     'senderName' => 'HRMIS mailer',
@@ -80,6 +80,7 @@ return [
         'JobExperience' => 'JobExperience',//69004
         'HRqualifications' => 'HRqualifications', //5205
         'JobApplicantRequirementEntries' => 'JobApplicantRequirementEntries', //55065
+        'HRJobApplicationsList' => 'HRJobApplicationsList', //70020 ----> Not published on client side
         'HRJobApplicationsCard'=>'HRJobApplicationsCard',//70021
 
         'Countries' => 'Countries', //10

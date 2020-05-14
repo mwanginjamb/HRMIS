@@ -13,7 +13,7 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
-
+    public $confirmpassword;
 
     /**
      * {@inheritdoc}
@@ -23,17 +23,18 @@ class SignupForm extends Model
         return [
             ['username', 'trim'],
             ['username', 'required'],
-           // ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+           ['username', 'unique', 'targetClass' => '\common\models\Hruser', 'message' => 'This username has already been taken.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            //['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\common\models\Hruser', 'message' => 'This email address has already been taken.'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
+            ['confirmpassword','compare','compareAttribute'=>'password','message'=>'Passwords do not match, try again'],
         ];
     }
 
@@ -71,9 +72,14 @@ class SignupForm extends Model
                 ['html' => 'recruitmentemailVerify-html', 'text' => 'emailVerify-text'],
                 ['user' => $user]
             )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' AAS HR'])
             ->setTo($this->email)
             ->setSubject('Account registration at ' . Yii::$app->name)
             ->send();
+    }
+
+    public function goHome()
+    {
+        return Yii::$app->getResponse()->redirect(Yii::$app->urlManager->createAbsoluteUrl(['recruitment/login']));
     }
 }

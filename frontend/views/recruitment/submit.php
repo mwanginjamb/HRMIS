@@ -64,9 +64,16 @@ exit;*/
                         <td>
                             <?= $form->field($cvmodel, 'imageFile')->fileInput() ?>
                         </td>
-                        <td>
+                        <td style="width:15%">
                             <button class="btn btn-outline-primary">Submit</button>
                         </td>
+
+                <?php if(\Yii::$app->recruitment->hasCv()): ?>
+                        <td style="width:15%">
+                            <?= Html::a('View Document',['recruitment/download','path' => $cvmodel->getPath()],['class' => 'btn btn-outline-info']) ?>
+                        </td>
+                <?php endif; ?>
+
                     </tr>
                 <?php ActiveForm::end() ?>
                 </table>
@@ -77,9 +84,14 @@ exit;*/
                     <td>
                         <?= $form->field($covermodel, 'imageFile')->fileInput() ?>
                     </td>
-                    <td>
+                    <td style="width:15%">
                         <button class="btn btn-outline-primary">Submit</button>
                     </td>
+                <?php if(\Yii::$app->recruitment->hasCoverletter()): ?>
+                    <td style="width:15%">
+                        <?= Html::a('View Document',['recruitment/download','path' => $covermodel->getPath()],['class' => 'btn btn-outline-info']) ?>
+                    </td>
+                <?php endif; ?>
 
 
                 </tr>

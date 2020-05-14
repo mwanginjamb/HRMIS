@@ -39,9 +39,12 @@ class QualificationController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index'],
+                        'actions' => ['logout','index','professional'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        //'roles' => ['@'],
+                        'matchCallback' => function($rule,$action){
+                            return (Yii::$app->session->has('HRUSER') || !Yii::$app->user->isGuest);
+                        },
                     ],
                 ],
             ],
@@ -597,6 +600,9 @@ class QualificationController extends Controller
     }
 
     public function actionRead($path){
+        if(Yii::$app->session->has('mode') && Yii::$app->session->get('mode') == 'external'){
+            $this->layout = 'external';
+        }
         $absolute = Yii::$app->recruitment->absoluteUrl().$path;
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $fh = file_get_contents($absolute); //read file into a string or get a file handle resource from sharepoint
@@ -609,6 +615,9 @@ class QualificationController extends Controller
     }
 
     public function actionDownload($path){
+        if(Yii::$app->session->has('mode') && Yii::$app->session->get('mode') == 'external'){
+            $this->layout = 'external';
+        }
         $base = basename($path);
        /* $ctx = Yii::$app->recruitment->connectWithAppOnlyToken(
             Yii::$app->params['sharepointUrl'],

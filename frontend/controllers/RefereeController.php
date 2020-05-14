@@ -39,7 +39,10 @@ class RefereeController extends Controller
                     [
                         'actions' => ['logout','index'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        //'roles' => ['@'],
+                        'matchCallback' => function($rule,$action){
+                            return (Yii::$app->session->has('HRUSER') || !Yii::$app->user->isGuest);
+                        },
                     ],
                 ],
             ],
@@ -62,7 +65,9 @@ class RefereeController extends Controller
     }
 
     public function actionIndex(){
-
+        if(Yii::$app->session->has('mode') && Yii::$app->session->get('mode') == 'external'){
+            $this->layout = 'external';
+        }
         return $this->render('index');
 
     }

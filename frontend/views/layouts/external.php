@@ -171,21 +171,19 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
 
                         <div class="dropdown-divider"></div>
 
-                        <?= (Yii::$app->user->isGuest)? Html::a('<i class="fas fa-sign-in-alt "></i> Signup','/site/signup/',['class'=> 'dropdown-item']): ''; ?>
+                        <?= (!Yii::$app->session->has('HRUSER'))? Html::a('<i class="fas fa-sign-in-alt "></i> Signup','/recruitment/signup/',['class'=> 'dropdown-item']): ''; ?>
 
                         <div class="dropdown-divider"></div>
 
-                        <?= (Yii::$app->user->isGuest)? Html::a('<i class="fas fa-lock-open"></i> Login','/site/login/',['class'=> 'dropdown-item']): ''; ?>
+                        <?= (!Yii::$app->session->has('HRUSER'))? Html::a('<i class="fas fa-lock-open"></i> Login','/recruitment/login/',['class'=> 'dropdown-item']): ''; ?>
 
                         <div class="dropdown-divider"></div>
 
                         <div class="dropdown-divider"></div>
 
-                        <?= (!Yii::$app->user->isGuest)? Html::a('<i class="fas fa-sign-out-alt"></i> Logout','/site/logout/',['class'=> 'dropdown-item']):''; ?>
+                        <?= (Yii::$app->session->has('HRUSER'))? Html::a('<i class="fas fa-sign-out-alt"></i> Logout','/recruitment/logout/',['class'=> 'dropdown-item']):''; ?>
 
-                        <div class="dropdown-divider"></div>
 
-                        <?= Html::a('<i class="fas fa-user"></i> Profile','employee/',['class'=> 'dropdown-item']); ?>
 
 
                     </div>

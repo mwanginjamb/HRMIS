@@ -72,7 +72,7 @@ class ApplicantprofileController extends Controller
     }
 
     public function actionCreate(){
-
+        //Yii::$app->recruitment->printrr(Yii::$app->session->get('HRUSER'));
         if(Yii::$app->session->has('mode') && Yii::$app->session->get('mode') == 'external'){
             $this->layout = 'external';
         }
@@ -83,7 +83,7 @@ class ApplicantprofileController extends Controller
         }
         $model = new Applicantprofile();
 
-        if(!Yii::$app->user->isGuest){//If it's an employee making an application , populate profile form with their employee data where relevant
+        if(!Yii::$app->user->isGuest && !Yii::$app->session->has('HRUSER')){//If it's an employee making an application , populate profile form with their employee data where relevant
             $model->First_Name = Yii::$app->user->identity->employee[0]->First_Name;
             $model->Middle_Name = !empty(Yii::$app->user->identity->employee[0]->Middle_Name)?Yii::$app->user->identity->employee[0]->Middle_Name:'';
             $model->Last_Name = Yii::$app->user->identity->employee[0]->Last_Name;
@@ -100,6 +100,8 @@ class ApplicantprofileController extends Controller
             $model->HELB_No = !empty(Yii::$app->user->identity->employee[0]->HELB_No)?Yii::$app->user->identity->employee[0]->HELB_No:'';
             $model->Union_Member_x003F_ = !empty(Yii::$app->user->identity->employee[0]->Union_Member_x003F_)?Yii::$app->user->identity->employee[0]->Union_Member_x003F_:'';
 
+        }else if(Yii::$app->session->has('HRUSER')){ //for external users - non- employees just prepopulate the email
+            $model->E_Mail = Yii::$app->session->get('HRUSER')->email;
         }
         $service = Yii::$app->params['ServiceName']['applicantProfile'];
 

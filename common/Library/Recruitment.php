@@ -242,6 +242,42 @@ class Recruitment extends Component
 
     }
 
+    //Check Cv
+    public function hasCv(){
+
+        $service = Yii::$app->params['ServiceName']['HRJobApplicationsCard'];
+        $filter = [
+            'Job_Application_No' => \Yii::$app->session->get('Job_Application_No'),
+        ];
+
+        $result = Yii::$app->navhelper->getData($service,$filter);
+
+        if(is_array($result)) {
+            return property_exists($result[0], 'CV');
+        }else{
+            return false;
+        }
+
+    }
+
+    //Check Cover Letter
+
+    public function hasCoverletter(){
+
+        $service = Yii::$app->params['ServiceName']['HRJobApplicationsCard'];
+        $filter = [
+            'Job_Application_No' => \Yii::$app->session->get('Job_Application_No')
+        ];
+
+        $result = Yii::$app->navhelper->getData($service,$filter);
+        if(is_array($result)) {
+            return property_exists($result[0], 'Cover_Letter');
+        }else{
+            return false;
+        }
+
+    }
+
     //Show Job Responsibility Specifications / children
 
     public function Responsibilityspecs($resp){

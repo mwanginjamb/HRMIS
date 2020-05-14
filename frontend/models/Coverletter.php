@@ -58,18 +58,37 @@ class Coverletter extends Model
             //Update Job Applicant Card
             $applicationService = Yii::$app->params['ServiceName']['HRJobApplicationsCard'];
             $filter = [
-                'Applicant_No' => Yii::$app->recruitment->getProfileID(),
+                'Job_Application_No' => \Yii::$app->session->get('Job_Application_No'),//Yii::$app->recruitment->getProfileID(),
             ];
+           // Yii::$app->recruitment->printrr($filter);
             $application = Yii::$app->navhelper->getData($applicationService,$filter);
             $updateData = [
                 'Key' => $application[0]->Key,
                 'Cover_Letter' => $this->sharepointUrl
             ];
-            Yii::$app->navhelper->updateData($applicationService,$updateData);
+            $res = Yii::$app->navhelper->updateData($applicationService,$updateData);
+
+            //Yii::$app->recruitment->printrr($res);
 
             return true;
         } else {
             return false;
         }
+    }
+
+    public function getPath(){
+
+        $service = Yii::$app->params['ServiceName']['HRJobApplicationsCard'];
+        $filter = [
+            'Job_Application_No' => \Yii::$app->session->get('Job_Application_No')
+        ];
+
+        $result = Yii::$app->navhelper->getData($service,$filter);
+        if(is_array($result)) {
+            return basename($result[0]->Cover_Letter);
+        }else{
+            return false;
+        }
+
     }
 }

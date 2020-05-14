@@ -79,7 +79,7 @@ class HrloginForm extends Model
         if ($this->_user === null) {
             $this->_user = Hruser::findByUsername($this->username);
         }
-
+        //Yii::$app->recruitment->printrr($this->_user);
 
         return $this->_user;
     }

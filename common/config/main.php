@@ -14,8 +14,8 @@ return [
         'db' => [
             'class' => 'yii\db\Connection',
             'dsn' => 'sqlsrv:server=FRANCIS\FRANC;database=AAS',
-            'username' => 'mwangi',
-            'password' => 'mwangi123',
+            'username' => 'Njambi',
+            'password' => 'njambi123',
             'charset' => 'utf8',
         ],
         'nav' => [
