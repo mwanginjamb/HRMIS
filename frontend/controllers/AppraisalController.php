@@ -1292,7 +1292,7 @@ class AppraisalController extends Controller
             $binary = file_get_contents($path['return_value']); //fopen($path['return_value'],'rb');
             $content = chunk_split(base64_encode($binary));
             //delete the file after getting it's contents --> This is some house keeping
-            unlink($path['return_value']);
+            //unlink($path['return_value']);
 
             // Yii::$app->recruitment->printrr($path);
             return $this->render('report',[

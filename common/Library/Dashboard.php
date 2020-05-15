@@ -120,14 +120,21 @@ class Dashboard extends Component
         $service = Yii::$app->params['ServiceName']['JobsList'];
         $filter = [
             'No_of_Posts' => '>0',
+
         ];
         $result = Yii::$app->navhelper->getData($service,$filter);
+        foreach($result as $req){
+            $RequisitionType = Yii::$app->recruitment->getRequisitionType($req->Job_ID);
+            if(($req->No_of_Posts >= 0 && !empty($req->Job_Description) && !empty($req->Job_ID)) && ($RequisitionType == 'Internal' || $RequisitionType == 'Both' ) ) {
+                $res[] = $req->Job_Description;
+            }
+        }
 
         //Yii::$app->recruitment->printrr($result);
         if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the filter result to false
             return 0;
         }
-        return count($result);
+        return count($res);
     }
 
     /*Get Staff on Leave*/
@@ -142,6 +149,37 @@ class Dashboard extends Component
             return 0;
         }
         return count($result);
+    }
+
+    //Get Number of Job Applications made by an AAS  employee
+
+    public function getInternalapplications(){
+        if(!Yii::$app->user->isGuest){
+            $srvc = Yii::$app->params['ServiceName']['employeeCard'];
+            $filter = [
+                'No' => Yii::$app->user->identity->employee[0]->No
+            ];
+            $Employee = Yii::$app->navhelper->getData($srvc,$filter);
+            if(empty($Employee[0]->ProfileID)){
+                return 0;
+            }
+            $profileID = $Employee[0]->ProfileID;
+
+        }else{ //if for some reason this check is called by a guest ,return false;
+            return 0;
+        }
+
+        $service = Yii::$app->params['ServiceName']['HRJobApplicationsList'];
+        $filter = [
+            'Applicant_No' => $profileID
+        ];
+        $result = \Yii::$app->navhelper->getData($service,$filter);
+
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the result is false
+            return 0;
+        }
+        return count($result);
+
     }
 
 

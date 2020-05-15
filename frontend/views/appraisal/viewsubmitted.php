@@ -59,7 +59,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             ]
                         ]) ?>
 
-                <?php elseif($model->EY_Appraisal_Status == 'Supervisor_Level'): ?>
+                <?php elseif($model->EY_Appraisal_Status == 'Agreement_Level'): ?>
 
                     <?= Html::a('<i class="fas fa-check"></i> Approve EY',['approveey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
                                 'class' => 'btn btn-app bg-success submitforapproval',
@@ -68,9 +68,29 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                 'confirm' => 'Are you sure you want to Approve this End Year Appraisal ?',
                                 'method' => 'post',
                             ]
-                        ]) ?>
+                        ])
+                    ?>
 
                 <?php endif; ?>
+
+
+                <?php if($model->EY_Appraisal_Status == 'Supervisor_Level'): ?>
+
+                <?= Html::a('<i class="fas fa-check"></i> Agreement',['sendtoagreementlevel','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                            'class' => 'btn btn-app bg-success submitforapproval',
+                            'title' => 'Move Appraisal to  Agreement Level',
+                            'data' => [
+                            'confirm' => 'Are you sure you want to send this End-Year Appraisal to Agreement Level ?',
+                            'method' => 'post',
+                            ]
+                    ])
+                ?>
+
+            <?php endif; ?>
+
+
+
+
                 <?php if($model->Goal_Setting_Status == 'Pending_Approval'): ?>
                     <div class="col-md-4">
 
@@ -99,7 +119,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                 'method' => 'post',]*/
                             ]) 
                         ?>
-                <?php elseif($model->EY_Appraisal_Status == 'Supervisor_Level'): ?>
+                <?php elseif($model->EY_Appraisal_Status == 'Agreement_Level'): ?>
 
                     
                     <?= Html::a('<i class="fas fa-times"></i> Reject EY',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
@@ -379,7 +399,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                     <td><?= !empty($k->Appraiser_Rating)?$k->Appraiser_Rating: 'Not Set' ?></td>
                                     <td><?= !empty($k->Agreed_Rating)?$k->Agreed_Rating: 'Not Set' ?></td>
                                     <td><?= !empty($k->Rating_Comments)?$k->Rating_Comments: 'Not Set' ?></td>
-                                    <td><?= ($model->EY_Appraisal_Status == 'Supervisor_Level')?Html::a('Evaluate',['appraisalkra/update','Line_No'=> $k->Line_No,'Appraisal_No' => $k->Appraisal_No,'Employee_No' => $k->Employee_No ],['class' => ' evalkra btn btn-info btn-xs']):'' ?></td>
+                                    <td><?= ($model->EY_Appraisal_Status == 'Supervisor_Level' || $model->EY_Appraisal_Status == 'Agreement_Level')
+                                            ?Html::a('Evaluate',['appraisalkra/update','Line_No'=> $k->Line_No,'Appraisal_No' => $k->Appraisal_No,'Employee_No' => $k->Employee_No ],['class' => ' evalkra btn btn-info btn-xs']):'' ?></td>
                                 </tr>
                                 <tr class="child">
                                     <td colspan="11" >
@@ -545,7 +566,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                     <td><?= !empty($be->Peer_2)?$be->Peer_2:'' ?></td>
                                                     <td><?= !empty($be->Agreed_Rating)?$be->Agreed_Rating:'' ?></td>
                                                     <td><?= !empty($be->Overall_Remarks)?$be->Overall_Remarks:'' ?></td>
-                                                    <td><?= Html::a('Evaluate',['employeeappraisalbehaviour/update','Employee_No'=>$be->Employee_No,'Line_No'=> $be->Line_No,'Appraisal_No' => $be->Appraisal_Code ],['class' => ' evalbehaviour btn btn-info btn-xs'])?></td>
+                                                    <td><?= ($be->Applicable)?Html::a('Evaluate',['employeeappraisalbehaviour/update','Employee_No'=>$be->Employee_No,'Line_No'=> $be->Line_No,'Appraisal_No' => $be->Appraisal_Code ],['class' => ' evalbehaviour btn btn-info btn-xs']):'' ?></td>
                                                 </tr>
                                                 <?php
                                             endforeach;
@@ -607,9 +628,9 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                 <td><?= $asses->Training_Action ?></td>
                                 <td><?= $asses->Due_Date ?></td>
                                 <td><?= $asses->Learning_Hours ?></td>
-                                <td><?= $asses->Status_Mid_Year ?></td>
-                                <td><?= $asses->Status_End_Year ?></td>
-                                <td><?= $asses->Comments ?></td>
+                                <td><?= isset($asses->Status_Mid_Year)?$asses->Status_Mid_Year:'' ?></td>
+                                <td><?= isset($asses->Status_End_Year)?$asses->Status_End_Year:'' ?></td>
+                                <td><?= isset($asses->Comments)?$asses->Comments:'' ?></td>
                                 <td><?= Html::a('<i class="fas fa-edit"></i> ',['learningassessment/update','Line_No'=> $asses->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?></td>
                             </tr>
                         <?php } ?>

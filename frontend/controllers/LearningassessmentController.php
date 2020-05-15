@@ -73,6 +73,7 @@ class LearningassessmentController extends Controller
 
         $model = new Learningassessmentcompetence() ;
         $service = Yii::$app->params['ServiceName']['LearningAssessmentCompetence'];
+        $performcelevels = $this->getPerformancelevels();
 
 
         if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Learningassessmentcompetence'],$model)  ){
@@ -81,7 +82,7 @@ class LearningassessmentController extends Controller
             $model->Employee_No = $Employee_No;
             $result = Yii::$app->navhelper->postData($service,$model);
 
-            if(is_object($result)){
+           /* if(is_object($result)){
                 Yii::$app->session->setFlash('success','Learning Assessment Added Successfully',true);
                 return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
 
@@ -89,6 +90,15 @@ class LearningassessmentController extends Controller
                 Yii::$app->session->setFlash('error','Error Adding Learning Assessment Line: '.$result,true);
                 return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
 
+            }*/
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            if(!is_string($result)){
+
+                return ['note' => '<div class="alert alert-success">Learning Assessment Added Successfully. </div>' ];
+            }else{
+
+                return ['note' => '<div class="alert alert-danger">Error Adding Learning Assessment Line : '.$result.'</div>'];
             }
 
         }//End Saving experience
@@ -96,6 +106,7 @@ class LearningassessmentController extends Controller
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('create', [
                 'model' => $model,
+                'performancelevels' => ArrayHelper::map($performcelevels,'Line_Nos','Perfomace_Level'),
             ]);
         }
 
@@ -110,6 +121,7 @@ class LearningassessmentController extends Controller
         $model = new Learningassessmentcompetence() ;
         $service = Yii::$app->params['ServiceName']['LearningAssessmentCompetence'];
         $model->isNewRecord = false;
+        $performcelevels = $this->getPerformancelevels();
         $filter = [
             'Line_No' => Yii::$app->request->get('Line_No'),
             'Employee_No' => Yii::$app->request->get('Employee_No'),
@@ -129,12 +141,21 @@ class LearningassessmentController extends Controller
             $result = Yii::$app->navhelper->updateData($service,$model);
 
             //Yii::$app->recruitment->printrr($result);
-            if(!empty($result)){
+           /* if(!empty($result)){
                 Yii::$app->session->setFlash('success','Learning Assessment Line Updated Successfully',true);
                 return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
             }else{
                 Yii::$app->session->setFlash('error','Error Updating Learning Assessment: '.$result,true);
                 return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
+            }*/
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            if(!is_string($result)){
+
+                return ['note' => '<div class="alert alert-success">Learning Assessment Updated Successfully. </div>' ];
+            }else{
+
+                return ['note' => '<div class="alert alert-danger">Error Updating Learning Assessment Line : '.$result.'</div>'];
             }
 
         }
@@ -142,6 +163,7 @@ class LearningassessmentController extends Controller
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('update', [
                 'model' => $model,
+                'performancelevels' => ArrayHelper::map($performcelevels,'Line_Nos','Perfomace_Level'),
 
             ]);
         }
@@ -352,6 +374,13 @@ class LearningassessmentController extends Controller
         return $religion;
     }
 
+    public function getPerformancelevels(){
+        $service = Yii::$app->params['ServiceName']['PerformanceLevel'];
+
+        $ratings = \Yii::$app->navhelper->getData($service);
+        return $ratings;
+    }
+
     public function loadtomodel($obj,$model){
 
         if(!is_object($obj)){
@@ -365,4 +394,5 @@ class LearningassessmentController extends Controller
 
         return $model;
     }
+
 }

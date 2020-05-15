@@ -24,8 +24,10 @@ $model = $model[0];
 
                     Yii::$app->session->set('ProfileID',$profileID);
 
-                }else if(Yii::$app->session->has('ProfileID')){ //Profile ID for external user
-                    $profileID = Yii::$app->session->get('ProfileID');
+                }else if(Yii::$app->session->has('HRUSER')){ //Profile ID for external user
+                    $hruser = \common\models\Hruser::findByUsername(Yii::$app->session->get('HRUSER')->username);
+                    $profileID =  $hruser->profileID;
+                     Yii::$app->session->set('ProfileID',$profileID);
                 }
 
                 echo (Yii::$app->session->has('ProfileID') || Yii::$app->recruitment->hasProfile(Yii::$app->session->get('ProfileID')))?

@@ -21,6 +21,7 @@ $this->title = 'Update Learning Assessment Line';
 
     <?= $this->render('_form',[
         'model' => $model,
+        'performancelevels' => $performancelevels,
     ]) ?>
 
 </div>

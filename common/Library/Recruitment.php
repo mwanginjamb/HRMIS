@@ -278,6 +278,8 @@ class Recruitment extends Component
 
     }
 
+
+
     //Show Job Responsibility Specifications / children
 
     public function Responsibilityspecs($resp){

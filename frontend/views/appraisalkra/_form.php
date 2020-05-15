@@ -39,7 +39,7 @@ use yii\widgets\ActiveForm;
 
                                     <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Closed' && Yii::$app->session->get('EY_Appraisal_Status') == 'Supervisor_Level' && Yii::$app->session->get('isSupervisor'))?$form->field($model, 'Appraiser_Rating')->dropDownList($ratings,['prompt' => 'Select Rating']):'' ?>
 
-                                    <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Closed' && Yii::$app->session->get('EY_Appraisal_Status') == 'Supervisor_Level' && Yii::$app->session->get('isSupervisor'))?$form->field($model, 'Agreed_Rating')->textInput():''?>
+                                    <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Closed' && Yii::$app->session->get('EY_Appraisal_Status') == 'Agreement_Level' && Yii::$app->session->get('isSupervisor'))?$form->field($model, 'Agreed_Rating')->dropDownList($ratings,['prompt' => 'Select Rating']):''?>
 
                                     <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Closed' && Yii::$app->session->get('EY_Appraisal_Status') == 'Supervisor_Level' && Yii::$app->session->get('isSupervisor'))?$form->field($model, 'Rating_Comments')->textInput(['type' => 'number']):'' ?>
 
@@ -77,3 +77,22 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 </div>
+
+<?php
+$script = <<<JS
+ //Submit Rejection form and get results in json    
+        $('form').on('submit', function(e){
+            e.preventDefault()
+            const data = $(this).serialize();
+            const url = $(this).attr('action');
+            $.post(url,data).done(function(msg){
+                    $('.modal').modal('show')
+                    .find('.modal-body')
+                    .html(msg.note);
+        
+                },'json');
+        });
+JS;
+
+$this->registerJs($script);
+

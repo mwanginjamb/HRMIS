@@ -188,6 +188,7 @@ class RecruitmentController extends Controller
            if(!Yii::$app->session->has('HRUSER')){
                return $this->redirect(['login']);
            }
+           //Yii::$app->recruitment->printrr(Yii::$app->session->get('HRUSER'));
        }else{
            Yii::$app->session->set('mode','internal');
        }

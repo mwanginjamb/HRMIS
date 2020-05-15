@@ -47,7 +47,7 @@ use yii\widgets\ActiveForm;
                             <?= (Yii::$app->user->identity->isSupervisor() && Yii::$app->session->get('EY_Appraisal_Status') == 'Supervisor_Level')?$form->field($model, 'Appraiser_Rating')->dropDownList($ratings,['prompt' => 'Select Rating']):'' ?>
                             <?= (Yii::$app->session->get('EY_Appraisal_Status') == 'Peer_1_Level')?$form->field($model, 'Peer_1')->dropDownList($ratings,['prompt' => 'Select Rating']):'' ?>
                             <?= (Yii::$app->session->get('EY_Appraisal_Status') == 'Peer_2_Level')?$form->field($model, 'Peer_2')->dropDownList($ratings,['prompt' => 'Select Rating']):'' ?>
-                            <?= (Yii::$app->user->identity->isSupervisor() && Yii::$app->session->get('EY_Appraisal_Status') == 'Supervisor_Level')?$form->field($model, 'Agreed_Rating')->dropDownList($ratings,['prompt' => 'Select Rating']):'' ?>
+                            <?= (Yii::$app->user->identity->isSupervisor() && Yii::$app->session->get('EY_Appraisal_Status') == 'Agreement_Level')?$form->field($model, 'Agreed_Rating')->dropDownList($ratings,['prompt' => 'Select Rating']):'' ?>
                             <?= (Yii::$app->user->identity->isSupervisor() && Yii::$app->session->get('EY_Appraisal_Status') == 'Supervisor_Level')?$form->field($model, 'Overall_Remarks')->textarea(['rows' => 4,'max-length'=> 250]):'' ?>
 
                             <?= $form->field($model, 'Key')->hiddenInput(['readonly'=> true])->label(false) ?>

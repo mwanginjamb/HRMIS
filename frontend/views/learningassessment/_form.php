@@ -41,8 +41,8 @@ use yii\widgets\ActiveForm;
                                     <?= $form->field($model, 'Due_Date')->textInput(['type' => 'date']) ?>
 
                                     <?= $form->field($model, 'Learning_Hours')->textInput(['type' => 'number']) ?>
-                                    <?= $form->field($model, 'Status_Mid_Year')->textInput() ?>
-                                    <?= $form->field($model, 'Status_End_Year')->textInput() ?>
+                                    <?= $form->field($model, 'Status_Mid_Year')->dropDownList($performancelevels,['prompt'=> 'Select Status']) ?>
+                                    <?= $form->field($model, 'Status_End_Year')->dropDownList($performancelevels,['prompt'=> 'Select Status']) ?>
                                     <?= $form->field($model, 'Comments')->textarea(['rows'=>2,'max-length' => 250]) ?>
 
 
@@ -96,3 +96,21 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 </div>
+
+<?php
+    $script = <<<JS
+ //Submit Rejection form and get results in json    
+        $('form').on('submit', function(e){
+            e.preventDefault()
+            const data = $(this).serialize();
+            const url = $(this).attr('action');
+            $.post(url,data).done(function(msg){
+                    $('.modal').modal('show')
+                    .find('.modal-body')
+                    .html(msg.note);
+        
+                },'json');
+        });
+JS;
+
+$this->registerJs($script);

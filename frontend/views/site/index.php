@@ -108,19 +108,18 @@ exit;*/
                 <!-- Info boxes -->
                 <div class="row">
                     <div class="col-12 col-sm-6 col-md-3">
-
-                        <div class="info-box">
-                            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-briefcase"></i></span>
-
-                            <div class="info-box-content">
-                                <span class="info-box-text">HR Vacancies</span>
-                                <span class="info-box-number"><?= Yii::$app->dashboard->getVacancies() ?>
-                                  <small></small>
-                                </span>
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'recruitment/vacancies' ?>" target="_blank">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-briefcase"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">HR Vacancies</span>
+                                    <span class="info-box-number"><?= Yii::$app->dashboard->getVacancies() ?>
+                                      <small></small>
+                                    </span>
+                                </div>
+                                <!-- /.info-box-content -->
                             </div>
-                            <!-- /.info-box-content -->
-                        </div>
-
+                        </a>
                     </div>
 
                     <!-- fix for small devices only -->
@@ -206,6 +205,26 @@ exit;*/
                                 <div class="info-box-content">
                                     <span class="info-box-text">Staff on Leave</span>
                                     <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getOnLeave())?></span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                        </a>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+
+                    <!-- fix for small devices only -->
+                    <div class="clearfix hidden-md-up"></div>
+
+                    <!-- /.col -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'recruitment/internalapplications' ?>" target="_blank">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-paper-plane"></i></span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-text">My Applications</span>
+                                    <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getInternalapplications())?></span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
