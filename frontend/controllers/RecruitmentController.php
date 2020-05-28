@@ -208,6 +208,7 @@ class RecruitmentController extends Controller
             Yii::$app->session->set('REQUISITION_NO',Yii::$app->recruitment->getRequisitionID($Job_ID));
         }
 
+        
         return $this->render('view',[
             'model' => $job,
         ]);

@@ -36,9 +36,9 @@ use yii\widgets\ActiveForm;
 
 
 
-                                    <?= $form->field($model, 'Appraisal_No')->textInput(['readonly' => true]) ?>
+                                    <?= $form->field($model, 'Appraisal_No')->hiddenInput(['readonly' => true])->label(false) ?>
 
-                                    <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true]) ?>
+                                    <?= $form->field($model, 'Employee_No')->hiddenInput(['readonly' => true])->label(false) ?>
 
                                     <?= $form->field($model, 'Weakness')->textarea(['placeholder' => 'Further Development Area','max-length'=>250,'rows' => 3]) ?>
 

@@ -58,6 +58,22 @@ Yii::$app->session->set('isSupervisor',false);
                     </div>
 
                 <?php endif; ?>
+
+                    <?=  ($model->EY_Appraisal_Status == 'Closed')?Html::a('<i class="fas fa-book-open"></i> P.A Report',['report','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                        'class' => 'btn btn-app bg-success  pull-right',
+                        'title' => 'Generate Performance Appraisal Report',
+                        'target'=> '_blank',
+                        'data' => [
+                            // 'confirm' => 'Are you sure you want to send appraisal to peer 2?',
+                            'params'=>[
+                                'appraisalNo'=> $_GET['Appraisal_No'],
+                                'employeeNo' => $_GET['Employee_No'],
+                            ],
+                            'method' => 'post',]
+                    ]):'';
+                    ?>
+
+
                 <?php if($model->MY_Appraisal_Status == 'Closed' && $model->EY_Appraisal_Status == 'Appraisee_Level'): ?>
 
                     <div class="col-md-4">
@@ -189,8 +205,8 @@ Yii::$app->session->set('isSupervisor',false);
                         <thead>
                             <tr>
                                 <th>Line No.</th>
-                                <th>Appraisal No</th>
-                                <th>Employee No</th>
+                                <!--<th>Appraisal No</th>
+                                <th>Employee No</th>-->
                                 <th>KRA</th>
                                 <th>Perfomance Level</th>
                                 <th>Perfomance Comment</th>
@@ -198,6 +214,7 @@ Yii::$app->session->set('isSupervisor',false);
                                 <th>Appraiser Rating</th>
                                 <th>Agreed Rating</th>
                                 <th>Rating Comments</th>
+                                <th>Employee Comments</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -216,8 +233,8 @@ Yii::$app->session->set('isSupervisor',false);
                                 <tr class="parent">
 
                                     <td><span>+</span></td>
-                                    <td><?= $k->Appraisal_No ?></td>
-                                    <td><?= $k->Employee_No ?></td>
+                                   <!-- <td><?/*= $k->Appraisal_No */?></td>
+                                    <td><?/*= $k->Employee_No */?></td>-->
                                     <td><?= $k->KRA ?></td>
                                     <td><?= !empty($k->Perfomance_Level)?$pl: 'Not Set' ?></td>
                                     <td><?= !empty($k->Perfomance_Comment)?$k->Perfomance_Comment: 'Not Set' ?></td>
@@ -225,6 +242,7 @@ Yii::$app->session->set('isSupervisor',false);
                                     <td><?= !empty($k->Appraiser_Rating)?$k->Appraiser_Rating: 'Not Set' ?></td>
                                     <td><?= !empty($k->Agreed_Rating)?$k->Agreed_Rating: 'Not Set' ?></td>
                                     <td><?= !empty($k->Rating_Comments)?$k->Rating_Comments: 'Not Set' ?></td>
+                                    <td><?= !empty($k->Employee_Comments)?$k->Employee_Comments: 'Not Set' ?></td>
                                     <td><?=($model->Goal_Setting_Status == 'Approved' && $model->MY_Appraisal_Status == 'Appraisee_Level')?Html::a('Evaluate',['appraisalkra/update','Line_No'=> $k->Line_No,'Appraisal_No' => $k->Appraisal_No,'Employee_No' => $k->Employee_No ],['class' => ' evalkra btn btn-info btn-xs']):''?></td>
                                 </tr>
                                 <tr class="child">
@@ -363,18 +381,21 @@ Yii::$app->session->set('isSupervisor',false);
                                             <!-- <th>Line No</th>-->
                                             <!-- <th>Employee No</th>-->
                                             <!-- <th>Appraisal Code</th>-->
-                                             <th>Behaviour Name</th>
-                                            <th>Applicable</th>
-                                            <th>Current Proficiency level</th>
-                                            <th>Expected Proficiency Level</th>
-                                            <th>Behaviour Description</th>
-                                            <th>Self Rating</th>
-                                            <th>Appraiser Rating</th>
-                                            <th>Peer 1</th>
-                                            <th>Peer 2</th>
-                                            <th>Agreed Rating</th>
-                                            <th>Overall Remarks</th>
-                                            <th>Action</th>
+                                            <td><b>Behaviour Name</b></td>
+                                            <td><b>Applicable</b></td>
+                                            <td width="7%"><b>Current Proficiency level</b></td>
+                                            <td width="7%"><b>Expected Proficiency Level</b></td>
+                                            <!--<td width="7%">Behaviour Description</td>-->
+                                            <td width="4%"><b>Self Rating</b></td>
+                                            <td width="10%"><b>Appraisee Remark</b></td>
+                                            <td width="4%"><b>Appraiser Rating</b></td>
+                                            <td width="4%"><b>Peer 1</b></td>
+                                            <td width="10%"><b>Peer 1 Remark</b></td>
+                                            <td width="4%"><b>Peer 2</b></td>
+                                            <td width="10%"><b>Peer 2 Remark</b></td>
+                                            <td width="7%"><b>Agreed Rating</b></td>
+                                            <td width="7%"><b>Overall Remarks</b></td>
+                                            <td><b>Action</b></td>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -389,14 +410,17 @@ Yii::$app->session->set('isSupervisor',false);
                                                     <td><?= Html::checkbox('Applicable',$be->Applicable,['disabled' => true]) ?></td>
                                                     <td><?= !empty($be->Current_Proficiency_Level)?$be->Current_Proficiency_Level:'' ?></td>
                                                     <td><?= !empty($be->Expected_Proficiency_Level)?$be->Expected_Proficiency_Level:'' ?></td>
-                                                    <td><?= !empty($be->Behaviour_Description)?$be->Behaviour_Description:'' ?></td>
+                                                   <!-- <td><?/*= !empty($be->Behaviour_Description)?$be->Behaviour_Description:'' */?></td>-->
                                                     <td><?= !empty($be->Self_Rating)?$be->Self_Rating:'' ?></td>
+                                                    <td><?= !empty($be->Appraisee_Remark)?$be->Appraisee_Remark:'' ?></td>
                                                     <td><?= !empty($be->Appraiser_Rating)?$be->Appraiser_Rating:'' ?></td>
                                                     <td><?= !empty($be->Peer_1)?$be->Peer_1:'' ?></td>
+                                                    <td><?= !empty($be->Peer_1_Remark)?$be->Peer_1_Remark:'' ?></td>
                                                     <td><?= !empty($be->Peer_2)?$be->Peer_2:'' ?></td>
+                                                    <td><?= !empty($be->Peer_2_Remark)?$be->Peer_2_Remark:'' ?></td>
                                                     <td><?= !empty($be->Agreed_Rating)?$be->Agreed_Rating:'' ?></td>
                                                     <td><?= !empty($be->Overall_Remarks)?$be->Overall_Remarks:'' ?></td>
-                                                    <td><?= Html::a('Evaluate',['employeeappraisalbehaviour/update','Employee_No'=>$be->Employee_No,'Line_No'=> $be->Line_No,'Appraisal_No' => $be->Appraisal_Code ],['class' => ' evalbehaviour btn btn-info btn-xs'])?></td>
+                                                    <td><?= ($be->Applicable)?Html::a('<i title="Evaluate Behaviour" class="fa fa-edit"></i>',['employeeappraisalbehaviour/update','Employee_No'=>$be->Employee_No,'Line_No'=> $be->Line_No,'Appraisal_No' => $be->Appraisal_Code ],['class' => ' evalbehaviour btn btn-info btn-xs']):'' ?></td>
                                                 </tr>
                                                 <?php
                                             endforeach;

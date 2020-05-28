@@ -27,6 +27,9 @@ public $Peer_1;
 public $Peer_2;
 public $Agreed_Rating;
 public $Overall_Remarks;
+public $Appraisee_Remark;
+public $Peer_1_Remark;
+public $Peer_2_Remark;
 public $Key;
 public $isNewRecord;
 

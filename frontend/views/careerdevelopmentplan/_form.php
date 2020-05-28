@@ -36,9 +36,9 @@ use yii\widgets\ActiveForm;
 
 
 
-                                    <?= $form->field($model, 'Appraisal_No')->textInput(['readonly' => true]) ?>
+                                    <?= $form->field($model, 'Appraisal_No')->hiddenInput(['readonly' => true])->label(false) ?>
 
-                                    <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true]) ?>
+                                    <?= $form->field($model, 'Employee_No')->hiddenInput(['readonly' => true])->label(false) ?>
 
                                     <?= $form->field($model, 'Career_Development_Goal')->textInput() ?>
                                     <?= $form->field($model, 'Estimate_Start_Date')->textInput(['type' => 'date']) ?>
@@ -98,7 +98,7 @@ use yii\widgets\ActiveForm;
 $script = <<<JS
  //Submit Rejection form and get results in json    
         $('form').on('submit', function(e){
-            e.preventDefault()
+            e.preventDefault();
             const data = $(this).serialize();
             const url = $(this).attr('action');
             $.post(url,data).done(function(msg){

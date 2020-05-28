@@ -80,14 +80,9 @@ class CareerdevelopmentplanController extends Controller
             $result = Yii::$app->navhelper->postData($service,$model);
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             if(is_object($result)){
-
                 return ['note' => '<div class="alert alert-success">Career Development Plan Line Added Successfully. </div>' ];
-
-
             }else{
-
                 return ['note' => '<div class="alert alert-danger">Error Adding Training Plan Line: '.$result.'</div>'];
-
             }
 
         }//End Saving experience

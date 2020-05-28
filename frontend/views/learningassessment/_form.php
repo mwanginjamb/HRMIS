@@ -41,8 +41,8 @@ use yii\widgets\ActiveForm;
                                     <?= $form->field($model, 'Due_Date')->textInput(['type' => 'date']) ?>
 
                                     <?= $form->field($model, 'Learning_Hours')->textInput(['type' => 'number']) ?>
-                                    <?= $form->field($model, 'Status_Mid_Year')->dropDownList($performancelevels,['prompt'=> 'Select Status']) ?>
-                                    <?= $form->field($model, 'Status_End_Year')->dropDownList($performancelevels,['prompt'=> 'Select Status']) ?>
+                                    <?= $form->field($model, 'Status_Mid_Year')->textarea(['rows' => 3,'max-lenth' => 250]) ?>
+                                    <?= $form->field($model, 'Status_End_Year')->textarea(['rows' => 3,'max-lenth' => 250]) ?>
                                     <?= $form->field($model, 'Comments')->textarea(['rows'=>2,'max-length' => 250]) ?>
 
 

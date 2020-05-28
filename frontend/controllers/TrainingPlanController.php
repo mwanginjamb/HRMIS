@@ -82,7 +82,7 @@ class TrainingPlanController extends Controller
             $model->Employee_No = $Employee_No;
             $result = Yii::$app->navhelper->postData($service,$model);
 
-            if(is_object($result)){
+            /*if(is_object($result)){
                 Yii::$app->session->setFlash('success','Training Plan Line Added Successfully',true);
                 return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
 
@@ -90,6 +90,15 @@ class TrainingPlanController extends Controller
                 Yii::$app->session->setFlash('error','Error Adding Training Plan Line: '.$result,true);
                 return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
 
+            }*/
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            if(!is_string($result)){
+
+                return ['note' => '<div class="alert alert-success">Training Plan Line Added Successfully. </div>' ];
+            }else{
+
+                return ['note' => '<div class="alert alert-danger">Error Adding Training Plan Line : '.$result.'</div>'];
             }
 
         }//End Saving experience
@@ -129,12 +138,21 @@ class TrainingPlanController extends Controller
             $result = Yii::$app->navhelper->updateData($service,$model);
 
             //Yii::$app->recruitment->printrr($result);
-            if(!empty($result)){
+           /* if(!empty($result)){
                 Yii::$app->session->setFlash('success','Training Plan Line Updated Successfully',true);
                 return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
             }else{
                 Yii::$app->session->setFlash('error','Error Updating Training Plan Line: '.$result,true);
                 return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
+            }*/
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            if(!is_string($result)){
+
+                return ['note' => '<div class="alert alert-success">Training Plan Line Updated Successfully. </div>' ];
+            }else{
+
+                return ['note' => '<div class="alert alert-danger">Error Updating Training Plan Line : '.$result.'</div>'];
             }
 
         }

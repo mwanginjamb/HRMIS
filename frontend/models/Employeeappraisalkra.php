@@ -22,6 +22,7 @@ public $Appraisee_Self_Rating;
 public $Appraiser_Rating;
 public $Agreed_Rating;
 public $Rating_Comments;
+public $Employee_Comments;
 public $Key;
 public $isNewRecord;
 

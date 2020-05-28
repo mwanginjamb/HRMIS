@@ -33,7 +33,9 @@ use yii\widgets\ActiveForm;
 
                                     <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Appraisee_Level' && Yii::$app->session->get('isSupervisor') == false )?$form->field($model, 'Perfomance_Level')->dropDownList($performancelevels,['prompt'=> 'Select Performance Level']):'' ?>
 
-                                    <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Appraisee_Level' && Yii::$app->session->get('isSupervisor') == false )?$form->field($model, 'Perfomance_Comment')->textarea(['row'=> 3]):'' ?>
+                                    <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Appraisee_Level' && Yii::$app->session->get('isSupervisor') == false )?$form->field($model, 'Perfomance_Comment')->textarea(['row'=> 3, 'maxlength' => 250]):'' ?>
+
+                                    <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Appraisee_Level' && Yii::$app->session->get('isSupervisor') == false )?$form->field($model, 'Employee_Comments')->textarea(['row'=> 3, 'maxlength' => 250]):'' ?>
 
                                     <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Closed' && Yii::$app->session->get('EY_Appraisal_Status') == 'Appraisee_Level' && !Yii::$app->session->get('isSupervisor'))?$form->field($model, 'Appraisee_Self_Rating')->dropDownList($ratings,['prompt' => 'Select Rating']):'' ?>
 
