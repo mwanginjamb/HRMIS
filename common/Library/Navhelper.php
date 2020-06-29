@@ -1050,6 +1050,45 @@ class Navhelper extends Component{
     }
 
 
+    // lEAVE Recall
+
+    public function RecallApproval($service,$data,$soapWsdlMethod){
+        $identity = \Yii::$app->user->identity;
+        $username = (!Yii::$app->user->isGuest)? Yii::$app->user->identity->{'User ID'} : Yii::$app->params['NavisionUsername'];
+        $password = Yii::$app->session->has('IdentityPassword')? Yii::$app->session->get('IdentityPassword'):Yii::$app->params['NavisionPassword'];
+
+        $creds = (object)[];
+        $creds->UserName = $username;
+        $creds->PassWord = $password;
+        $url = new Services($service);
+        $soapWsdl=$url->getUrl();
+
+        $entry = (object)[];
+
+        foreach($data as $key => $value){
+            if($key !=='_csrf-frontend'){
+                $entry->$key = $value;
+            }
+
+        }
+
+        if(!Yii::$app->navision->isUp($soapWsdl,$creds)) {
+            throw new \yii\web\HttpException(503, 'Service unavailable');
+
+        }
+
+        $results = Yii::$app->navision->RecallApproval($creds, $soapWsdl,$entry, $soapWsdlMethod);
+
+        if(is_object($results)){
+            $lv =(array)$results;
+            return $lv;
+        }
+        else{
+            return $results;
+        }
+
+    }
+
     /**Auxilliary methods for working with models */
 
     public function loadmodel($obj,$model){ //load object data to a model, e,g from service data to model

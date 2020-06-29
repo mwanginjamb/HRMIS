@@ -19,7 +19,7 @@ return [
     'CompanyName'=>'AAS%20HR%20test',//Nav Company,
     'CompanyNameStripped' => 'AAS HR test$',
     'ldPrefix'=>'francis',//ACTIVE DIRECTORY prefix
-    'adServer' => 'KRB-SVR7.KRBHQS.GO.KE', //Active directory domain controller
+    'adServer' => 'DC2SVR.AASCIENCES.AC.KE', //Active directory domain controller
 
     //sharepoint config
     'sharepointUrl' => 'https://aaofsciences.sharepoint.com',//'https://ackads.sharepoint.com',
@@ -129,12 +129,6 @@ return [
         //P9 report
 
         'P9YEARS' => 'P9YEARS', //70286
-
-
-
-
-
-
 
 
 

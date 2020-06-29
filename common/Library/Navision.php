@@ -549,6 +549,20 @@ class Navision extends Component
 
     }
 
+    // Leave Recall
+    public function RecallApproval($credentials, $soapWsdl, $Entry, $soapWsdlMethod)
+    {
+        //$result =  $client->Create([$EntryID => $Entry]);
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->$soapWsdlMethod($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
     public function CancelLeaveRequestApproval($credentials, $soapWsdl, $Entry)
     {
         //$result =  $client->Create([$EntryID => $Entry]);

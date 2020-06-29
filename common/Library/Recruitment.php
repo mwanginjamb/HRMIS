@@ -295,7 +295,7 @@ class Recruitment extends Component
         if(!is_string($results) && !is_object($results)){
 
             foreach($results as $spec){
-
+                if(isset($spec->Specifaction))
                 $html .= '<tr>
 
                             <td>'.$spec->Specifaction.'</td>

@@ -84,8 +84,10 @@ class SiteController extends Controller
     {
 
         $employee = $this->actionGetemployee()[0];
-        $supervisor = $this->getSupervisor($employee->Supervisor_Code);
+        $supervisor = isset($employee->Supervisor_Code)?$this->getSupervisor($employee->Supervisor_Code):'';
         $balances = $this->Getleavebalance();
+
+        //print '<pre>'; print_r($balances); exit;
 
         return $this->render('index',[
             'employee' => $employee,
@@ -110,8 +112,9 @@ class SiteController extends Controller
         $model = new LoginForm();
 
 
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        if ($model->load(Yii::$app->request->post()) && $model->login()  ) {
 
+            //var_dump($model->login()); exit;
             return $this->goBack();
 
         } else {
@@ -304,7 +307,12 @@ class SiteController extends Controller
         ];
         $supervisor = \Yii::$app->navhelper->getData($service,$filter);
         //Yii::$app->recruitment->printrr($filter);
-        return $supervisor[0];
+        if(is_array($supervisor)){
+            return $supervisor[0];
+        }else{
+            return false;
+        }
+        
     }
 
     public function Getleavebalance(){

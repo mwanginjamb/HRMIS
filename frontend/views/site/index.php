@@ -49,49 +49,68 @@ exit;*/
                             <li class="list-group-item">
                                 <b><i class="fa fa-hourglass-start"></i></b> <a title="Length of Service" class="float-right"><?= !empty($employee->DService)?$employee->DService:'' ?></a>
                             </li>
+
+
+                            <li class="list-group-item">
+                                <b><i class="fa fa-briefcase"></i></b> <a title="Job Title" class="float-right"> <?= !empty($employee->Job_Title)?$employee->Job_Title:'' ?></a>
+                            </li>
+
+
+                            <li class="list-group-item">
+                                <b><i class="fa fa-briefcase"></i></b> <a title="Job Grade" class="float-right"><?= !empty($employee->Grade)?$employee->Grade:'' ?></a>
+                            </li>
+
+                            <li class="list-group-item">
+                                <b><i class="fa fa-person-booth mr-1"></i></b> <a title="Date of Join" class="float-right"><?= !empty($employee->Date_Of_Join)?$employee->Date_Of_Join:'' ?></a>
+                            </li>
+
+
                         </ul>
 
-                        <a href="mailto:<?= $supervisor->Company_E_Mail ?>" class="btn btn-primary btn-block"><b>Email Supervisor</b></a>
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl() ?>employee/" class="btn btn-primary btn-block"><b>My Profile</b></a>
                     </div>
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
 
                 <!-- About Me Box -->
+
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">About Me</h3>
+                        <h3 class="card-title">My Leave Balances</h3>
                     </div>
-                    <!-- /.card-header -->
                     <div class="card-body">
-                        <strong><i class="fas fa-book mr-1"></i> Job Title</strong>
+                        <table class="table dt-responsive table-hover">
+                            <thead>
+                            <tr>
+                                <th>Leave Type</th>
+                                <th>Balance</th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                        <p class="text-muted">
-                            <?= !empty($employee->Job_Title)?$employee->Job_Title:'' ?>
-                        </p>
+                            <?php
 
-                        <hr>
 
-                        <strong><i class="fas fa-person-booth mr-1"></i> Gender</strong>
 
-                        <p class="text-muted"><?= !empty($employee->Gender)?$employee->Gender:'' ?> </p>
+                            foreach($balances as $key => $val){
+                                if($key == 'Key')
+                                    continue;
+                                print '
+                                    <tr>
+                                        <td>'.str_replace('_',' ',$key).'</td><td>'.$val.'</td>
+                                     </tr>
+                            ';
 
-                        <hr>
+                            } ?>
 
-                        <strong><i class="fas fa-birthday-cake mr-1"></i> Age</strong>
-
-                        <p class="text-muted">
-                            <?= !empty($employee->DAge)?$employee->DAge:''?>
-                        </p>
-
-                        <hr>
-
-                        <strong><i class="far fa-file-alt mr-1"></i> Date of Join:</strong>
-
-                        <p class="text-muted"><?= !empty($employee->Date_Of_Join)?$employee->Date_Of_Join:'' ?></p>
+                            </tbody>
+                        </table>
                     </div>
-                    <!-- /.card-body -->
                 </div>
+
+                <!--End Me Box-->
+
                 <!-- /.card -->
             </div>
             <!-- /.col -->
@@ -112,7 +131,7 @@ exit;*/
                             <div class="info-box">
                                 <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-briefcase"></i></span>
                                 <div class="info-box-content">
-                                    <span class="info-box-text">HR Vacancies</span>
+                                    <span class="info-box-text">Vacancies</span>
                                     <span class="info-box-number"><?= Yii::$app->dashboard->getVacancies() ?>
                                       <small></small>
                                     </span>
@@ -131,7 +150,7 @@ exit;*/
                             <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text">Open Approvals</span>
+                                <span class="info-box-text">Open Requests</span>
                                 <span class="info-box-number"><?= Yii::$app->dashboard->getOpenApprovals() ?>
                                   <small></small>
                                 </span>
@@ -198,26 +217,6 @@ exit;*/
 
                     <!-- /.col -->
                     <div class="col-12 col-sm-6 col-md-3">
-                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'leave/activeleaves' ?>" target="_blank">
-                            <div class="info-box mb-3">
-                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-paper-plane"></i></span>
-
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Staff on Leave</span>
-                                    <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getOnLeave())?></span>
-                                </div>
-                                <!-- /.info-box-content -->
-                            </div>
-                        </a>
-                        <!-- /.info-box -->
-                    </div>
-                    <!-- /.col -->
-
-                    <!-- fix for small devices only -->
-                    <div class="clearfix hidden-md-up"></div>
-
-                    <!-- /.col -->
-                    <div class="col-12 col-sm-6 col-md-3">
                         <a href="<?= Yii::$app->recruitment->absoluteUrl().'recruitment/internalapplications' ?>" target="_blank">
                             <div class="info-box mb-3">
                                 <span class="info-box-icon bg-info elevation-1"><i class="fas fa-paper-plane"></i></span>
@@ -232,6 +231,49 @@ exit;*/
                         <!-- /.info-box -->
                     </div>
                     <!-- /.col -->
+                    <!-- fix for small devices only -->
+                    <div class="clearfix hidden-md-up"></div>
+
+                    <!-- .col my Approved -->
+
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">My Approved</span>
+                                <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getSuperApproved())?></span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+
+
+                    <!-- /.col -->
+
+
+                    <!-- fix for small devices only -->
+                    <div class="clearfix hidden-md-up"></div>
+
+                    <!-- .col My Rejected -->
+
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box mb-3">
+                            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-users"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">My Rejected</span>
+                                <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getSuperRejected())?></span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+
+
+                    <!-- /.col -->
+
 
 
                 </div>
@@ -240,74 +282,33 @@ exit;*/
                 <div class="row">
 
                     <!-- /.col -->
-                    <div class="col-12 col-sm-6 col-md-3">
-                        <div class="info-box mb-3">
-                            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
-                            <div class="info-box-content">
-                                <span class="info-box-text">Super Approved</span>
-                                <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getSuperApproved())?></span>
-                            </div>
-                            <!-- /.info-box-content -->
-                        </div>
-                        <!-- /.info-box -->
-                    </div>
                     <!-- /.col -->
 
                     <!-- /.col -->
-                    <div class="col-12 col-sm-6 col-md-3">
-                        <div class="info-box mb-3">
-                            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-users"></i></span>
 
-                            <div class="info-box-content">
-                                <span class="info-box-text">Super Rejected</span>
-                                <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getSuperRejected())?></span>
-                            </div>
-                            <!-- /.info-box-content -->
-                        </div>
-                        <!-- /.info-box -->
-                    </div>
                     <!-- /.col -->
 
 
                 </div>
 
 
-
-
-                <div class="card card-blue">
-                    <div class="card-header">
-                        <h3 class="card-title">My Leave Balances</h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Staff on Leave This Week</h3>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered dt-responsive table-hover" id="leaves">
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <table class="table table-bordered dt-responsive table-hover" id="leavebances">
-                            <thead>
-                                <tr>
-                                    <th>Leave Type</th>
-                                    <th>Balance</th>
-                                </tr>
-                            </thead>
-                            <tbody>
 
-                            <?php
-
-
-
-                            foreach($balances as $key => $val){
-                                if($key == 'Key')
-                                    continue;
-                                print '
-                                    <tr>
-                                        <td>'.$key.'</td><td>'.$val.'</td>
-                                     </tr>
-                            ';
-
-                            } ?>
-
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
+
+
             </div>
 
         </div>
@@ -340,18 +341,53 @@ $script = <<<JS
            
        });
           
-          $('#leavebances').DataTable({});
-        
-       //Hidding some 
-       var table = $('#onleave').DataTable();
-       //table.columns([3,4,5,6,]).visible(false);
-    
-    /*End Data tables*/
-        $('#onleave').on('click','tr', function(){
+       /*Active leaves */
+       
+            $('#leaves').DataTable({
+           
+            //serverSide: true,  
+            ajax: '/leave/getactiveleaves',
+            paging: true,
+            columns: [
+                // { title: 'Leave No.' ,data: 'Application Code'},
+                { title: 'Employee Name' ,data: 'Employee_Name'},
+                { title: 'Days Applied' ,data: 'Days_Applied'},
+                { title: 'Start Date' ,data: 'Start_Date'},
+                { title: 'End Date' ,data: 'End_Date'},
+                { title: 'Return Date' ,data: 'Return_Date'},
+                { title: 'Leave Type' ,data: 'Leave_Type'},
+                // { title: 'Status', data: 'Status' },
+               
+            ] ,                              
+           language: {
+                "zeroRecords": "No Active Leaves to display"
+            },
             
-        });
+            //order : [[ 2, "desc" ]]     
+       });
+        
+      
+    
+   
     });
         
 JS;
 
 $this->registerJs($script);
+
+
+$style = <<<CSS
+tr > td:nth-child(5), th:nth-child(5){
+    color: red!important;
+}
+
+tr > td:nth-child(3), th:nth-child(3){
+    color: lightgreen!important;
+}
+
+tr > td:nth-child(4), th:nth-child(4){
+    color: #0056b3!important;
+}
+CSS;
+
+$this->registerCss($style);

@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
             </div>
             <div class="card-body">
                 <?php
-                $form = ActiveForm::begin(['action'=> ['employeerequisition/create']]); ?>
+                $form = ActiveForm::begin(); ?>
                 <div class="row">
                     <div class="col-md-6">
 
@@ -48,7 +48,7 @@ use yii\widgets\ActiveForm;
                             <?= $form->field($model, 'Key')->hiddenInput(['readonly'=> true])->label(false); ?>
                             <?= $form->field($model, 'Employment_Type')->dropDownList($employmentTypes, ['prompt' => 'Select Employment Type']) ?>
                             <?= $form->field($model, 'Priority')->dropDownList($priority, ['prompt' => 'Select Requisition Priority']) ?>
-                            <?= $form->field($model, 'Required_Positions')->textInput(['type' => 'number']) ?>
+                            <?= $form->field($model, 'Positions')->textInput(['type' => 'number']) ?>
                             <?= $form->field($model, 'Requisition_Type')->dropDownList($requisitionType, ['prompt' => 'Select Requisition Type']) ?>
                             <?= $form->field($model, 'Approval_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                             <?= $form->field($model, 'Approval_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>

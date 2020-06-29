@@ -22,11 +22,25 @@ if(Yii::$app->session->hasFlash('error')){
 
 
 
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+                <?= $form->field($model, 'username',[
+                    'inputTemplate' => '<div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span>{input}</div>',
+                    ])
+                    ->textInput([
+                            'autofocus' => true,
+                            'placeholder' => 'Username'
+                    ])
+                    ->label(false)
+?>
 
 
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
+                <?= $form->field($model, 'password',[
+                    'inputTemplate' => '<div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-lock"></i></span>{input}</div>'
+                    ])->passwordInput([
+                            'Placeholder' => 'Password'
+])
+                        ->label(false)
+?>
 
 
 
@@ -40,9 +54,9 @@ if(Yii::$app->session->hasFlash('error')){
                 </div>
 
                 <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                    <?= Html::submitButton('Login', ['class' => 'btn btn-warning', 'name' => 'login-button']) ?>
 
-                    <?= Html::a('signup', ['/site/signup'],['class' => 'btn btn-warning']) ?>
+                    <?php Html::a('signup', ['/site/signup'],['class' => 'btn btn-warning']) ?>
                 </div>
 
     <?php ActiveForm::end(); ?>
@@ -52,13 +66,59 @@ if(Yii::$app->session->hasFlash('error')){
 <?php
 
 $style = <<<CSS
-            .login-page { 
-          background: url("../../images/2 - 46569988015_a6687614de_b.jpg") no-repeat center center fixed; 
+    .login-page { 
+          background: url("../../images/login.png") no-repeat center center fixed; 
           -webkit-background-size: cover;
           -moz-background-size: cover;
           -o-background-size: cover;
           background-size: cover;
     }
+    
+    .top-logo {
+        display: flex;
+        margin-left: 10px;
+       
+    }
+     .top-logo img { 
+                width: 120px;
+                height: auto;
+                position: absolute;
+                left: 15px;
+                top:15px;
+                
+          
+            }
+     .login-logo a  {
+        color: #f6c844!important;
+        font-family: sans-serif, Verdana;
+        font-size: larger;
+        font-weight: 400;
+     }
+
+    input.form-control {
+        border-left: 0!important;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border: 1px solid #f6c844;
+    }
+    
+    span.input-group-text {
+        border-right: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border: 1px solid #f6c844;
+    }
+    
+   .card {
+    background-color: rgba(0,0,0,.1);
+   }
+   
+   .login-card-body {
+     background-color: rgba(0,0,0,.1);
+   }
+
+    
+    
 CSS;
 
 $this->registerCss($style);

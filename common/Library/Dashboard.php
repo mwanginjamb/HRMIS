@@ -122,6 +122,7 @@ class Dashboard extends Component
             'No_of_Posts' => '>0',
 
         ];
+        $res = [];
         $result = Yii::$app->navhelper->getData($service,$filter);
         foreach($result as $req){
             $RequisitionType = Yii::$app->recruitment->getRequisitionType($req->Job_ID);

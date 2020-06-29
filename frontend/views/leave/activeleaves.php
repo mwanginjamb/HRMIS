@@ -39,12 +39,6 @@ if(Yii::$app->session->hasFlash('success')){
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Staff on Leave List</h3>
-
-
-
-
-
-
             </div>
             <div class="card-body">
                 <table class="table table-bordered dt-responsive table-hover" id="leaves">
@@ -84,9 +78,7 @@ $script = <<<JS
                 "zeroRecords": "No Active Leaves to display"
             },
             
-            //order : [[ 2, "desc" ]]
-            
-           
+            //order : [[ 2, "desc" ]]     
        });
         
        //Hidding some 

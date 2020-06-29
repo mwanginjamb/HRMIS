@@ -63,6 +63,8 @@ class LeaveController extends Controller
 
     public function actionIndex(){
 
+        //print '<pre>';
+       // print_r(Yii::$app->user->identity->Employee[0]->Last_Name); exit;
 
         return $this->render('index');
 
@@ -385,11 +387,11 @@ class LeaveController extends Controller
 
 
 
-    public function getLeaveTypes($gender = 'Female'){
+    public function getLeaveTypes($gender = ''){
         $service = Yii::$app->params['ServiceName']['leaveTypes'];
         $filter = [
             'Gender' => $gender,
-            'Gender' => 'Both'
+            'Gender' => !empty(Yii::$app->user->identity->Employee[0]->Gender)?Yii::$app->user->identity->Employee[0]->Gender:'Both'
         ];
 
         $leavetypes = \Yii::$app->navhelper->getData($service,$filter);
@@ -409,20 +411,24 @@ class LeaveController extends Controller
         $service = Yii::$app->params['ServiceName']['activeLeaveList'];
 
         $active = \Yii::$app->navhelper->getData($service);
-        krsort($active);//sort  keys in descending order
+        if(is_array($active)){
+            krsort($active);//sort  keys in descending order
+        }
+
 
         //Yii::$app->recruitment->printrr($active);
         $result = [];
         foreach($active as $leave){
 
             $result['data'][] = [
-                'Key' => $leave->Key,
+                'Key' => !empty($leave->Key)?$leave->Key:'',
                 'Application Code' => !empty($leave->Application_Code)?$leave->Application_Code:'',
                 'Employee_Name' => !empty($leave->Names)?$leave->Names:'',
                 'Days_Applied' => $leave->Days_Applied,
                 'Start_Date' => $leave->Start_Date,
                 'Return_Date' => $leave->Return_Date,
                 'End_Date' => $leave->End_Date,
+                'Leave_Type' => !empty($leave->Leave_Type)?$leave->Leave_Type:'',
                 'Status' => $leave->Status,
             ];
         }

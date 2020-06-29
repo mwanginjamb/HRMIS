@@ -50,28 +50,19 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                     <div class="col-md-6">
 
                             <?=
-                            $form->field($model, 'Employee_No')->dropDownList($employees,[
-                                'prompt' => 'Select Employee to Recall',
-                                'onchange' => '
-                                            $.get($("input[name=absolute]").val()+"leaverecall/create",{"empno": $(this).val() },function(data){                                                
-                                            }).done(function(msg){
-                                                location.reload();
-                                            },"json");                                        
-                                            '
-                                ,
-                            ])
+                            $form->field($model, 'Employee_No')->textInput(['readonly' => true])
                             ?>
                             <?= $form->field($model, 'Recall_No')->textInput(['readonly'=> 'true']) ?>
 
                             <?= ($model->Employee_No)?$form->field($model, 'Leave_No_To_Recall')->dropDownList($leaves,[
                                     'prompt' => 'Select Leave to Recall',
-                                'onchange' => '
-                                            $.get("input[name=absolute]").val()+"leaverecall/create",{"Leave_No_To_Recall": $(this).find(":selected").val(), "Key": $("#leaverecall-key").val() },function(data){                                                
-                                            }).done(function(msg){
-                                                location.reload();
-                                            },"json");                                        
-                                            '
-                                ,
+                                    'onchange' => '
+                                                $.get("input[name=absolute]").val()+"leaverecall/create",{"Leave_No_To_Recall": $(this).find(":selected").val(), "Key": $("#leaverecall-key").val() },function(data){                                                
+                                                }).done(function(msg){
+                                                    location.reload();
+                                                },"json");                                        
+                                                '
+                                    ,
                             ]): '' ?>
 
                             <?= $form->field($model, 'Days_To_Recall')->textInput(['type' => 'number']) ?>
@@ -156,7 +147,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 $script = <<<JS
     $(function(){
-        $("#leaverecall-employee_no").select2();
+        // $("#leaverecall-employee_no").select2();
         var url = $('input[name=absolute]').val();
         
         $("select#leaverecall-leave_no_to_recall").on('change', function(){

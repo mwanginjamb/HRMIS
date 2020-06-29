@@ -539,6 +539,10 @@ class RecruitmentController extends Controller
         $requirements = '';
 
         //Refresh the Job Applicant Requirements on each update
+
+        //Yii::$app->recruitment->printrr(Yii::$app->session->get('Job_Application_No'));
+
+
         if(Yii::$app->session->has('Job_Application_No')){
             $requirements = $this->getRequiremententries();
             Yii::$app->session->set('requirements',$requirements);
@@ -567,10 +571,10 @@ class RecruitmentController extends Controller
 
             $result = Yii::$app->navhelper->SubmitJobApplication($service,$data); // This code unit should return  the Job_Applicant_No so as to generate jobrequirement entries.
 
-            //Yii::$app->recruitment->printrr($data);
+            //Yii::$app->recruitment->printrr($result);
 
             //Remove sessions set within the process
-            Yii::$app->session->remove('REQUISITION_NO');
+            //Yii::$app->session->remove('REQUISITION_NO');
 
             if(is_array($result)){
                 //store Job Applicant Number
@@ -579,6 +583,8 @@ class RecruitmentController extends Controller
                 $requirements = $this->getRequiremententries();
                 //store requirements in a session
                 Yii::$app->session->set('requirements',$requirements);
+
+               // Yii::$app->recruitment->printrr($requirements);
 
 
             }

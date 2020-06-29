@@ -69,8 +69,7 @@ class EmployeerequisitionController extends Controller
     public function actionCreate(){
 
         $model = new Employeerequsition();
-
-
+        $model->isNewRecord = true;
         $service = Yii::$app->params['ServiceName']['RequisitionEmployeeCard'];
 
         if(\Yii::$app->request->get('create') ){
@@ -84,21 +83,20 @@ class EmployeerequisitionController extends Controller
         $employmentTypes = $this->getEmploymentTypes();
         $priority = $this->getPriority();
         $requisitionType = $this->getRequisitionTypes();
-        $message = "";
-        $success = false;
+
 
         if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
 
-            $result = Yii::$app->navhelper->updateData($service,Yii::$app->request->post()['Leave']);
+            $result = Yii::$app->navhelper->updateData($service,Yii::$app->request->post()['Employeerequsition']);
 
-            if(is_object($result)){
+            if(!is_string($result)){
 
-                Yii::$app->session->setFlash('success','Leave request Created Successfully',true);
+                Yii::$app->session->setFlash('success','Employee Requisition Created Successfully',true);
                 return $this->redirect(['view','ApplicationNo' => $result->Application_No]);
 
             }else{
 
-                Yii::$app->session->setFlash('error','Error Creating Leave request: '.$result,true);
+                Yii::$app->session->setFlash('error','Error Creating Employee Requisition : '.$result,true);
                 return $this->redirect(['index']);
 
             }
@@ -118,53 +116,63 @@ class EmployeerequisitionController extends Controller
         ]);
     }
 
-    public function actionUpdate($ApplicationNo){
-        $service = Yii::$app->params['ServiceName']['reqApplicationCard'];
-        $leaveTypes = $this->getLeaveTypes();
-        $employees = $this->getEmployees();
-
-
+    public function actionUpdate($Requisition_No){
+        $model = new Employeerequsition();
+        $model->isNewRecord = false;
+        $service = Yii::$app->params['ServiceName']['RequisitionEmployeeCard'];
         $filter = [
-            'Application_No' => $ApplicationNo
+            'Requisition_No' => $Requisition_No,
         ];
-        $result = Yii::$app->navhelper->getData($service, $filter);
+        $result = Yii::$app->navhelper->getData($service,$filter);
+        if(is_array($result)){
+            //load nav result to model
+            $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;
+        }else{
+            Yii::$app->navhelper->printrr($result);
+        }
 
 
+        $jobs = $this->getJobs();
+        $requestReasons = $this->getRequestReasons();
+        $employmentTypes = $this->getEmploymentTypes();
+        $priority = $this->getPriority();
+        $requisitionType = $this->getRequisitionTypes();
 
-        //load nav result to model
-        $leaveModel = new Leave();
+        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeerequsition'],$model) ){
+            $result = Yii::$app->navhelper->updateData($service,$model);
 
-        $model = $this->loadtomodel($result[0],$leaveModel);
-
-
-
-        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
-            $result = Yii::$app->navhelper->updateData($model);
-
-
-            if(!empty($result)){
-                Yii::$app->session->setFlash('success','Leave request Updated Successfully',true);
-                return $this->redirect(['view','ApplicationNo' => $result->Application_No]);
+            // Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            if(!is_string($result)){
+                Yii::$app->session->setFlash('success','Employee Requisition Updated Successfully',true);
+                return $this->redirect(['view','Requisition_No' => $result->Requisition_No]);
             }else{
-                Yii::$app->session->setFlash('error','Error Updating Leave Request : '.$result,true);
+
+                Yii::$app->session->setFlash('error','Error Updating Employee Requisition : '.$result,true);
                 return $this->redirect(['index']);
+
             }
+
 
         }
 
+
+
         return $this->render('update',[
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name')
+            'jobs' => $jobs,
+            'requestReasons' => $requestReasons,
+            'employmentTypes' => $employmentTypes,
+            'priority' => $priority,
+            'requisitionType' => $requisitionType
         ]);
     }
 
-    public function actionView($ApplicationNo){
+    public function actionView($Requisition_No){
         $service = Yii::$app->params['ServiceName']['RequisitionEmployeeCard'];
 
 
         $filter = [
-            'Requisition_No' => $ApplicationNo
+            'Requisition_No' => $Requisition_No
         ];
 
         $requisition = Yii::$app->navhelper->getData($service, $filter);
@@ -172,6 +180,9 @@ class EmployeerequisitionController extends Controller
         //load nav result to model
         $requisitionModel = new Employeerequsition();
         $model = $this->loadtomodel($requisition[0],$requisitionModel);
+
+        //print '<pre>';
+        //print_r($model); exit;
 
         $jobs = $this->getJobs();
         $requestReasons = $this->getRequestReasons();
@@ -192,7 +203,10 @@ class EmployeerequisitionController extends Controller
 
     public function getJobs(){
         $service = Yii::$app->params['ServiceName']['JobsList'];
-        $jobs = \Yii::$app->navhelper->getData($service);
+        $filter = [
+            'Status' => 'Approved'
+        ];
+        $jobs = \Yii::$app->navhelper->getData($service, $filter);
         (object)$result = [];
 
         foreach($jobs as $j){
@@ -272,10 +286,10 @@ class EmployeerequisitionController extends Controller
 
 
             $link = $updateLink =  '';
-            $Viewlink = Html::a('Details',['view','ApplicationNo'=> $req->Requisition_No ],['class'=>'btn btn-outline-primary btn-xs']);
+            $Viewlink = Html::a('Details',['view','Requisition_No'=> $req->Requisition_No ],['class'=>'btn btn-outline-primary btn-xs']);
             if($req->Approval_Status == 'Open' ){
                 $link = Html::a('Send Approval Request',['approval-request','app'=> $req->Requisition_No ],['class'=>'btn btn-primary btn-xs']);
-                $updateLink = Html::a('Update Leave',['update','ApplicationNo'=> $req->Requisition_No ],['class'=>'btn btn-info btn-xs']);
+                $updateLink = Html::a('Update Leave',['update','Requisition_No'=> $req->Requisition_No ],['class'=>'btn btn-info btn-xs']);
             }else if($req->Approval_Status == 'Pending_Approval'){
                 $link = Html::a('Cancel Approval Request',['cancel-request','app'=> $req->Requisition_No ],['class'=>'btn btn-warning btn-xs']);
             }

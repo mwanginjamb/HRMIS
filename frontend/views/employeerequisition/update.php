@@ -12,9 +12,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\AgendaDocument */
 
-$this->title = 'Update Leave: ' . $model->Application_No;
-$this->params['breadcrumbs'][] = ['label' => 'Update Leave', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->Application_No, 'url' => ['view', 'id' => $model->Application_No]];
+$this->title = 'Update Requisition: ' . $model->Requisition_No;
+$this->params['breadcrumbs'][] = ['label' => 'Employee Requsitions', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Update Employee Requisition', 'url' => ['update', 'Requisition_No' => $model->Requisition_No]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="agenda-document-update">
@@ -23,8 +23,11 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
-        'leaveTypes' => $leaveTypes,
-        'relievers' => $relievers
+        'jobs' => $jobs,
+        'requestReasons' => $requestReasons,
+        'employmentTypes' => $employmentTypes,
+        'priority' => $priority,
+        'requisitionType' => $requisitionType
     ]) ?>
 
 </div>

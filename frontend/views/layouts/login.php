@@ -14,7 +14,7 @@ use frontend\assets\AdminlteAsset;
 use common\widgets\Alert;
 
 AdminlteAsset::register($this);
-$this->title = 'HRMIS';
+$this->title = 'Welcome to the AAS Integrated Systems Portal';
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -30,9 +30,12 @@ $this->title = 'HRMIS';
 <body class="hold-transition login-page">
 <?php $this->beginBody() ?>
 
+<div class="top-logo">
+    <img src="<?= \yii\helpers\Url::to('/images/Logo.png')?>" />
+</div>
 
 <div class="login-logo">
-    <a href="../../index2.html"><b><?= $this->title ?></a>
+    <a href="#"><b><?= $this->title ?></a>
 </div>
 <!-- /.login-logo -->
 <div class="card">

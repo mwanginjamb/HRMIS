@@ -24,6 +24,7 @@ class Employeerequsition extends Model
     public $Priority;
     public $Vacant_Positions;
     public $Required_Positions;
+    public $Positions;
     public $Global_Dimension_2_Code;
     public $Requisition_Type;
     public $Approval_Status;
@@ -34,6 +35,7 @@ class Employeerequsition extends Model
     public $Nature_of_Employment;
     public $No_of_Job_Applications;
     public $Advertised;
+    public $isNewRecord;
 
     public function rules()
     {

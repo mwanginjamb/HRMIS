@@ -191,7 +191,8 @@ $script = <<<JS
         
         //Marking the checklist
         var absolute = $('input[name=absolute]').val();
-        $('input[name=requirement]').on('click', function(){
+        $('input[name=requirement]').on('click', function(e){
+            //e.preventDefault();
             var key = $(this).attr('rel');
             var Line_No = $(this).attr('rev');
             $.post(absolute+'recruitment/requirementscheck',{"Key": key,"Line_No": Line_No }).done(function(msg){

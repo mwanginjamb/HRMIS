@@ -50,7 +50,7 @@ $this->title = 'HRMIS - Employee Requisition Card';
                         <?= $form->field($model, 'Key')->hiddenInput(['readonly'=> true])->label(false); ?>
                         <?= $form->field($model, 'Employment_Type')->dropDownList($employmentTypes, ['prompt' => 'Select Employment Type','readonly'=> 'true','disabled'=>true]) ?>
                         <?= $form->field($model, 'Priority')->dropDownList($priority, ['prompt' => 'Select Requisition Priority','readonly'=> 'true','disabled'=>true]) ?>
-                        <?= $form->field($model, 'Required_Positions')->textInput(['type' => 'number','readonly'=> 'true','disabled'=>true]) ?>
+                        <?= $form->field($model, 'Positions')->textInput(['type' => 'number','readonly'=> 'true','disabled'=>true]) ?>
                         <?= $form->field($model, 'Requisition_Type')->dropDownList($requisitionType, ['prompt' => 'Select Requisition Type','readonly'=> 'true','disabled'=>true]) ?>
                         <?= $form->field($model, 'Approval_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                         <?= $form->field($model, 'Approval_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
