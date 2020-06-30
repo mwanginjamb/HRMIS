@@ -31,7 +31,7 @@ exit;*/
                     <div class="card-body box-profile">
                         <div class="text-center">
                             <img class="profile-user-img img-fluid img-circle"
-                                 src="../../dist/img/user4-128x128.jpg"
+                                 src="https://via.placeholder.com/150/cccccc/FFFFFF/?text=<?= Yii::$app->user->identity->Employee[0]->Last_Name?>"
                                  alt="User profile picture">
                         </div>
 
@@ -149,13 +149,17 @@ exit;*/
                         <div class="info-box">
                             <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
 
-                            <div class="info-box-content">
-                                <span class="info-box-text">Open Requests</span>
-                                <span class="info-box-number"><?= Yii::$app->dashboard->getOpenApprovals() ?>
-                                  <small></small>
-                                </span>
-                            </div>
-                            <!-- /.info-box-content -->
+                            <a href="<?= Yii::$app->recruitment->absoluteUrl().'site/openrequests' ?>" target="_blank">
+
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Open Requests</span>
+                                        <span class="info-box-number"><?= Yii::$app->dashboard->getOpenApprovals() ?>
+                                          <small></small>
+                                        </span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+
+                            </a>
                         </div>
                         <!-- /.info-box -->
                     </div>
@@ -164,16 +168,19 @@ exit;*/
                     <div class="clearfix hidden-md-up"></div>
                     <!-- /.col -->
                     <div class="col-12 col-sm-6 col-md-3">
-                        <div class="info-box mb-3">
-                            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-thumbs-up"></i></span>
 
-                            <div class="info-box-content">
-                                <span class="info-box-text">Approved Reqs.</span>
-                                <span class="info-box-number"><?= Yii::$app->dashboard->getApprovedApprovals() ?></span>
+
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'site/approvedrequests' ?>" target="_blank">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-success elevation-1"><i class="fas fa-thumbs-up"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Approved Reqs.</span>
+                                    <span class="info-box-number"><?= Yii::$app->dashboard->getApprovedApprovals() ?></span>
+                                </div>
+                                <!-- /.info-box-content -->
                             </div>
-                            <!-- /.info-box-content -->
-                        </div>
-                        <!-- /.info-box -->
+                            <!-- /.info-box -->
+                        </a>
                     </div>
                     <!-- /.col -->
 
@@ -181,16 +188,22 @@ exit;*/
                     <div class="clearfix hidden-md-up"></div>
 
                     <div class="col-12 col-sm-6 col-md-3">
-                        <div class="info-box mb-3">
-                            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-times"></i></span>
 
-                            <div class="info-box-content">
-                                <span class="info-box-text">Rejected Reqs.</span>
-                                <span class="info-box-number"><?= Yii::$app->dashboard->getRejectedApprovals() ?></span>
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'site/rejectedrequests' ?>" target="_blank">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-times"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Rejected Reqs.</span>
+                                    <span class="info-box-number"><?= Yii::$app->dashboard->getRejectedApprovals() ?></span>
+                                </div>
+                                <!-- /.info-box-content -->
                             </div>
-                            <!-- /.info-box-content -->
-                        </div>
-                        <!-- /.info-box -->
+                            <!-- /.info-box -->
+
+                        </a>
+
+
+
                     </div>
 
 
@@ -237,16 +250,19 @@ exit;*/
                     <!-- .col my Approved -->
 
                     <div class="col-12 col-sm-6 col-md-3">
-                        <div class="info-box mb-3">
-                            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
-                            <div class="info-box-content">
-                                <span class="info-box-text">My Approved</span>
-                                <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getSuperApproved())?></span>
-                            </div>
-                            <!-- /.info-box-content -->
-                        </div>
-                        <!-- /.info-box -->
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'site/supervisorapproved' ?>" target="_blank">
+                                <div class="info-box mb-3">
+                                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">My Approved</span>
+                                        <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getSuperApproved())?></span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                        </a>
+
                     </div>
 
 
@@ -259,16 +275,18 @@ exit;*/
                     <!-- .col My Rejected -->
 
                     <div class="col-12 col-sm-6 col-md-3">
-                        <div class="info-box mb-3">
-                            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-users"></i></span>
 
-                            <div class="info-box-content">
-                                <span class="info-box-text">My Rejected</span>
-                                <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getSuperRejected())?></span>
-                            </div>
-                            <!-- /.info-box-content -->
-                        </div>
-                        <!-- /.info-box -->
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'site/supervisorrejected' ?>" target="_blank">
+                                <div class="info-box mb-3">
+                                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-users"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">My Rejected</span>
+                                        <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getSuperRejected())?></span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                        </a>
                     </div>
 
 
@@ -390,4 +408,4 @@ tr > td:nth-child(4), th:nth-child(4){
 }
 CSS;
 
-$this->registerCss($style);
+// $this->registerCss($style);

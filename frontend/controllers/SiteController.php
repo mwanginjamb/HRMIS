@@ -3,8 +3,11 @@ namespace frontend\controllers;
 
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
+use Office365\PHP\Client\Runtime\OData\JsonFormat;
 use Yii;
 use yii\base\InvalidArgumentException;
+use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -14,6 +17,8 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+
+
 
 /**
  * Site controller
@@ -94,6 +99,41 @@ class SiteController extends Controller
             'supervisor' => $supervisor,
             'balances' => $balances
             ]);
+    }
+
+    public function actionOpenrequests()
+    {
+        return $this->render('openrequests', [
+
+        ]);
+    }
+
+    public function actionApprovedrequests()
+    {
+        return $this->render('approvedrequests', [
+
+        ]);
+    }
+
+    public function actionRejectedrequests()
+    {
+        return $this->render('rejectedrequests', [
+
+        ]);
+    }
+
+    public function actionSupervisorrejected()
+    {
+        return $this->render('supervisorrejected', [
+
+        ]);
+    }
+
+    public function actionSupervisorapproved()
+    {
+        return $this->render('supervisorapproved', [
+
+        ]);
     }
 
     /**
@@ -341,5 +381,226 @@ class SiteController extends Controller
 
         return $result;
 
+    }
+
+    // Get Open Requests
+
+    function actionGetopenrequests()
+    {
+        $result = [];
+        $service = Yii::$app->params['ServiceName']['RequeststoApprove'];
+        $filter = [
+            'Sender_ID' => Yii::$app->user->identity->getId(),
+            'Status' => 'Open'
+        ];
+        $result = Yii::$app->navhelper->getData($service,$filter);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the filter result to false
+            return [];
+        }else {
+            $count = 0;
+            krsort($result);
+            foreach( $result as $app){
+                $count++;
+                $detailsLink = Html::a('<i class="fa fa-eye"></i>',['leave/view','ApplicationNo'=> $app->Document_No ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
+
+                $result['data'][] = [
+                    'Key' => $app->Key,
+                    'id' => $count,
+                    'Details' => $app->Details,
+                    'Comment' => $app->Comment,
+                    'Sender_ID' => $this->getName($app->Sender_ID),
+                    'Due_Date' => $app->Due_Date,
+                    'Status' => $app->Status,
+                    'Document_No' => $app->Document_No,
+                    'details' => $detailsLink
+
+                ];
+            }
+        }
+
+        return $result;
+
+    }
+
+    function actionGetapprovedrequests()
+    {
+        $result = [];
+        $service = Yii::$app->params['ServiceName']['RequeststoApprove'];
+        $filter = [
+            'Sender_ID' => Yii::$app->user->identity->getId(),
+            'Status' => 'Approved'
+        ];
+        $result = Yii::$app->navhelper->getData($service,$filter);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the filter result to false
+            return [];
+        }else {
+            $count = 0;
+            krsort($result);
+            foreach( $result as $app){
+                $count++;
+
+                $detailsLink = Html::a('<i class="fa fa-eye"></i>',['leave/view','ApplicationNo'=> $app->Document_No ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
+
+                $result['data'][] = [
+                    'Key' => $app->Key,
+                    'id' => $count,
+                    'Details' => $app->Details,
+                    'Comment' => $app->Comment,
+                    'Sender_ID' => $this->getName($app->Sender_ID),
+                    'Due_Date' => $app->Due_Date,
+                    'Status' => $app->Status,
+                    'Document_No' => $app->Document_No,
+                    'details' => $detailsLink
+
+                ];
+            }
+        }
+
+        return $result;
+
+    }
+
+
+
+    function actionGetrejectedrequests()
+    {
+        $result = [];
+        $service = Yii::$app->params['ServiceName']['RequeststoApprove'];
+        $filter = [
+            'Sender_ID' => Yii::$app->user->identity->getId(),
+            'Status' => 'Rejected'
+        ];
+        $result = Yii::$app->navhelper->getData($service,$filter);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the filter result to false
+            return [];
+        }else {
+            $count = 0;
+            krsort($result);
+            foreach( $result as $app){
+                $count++;
+
+                $detailsLink = Html::a('<i class="fa fa-eye"></i>',['leave/view','ApplicationNo'=> $app->Document_No ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
+
+                $result['data'][] = [
+                    'Key' => $app->Key,
+                    'id' => $count,
+                    'Details' => $app->Details,
+                    'Comment' => $app->Comment,
+                    'Sender_ID' => $this->getName($app->Sender_ID),
+                    'Due_Date' => $app->Due_Date,
+                    'Status' => $app->Status,
+                    'Document_No' => $app->Document_No,
+                    'details' => $detailsLink
+
+                ];
+            }
+        }
+
+        return $result;
+
+    }
+
+    function actionGetsupervisorapproved()
+    {
+        $result = [];
+        $service = Yii::$app->params['ServiceName']['RequeststoApprove'];
+        $filter = [
+            'Approver_ID' => Yii::$app->user->identity->getId(),
+            'Status' => 'Approved'
+        ];
+        $result = Yii::$app->navhelper->getData($service,$filter);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the filter result to false
+            return [];
+        }else {
+            $count = 0;
+            krsort($result);
+            foreach( $result as $app){
+                $count++;
+
+                $detailsLink = Html::a('<i class="fa fa-eye"></i>',['leave/view','ApplicationNo'=> $app->Document_No ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
+
+                $result['data'][] = [
+                    'Key' => $app->Key,
+                    'id' => $count,
+                    'Details' => $app->Details,
+                    'Comment' => $app->Comment,
+                    'Sender_ID' => $this->getName($app->Sender_ID),
+                    'Due_Date' => $app->Due_Date,
+                    'Status' => $app->Status,
+                    'Document_No' => $app->Document_No,
+                    'details' => $detailsLink
+
+                ];
+            }
+        }
+
+        return $result;
+
+    }
+
+
+    function actionGetsupervisorrejected()
+    {
+        $result = [];
+        $service = Yii::$app->params['ServiceName']['RequeststoApprove'];
+        $filter = [
+            'Approver_ID' => Yii::$app->user->identity->getId(),
+            'Status' => 'Rejected'
+        ];
+        $result = Yii::$app->navhelper->getData($service,$filter);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the filter result to false
+            return [];
+        }else {
+            $count = 0;
+            krsort($result);
+            foreach( $result as $app){
+                $count++;
+
+                $detailsLink = Html::a('<i class="fa fa-eye"></i>',['leave/view','ApplicationNo'=> $app->Document_No ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
+
+                $result['data'][] = [
+                    'Key' => $app->Key,
+                    'id' => $count,
+                    'Details' => $app->Details,
+                    'Comment' => $app->Comment,
+                    'Sender_ID' => $this->getName($app->Sender_ID),
+                    'Due_Date' => $app->Due_Date,
+                    'Status' => $app->Status,
+                    'Document_No' => $app->Document_No,
+                    'details' => $detailsLink
+
+                ];
+            }
+        }
+
+        return $result;
+
+    }
+
+
+
+    public function getName($userID){
+
+        //get Employee No
+        $user = \common\models\User::find()->where(['User ID' => $userID])->one();
+        $No = $user->{'Employee No_'};
+        //Get Employees full name
+        $service = Yii::$app->params['ServiceName']['employees'];
+        $filter = [
+            'No' => $No
+        ];
+
+        $results = Yii::$app->navhelper->getData($service,$filter);
+        return $results[0]->Full_Name;
     }
 }

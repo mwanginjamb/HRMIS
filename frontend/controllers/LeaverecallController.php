@@ -329,7 +329,7 @@ class LeaverecallController extends Controller
         $result = [];
 
         foreach($leaves as $leave){
-            if($leave->Days_Applied > 0) {
+            if(isset($leave->Days_Applied) && $leave->Days_Applied > 0) {
                 $result[] = [
                     'No' => $leave->Application_No,
                     'Description' => $leave->Application_No . ' | ' . $leave->Start_Date . ' | ' . $leave->End_Date . ' | ' . $leave->Days_Applied,

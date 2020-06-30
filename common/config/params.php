@@ -56,6 +56,7 @@ return [
         'leaveApplicationCard' => 'leaveApplicationCard', //71075
         'leaveBalance' => 'leaveBalance',//71153
         'leaveTypes' => 'leaveTypes', //70045
+        'LeaveTypesLookup' => 'LeaveTypesLookup', //50006
         'leaveRecallCard' => 'leaveRecallCard',//71076
         'leaveRecallList' => 'leaveRecallList',//71077
         'activeLeaveList' => 'activeLeaveList',//69005

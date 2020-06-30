@@ -388,10 +388,10 @@ class LeaveController extends Controller
 
 
     public function getLeaveTypes($gender = ''){
-        $service = Yii::$app->params['ServiceName']['leaveTypes'];
+        $service = Yii::$app->params['ServiceName']['LeaveTypesLookup']; //['leaveTypes'];
         $filter = [
-            'Gender' => $gender,
-            'Gender' => !empty(Yii::$app->user->identity->Employee[0]->Gender)?Yii::$app->user->identity->Employee[0]->Gender:'Both'
+           // 'Gender' => $gender,
+           //'Gender' => !empty(Yii::$app->user->identity->Employee[0]->Gender)?Yii::$app->user->identity->Employee[0]->Gender:'Both'
         ];
 
         $leavetypes = \Yii::$app->navhelper->getData($service,$filter);

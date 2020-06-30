@@ -64,6 +64,7 @@ class ApprovalsController extends Controller
 
     public function actionIndex(){
 
+        //exit(Yii::$app->user->identity->{'User ID'});
         return $this->render('index');
 
     }
@@ -205,11 +206,12 @@ class ApprovalsController extends Controller
 
         $filter = [
             'Approver_ID' => Yii::$app->user->identity->{'User ID'},
+            'Status' => 'Open',
         ];
         $approvals = \Yii::$app->navhelper->getData($service,$filter);
 
-       /* print '<pre>';
-       print_r($approvals ); exit;*/
+        /* print '<pre>';
+        print_r($approvals ); exit;*/
 
 
         $result = [];
@@ -218,17 +220,35 @@ class ApprovalsController extends Controller
             foreach($approvals as $app){
 
 
+                if(strpos($app->Details, 'Recalls') !== FALSE){
+                    $Rejectaction = 'rejectleaverecall';
+                    $Approveaction = 'approveleaverecall';
+                    $recall = TRUE;
+                }else{ // Leave Approvals
+                    $Rejectaction = 'reject-request';
+                    $Approveaction = 'approve-request';
+                    $recall = FALSE;
+                }
 
-                    $Approvelink = ($app->Status == 'Open')? Html::a('Approve Request',['approve-request','app'=> $app->Document_No ],['class'=>'btn btn-success btn-xs','data' => [
-                        'confirm' => 'Are you sure you want to Approve this request?',
-                        'method' => 'post',
-                    ]]):'';
+                $Approvelink = ($app->Status == 'Open')? Html::a('Approve Request',[ $Approveaction,'app'=> $app->Document_No ],['class'=>'btn btn-success btn-xs','data' => [
+                    'confirm' => 'Are you sure you want to Approve this request?',
+                    'method' => 'post',
+                ]]):'';
+
+                if($recall){
+                    $Rejectlink = ($app->Status == 'Open')? Html::a('Reject Request',[$Rejectaction,'app'=> $app->Document_No ],['class'=>'btn btn-warning btn-xs',
+                        'rel' => $app->Document_No,
+                        'rev' => $app->Record_ID_to_Approve,
+                    ]): "";
+                }else{ //Leave Rejection
                     $Rejectlink = ($app->Status == 'Open')? Html::a('Reject Request',['reject-request' ],['class'=>'btn btn-warning reject btn-xs',
                         'rel' => $app->Document_No,
                         'rev' => $app->Record_ID_to_Approve,
-                        ]): "";
+                    ]): "";
+                }
 
-                    $detailsLink = Html::a('Request Details',['leave/view','ApplicationNo'=> $app->Document_No ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
+
+                $detailsLink = Html::a('Request Details',['leave/view','ApplicationNo'=> $app->Document_No ],['class'=>'btn btn-outline-info btn-xs','target' => '_blank']);
 
 
 
@@ -262,10 +282,10 @@ class ApprovalsController extends Controller
         $request = Yii::$app->navhelper->ApproveLeaveRequest($service, $data);
 
         if(is_array($request)){
-            Yii::$app->session->setFlash('success','Leave Request Approved Successfully',true);
+            Yii::$app->session->setFlash('success','Request Approved Successfully',true);
             return $this->redirect(['index']);
         }else{
-            Yii::$app->session->setFlash('error','Error Approving Leave Request : '.$request,true);
+            Yii::$app->session->setFlash('error','Error Approving Request : '.$request,true);
             return $this->redirect(['index']);
         }
     }
@@ -287,7 +307,7 @@ class ApprovalsController extends Controller
             //return var_dump($tableid);
             $data = [
                 'Comment' => $comment,
-                 //'User_ID' => Yii::$app->user->identity->{'User ID'},
+                //'User_ID' => Yii::$app->user->identity->{'User ID'},
                 //'Entry_No' => 1,
                 'Table_ID' => $tableid, //Has issues on insert event in nav
                 'Document_No' => $documentno,
@@ -300,7 +320,7 @@ class ApprovalsController extends Controller
             $Commentrequest = Yii::$app->navhelper->postData($Commentservice,$data);
             //print '<pre>';
             //print_r($Commentrequest);
-           // return;
+            // return;
         }
 
         //End Adding Approval Comments
@@ -309,7 +329,7 @@ class ApprovalsController extends Controller
         if(count($Commentrequest)){
             $request = Yii::$app->navhelper->RejectLeaveRequest($service, $Approvaldata);
         }else{
-            Yii::$app->session->setFlash('error','Comments Page: Error Rejecting Leave Request : '.$Commentrequest,true);
+            Yii::$app->session->setFlash('error','Comments Page: Error Rejecting Approval Request : '.$Commentrequest,true);
 
             return $this->redirect(['index']);
         }
@@ -317,19 +337,56 @@ class ApprovalsController extends Controller
 
         if(is_array($request)){
 
-           /* print '<pre>';
-            print_r($request); return;*/
-            Yii::$app->session->setFlash('success','Leave Request Rejected Successfully',true);
+            /* print '<pre>';
+             print_r($request); return;*/
+            Yii::$app->session->setFlash('success','Approval Request Rejected Successfully',true);
             return $this->redirect(['index']);
         }else{
 
-             print '<pre>';
+            print '<pre>';
             print_r($request); return;
 
             Yii::$app->session->setFlash('error','Approvals Page: Error Rejecting Leave Request : '.$request,true);
             return $this->redirect(['index']);
         }
     }
+
+    // Approve Leave Recall Request
+
+
+    public function actionApproveleaverecall($app){
+        $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
+        $data = ['recallNo' => $app];
+
+        $request = Yii::$app->navhelper->IanApproveLeaveRecall($service, $data);
+
+        if(is_array($request)){
+            Yii::$app->session->setFlash('success','Leave Recall Request Approved Successfully',true);
+            return $this->redirect(['index']);
+        }else{
+            Yii::$app->session->setFlash('error','Error Approving Leave Recall Request : '.$request,true);
+            return $this->redirect(['index']);
+        }
+    }
+
+
+    // Reject Leave Recall Request
+
+    public function actionRejectleaverecall($app){
+        $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
+        $data = ['recallNo' => $app];
+
+        $request = Yii::$app->navhelper->IanRejectLeaveRecall($service, $data);
+
+        if(is_array($request)){
+            Yii::$app->session->setFlash('success','Leave Recall Request Rejected Successfully',true);
+            return $this->redirect(['index']);
+        }else{
+            Yii::$app->session->setFlash('error','Error Rejecting Leave Recall Request : '.$request,true);
+            return $this->redirect(['index']);
+        }
+    }
+
 
     public function getName($userID){
 
