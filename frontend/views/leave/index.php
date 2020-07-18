@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = '';
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-        <?= \yii\helpers\Html::a('New Leave',['create','create'=> 1],['class' => 'btn btn-outline-warning push-right', 'data' => [
+        <?= \yii\helpers\Html::a('New Leave',['create','create'=> 1],['class' => 'btn btn-warning push-right', 'data' => [
             'confirm' => 'Are you sure you want to create a new leave request?',
             'method' => 'post',
         ],]) ?>
@@ -47,7 +47,7 @@ if(Yii::$app->session->hasFlash('success')){
 ?>
 <div class="row">
     <div class="col-md-12">
-        <div class="card">
+        <div class="card card-primary">
             <div class="card-header">
                 <h3 class="card-title">My Leave History List</h3>
 

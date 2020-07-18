@@ -68,7 +68,7 @@ class Services
         if ( isset(Yii::$app->params['ServiceName']))
         {
             $serviceNames=Yii::$app->params['ServiceName'];//FMN: AN array of web service identities set in params.php in config dir.
-            if(array_key_exists("$this->id",$serviceNames)){//FMN: $this->id is a class argument representing index of the requested service
+            if(array_key_exists("$this->id",$serviceNames)){//FMN: $this->id is a class constructor argument representing index of the requested service
                 $this->ServiceName= $serviceNames[$this->id];
             }
             return  $this->ServiceName;
@@ -79,7 +79,7 @@ class Services
         if($this->getServer() && $this->getPort() && $this->getServiceName() && $this->getCompanyName() && $this->getServiceName() && $this->getServerInstance())
         {
             $this->url='http://'.$this->Server.':'.$this->Port.'/'.$this->ServerInstance.'/WS/'.$this->CompanyName.'/Page/'.$this->ServiceName;
-            if(in_array($this->id, Yii::$app->params['codeUnits']))// any id in codeunits array be considered as a codeunit WS
+            if(in_array($this->id, Yii::$app->params['codeUnits']))// FMN any id in codeunits array be considered as a codeunit WS
             {
                 $this->url='http://'.$this->Server.':'.$this->Port.'/'.$this->ServerInstance.'/WS/'.$this->CompanyName.'/Codeunit/'.$this->ServiceName;
             }

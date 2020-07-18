@@ -136,6 +136,11 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionPendingapprovals()
+    {
+        return $this->redirect(['./approvals']);
+    }
+
     /**
      * Logs in a user.
      *

@@ -13,7 +13,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 <div class="row">
     <div class="col-md-12">
-        <div class="card">
+        <div class="card card-primary">
             <div class="card-header">
                 <h3 class="card-title"><?= $this->title ?></h3>
             </div>
@@ -118,21 +118,10 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                 </div>
 
-
-
-
-
-
-
-
-
-
-
-
                 <div class="row">
 
                     <div class="form-group">
-                        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+                        <?= Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
                     </div>
 
 

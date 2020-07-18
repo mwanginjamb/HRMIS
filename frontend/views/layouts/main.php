@@ -215,7 +215,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
 
 
 <!--Approval Management -->
-                        <?php if(Yii::$app->user->identity->isSupervisor()): ?>
+                        <?php if( !Yii::$app->user->isGuest &&   Yii::$app->user->identity->isSupervisor()): ?>
                         <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('approvals')?'menu-open':'' ?>">
 
                             <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl('approvals')?'active':'' ?>">
@@ -397,7 +397,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                         <p> Goal Setting</p>
                                     </a>
                                 </li>
-                    <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
+                    <?php if( !Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>appraisal/submitted" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','submitted')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
@@ -411,7 +411,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                         <p>Approved Goals </p>
                                     </a>
                                 </li>
-                    <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
+                    <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
                                 <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>appraisal/superapprovedappraisals" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','superapprovedappraisals')?'active':'' ?>">
                                         <i class="fa fa-check-square nav-icon"></i>
@@ -440,7 +440,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                             </a>
                                         </li>
 
-                                        <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
+                                        <?php if( !Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
 
                                             <li class="nav-item">
                                                 <a href="<?= $absoluteUrl ?>appraisal/mysupervisorlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','mysupervisorlist')?'active':'' ?>">
@@ -458,7 +458,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                             </a>
                                         </li>
 
-                                        <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
+                                        <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
 
                                             <li class="nav-item">
                                                 <a href="<?= $absoluteUrl ?>appraisal/myapprovedsupervisorlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','myapprovedsupervisorlist')?'active':'' ?>">
@@ -498,7 +498,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                             </a>
                                         </li>
 
-                                        <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
+                                        <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
                                             <li class="nav-item">
                                                 <a href="<?= $absoluteUrl ?>appraisal/eysupervisorlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eysupervisorlist')?'active':'' ?>">
                                                     <i class="fa fa-check-square nav-icon"></i>
@@ -523,7 +523,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                             </a>
                                         </li>
 
-                                        <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
+                                        <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
                                             <li class="nav-item">
                                                 <a href="<?= $absoluteUrl ?>appraisal/eyagreementlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eyagreementlist')?'active':'' ?>">
                                                     <i class="fa fa-check-square nav-icon"></i>
@@ -538,7 +538,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                                 <p>E-Y Closed (Appraisee) </p>
                                             </a>
                                         </li>
-                                        <?php if(Yii::$app->user->identity->isSupervisor()):  ?>
+                                        <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
                                             <li class="nav-item">
                                                 <a href="<?= $absoluteUrl ?>appraisal/eysupervisorclosedlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eysupervisorclosedlist')?'active':'' ?>">
                                                     <i class="fa fa-check-square nav-icon"></i>
@@ -634,7 +634,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
             <strong>Copyright &copy; AAS -  <?= Html::encode(Yii::$app->name) ?> 2014 - <?= date('Y') ?>   <a href="#"> African Academy of Sciences</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
-                <b><?= Yii::signature() ?></b>
+                <b><?php Yii::signature() ?></b>
             </div>
         </footer>
 

@@ -12,20 +12,14 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 <div class="row">
     <div class="col-md-12">
-        <div class="card">
+        <div class="card card-primary">
             <div class="card-header">
                 <h3 class="card-title">New Leave Application</h3>
             </div>
             <div class="card-body">
+                <?php
 
-
-
-                    <?php
-
-
-
-
-                    $form = ActiveForm::begin(); ?>
+                $form = ActiveForm::begin(); ?>
                 <div class="row">
                     <div class="col-md-6">
 
@@ -37,7 +31,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                             <?= $form->field($model, 'Leave_Code')->dropDownList($leaveTypes,['prompt' => 'Select Leave Type']) ?>
 
-                            <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date']) ?>
+                            <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','min'=> date('Y-m-d')]) ?>
 
                             <?= $form->field($model, 'Total_No_Of_Days')->textInput(['type' => 'number']) ?>
 
@@ -46,7 +40,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                             <?= $form->field($model, 'End_Date')->textInput(['type' => 'date','readonly'=> true,'disabled'=>true]) ?>
 
-                            <?= $form->field($model, 'Days_Applied')->textInput(['readonly'=> true]) ?>
+                            <?= $form->field($model, 'Days_Applied')->textInput(['readonly'=> true, 'min' => 1]) ?>
 
                             <?= $form->field($model, 'Reliever')->dropDownList($relievers,['prompt' => 'Select Reliever']) ?>
 
@@ -115,7 +109,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 $script = <<<JS
  //Submit Rejection form and get results in json leave-total_no_of_days    
         $('#leave-total_no_of_days').on('change', function(e){
-            e.preventDefault()
+            e.preventDefault();
+            console.log('Applying for leave..');
             const Leave_Code = $('#leave-leave_code').val();
             const Leave_Application_No = $('#leave-application_no').val();
             const Leave_Key = $('#leave-key').val();
@@ -123,7 +118,17 @@ $script = <<<JS
             const url = $('input[name="absolute"]').val()+'leave/setdays';
             $.post(url,{'Total_No_Of_Days': $(this).val(),'Leave_Code': Leave_Code,'Application_No': Leave_Application_No,'Key':Leave_Key,'Start_Date': Start_Date }).done(function(msg){
                    //populate empty form fields with new data
+                    console.log(typeof msg);
                     console.table(msg);
+                    if((typeof msg) === 'string') { // A string is an error
+                        const parent = document.querySelector('.field-leave-total_no_of_days');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = msg;  
+                    }else{ // An object represents correct details
+                        const parent = document.querySelector('.field-leave-total_no_of_days');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = ''; 
+                    }
                     $('#leave-end_date').val(msg.End_Date);
                     $('#leave-reporting_date').val(msg.Reporting_Date);
                     $('#leave-days_applied').val(msg.Days_Applied);

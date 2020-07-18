@@ -15,7 +15,7 @@ use yii\helpers\Html;
 $this->title = 'Update Leave: ' . $model->Application_No;
 $this->params['breadcrumbs'][] = ['label' => 'Update Leave', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->Application_No, 'url' => ['view', 'id' => $model->Application_No]];
-$this->params['breadcrumbs'][] = 'Update';
+// $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="agenda-document-update">
 
@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = 'Update';
     <?= $this->render('_form', [
         'model' => $model,
         'leaveTypes' => $leaveTypes,
-        'relievers' => $relievers
+        'relievers' => $relievers,
     ]) ?>
 
 </div>

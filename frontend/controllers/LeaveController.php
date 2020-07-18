@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
  * Date: 2/22/2020
- * Time: 2:53 PM
+ * Time: 2:53 PDF_makespotcolor(p, spotname)
  */
 
 namespace frontend\controllers;
@@ -29,7 +29,7 @@ class LeaveController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','index'],
+                'only' => ['logout', 'signup','index','create','update','delete'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -37,7 +37,7 @@ class LeaveController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index'],
+                        'actions' => ['logout','index','create','update','delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -82,7 +82,11 @@ class LeaveController extends Controller
         if(\Yii::$app->request->get('create')){
             if(empty(Yii::$app->request->post()['Leave'])) {
                 //make an initial empty request to nav
-                $req = Yii::$app->navhelper->postData($service, []);
+                $now = date('Y-m-d');
+                $model->Start_Date = date('Y-m-d', strtotime($now.' + 2 days'));
+                $model->Total_No_Of_Days = 1;
+
+                $req = Yii::$app->navhelper->postData($service, $model);
 
                 if (is_string($req)) {  // A string response is a fucking error
                     Yii::$app->session->setFlash('error', 'Error : ' . $req, true);

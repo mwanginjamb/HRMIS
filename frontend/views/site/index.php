@@ -57,7 +57,7 @@ exit;*/
 
 
                             <li class="list-group-item">
-                                <b><i class="fa fa-briefcase"></i></b> <a title="Job Grade" class="float-right"><?= !empty($employee->Grade)?$employee->Grade:'' ?></a>
+                                <b><i class="fa fa-briefcase"></i></b> <a title="Job Grade" class="float-right"><?= !empty($employee->Salary_Grade)?$employee->Salary_Grade:'' ?></a>
                             </li>
 
                             <li class="list-group-item">
@@ -129,7 +129,7 @@ exit;*/
                     <div class="col-12 col-sm-6 col-md-3">
                         <a href="<?= Yii::$app->recruitment->absoluteUrl().'recruitment/vacancies' ?>" target="_blank">
                             <div class="info-box">
-                                <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-briefcase"></i></span>
+                                <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-briefcase" style="color:#fff!important;"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text">Vacancies</span>
                                     <span class="info-box-number"><?= Yii::$app->dashboard->getVacancies() ?>
@@ -212,16 +212,18 @@ exit;*/
 
                     <!-- /.col -->
                     <div class="col-12 col-sm-6 col-md-3">
-                        <div class="info-box mb-3">
-                            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
-                            <div class="info-box-content">
-                                <span class="info-box-text">Staff Count</span>
-                                <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getStaffCount())?></span>
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'site/pendingapprovals' ?>" target="_blank">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-envelope-open" style="color:#fff!important;"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Pending Approvals</span>
+                                    <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getSuperPending())?></span>
+                                </div>
+                                <!-- /.info-box-content -->
                             </div>
-                            <!-- /.info-box-content -->
-                        </div>
-                        <!-- /.info-box -->
+                            <!-- /.info-box -->
+                        </a>
                     </div>
                     <!-- /.col -->
 
@@ -253,7 +255,7 @@ exit;*/
 
                         <a href="<?= Yii::$app->recruitment->absoluteUrl().'site/supervisorapproved' ?>" target="_blank">
                                 <div class="info-box mb-3">
-                                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+                                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-check"></i></span>
                                     <div class="info-box-content">
                                         <span class="info-box-text">My Approved</span>
                                         <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getSuperApproved())?></span>

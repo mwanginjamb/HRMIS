@@ -70,7 +70,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Approvals List', 'url' => ['index'
                                 <textarea class="form-control" name="comment" rows="4" placeholder="Enter your approval comment here.."></textarea>
                                 <br>
                                 <input type="hidden" name="documentNo" class="form-control">
-                                <input type="text" name="Record_ID_to_Approve" class="form-control">
+                                <input type="hidden" name="Record_ID_to_Approve" class="form-control">
+                                <input type="hidden" name="Table_ID" class="form-control">
                             </div>
                             <div class="card-footer">
                                 <div class="input-group">
@@ -147,9 +148,10 @@ $script = <<<JS
         var comment = $('textarea[name=comment]').val();
         var docno = $('input[name=documentNo]').val();
         var workflow = $('input[name=workflow]').val();
+        var Table_ID = $('input[name=Table_ID]').val();
         
         
-        $.post(url,{"comment": comment ,"docno": docno,"workflow": workflow}).done(function(){
+        $.post(url,{"comment": comment ,"docno": docno,"workflow": workflow, "Table_ID": Table_ID}).done(function(){
             //$('.modal').modal('hide');
         });
         
@@ -164,9 +166,11 @@ $script = <<<JS
             
             var docno = $(this).attr('rel');
             var Record_ID_to_Approve = $(this).attr('rev');
+            var Table_ID = $(this).attr('type');
             
             $('input[name=documentNo]').val(docno);
             $('input[name=Record_ID_to_Approve]').val(Record_ID_to_Approve);
+            $('input[name=Table_ID]').val(Table_ID);
             
     
             $('.modal').modal('show');                            

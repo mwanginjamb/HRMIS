@@ -93,17 +93,39 @@ if(Yii::$app->session->hasFlash('success')){
                             <?= $form->field($model, 'Marital_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                             <?= $form->field($model, 'Religion')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                             <?= $form->field($model, 'First_Language_R_W_S')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'First_Language_Read')->checkbox(['readonly'=> true, 'disabled'=>true]) ?>
 
-                            <?= $form->field($model, 'First_Language_Write')->checkbox(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'First_Language_Speak')->checkbox(['readonly'=> true, 'disabled'=>true]) ?>
+
+
+
+
+
+                            <div class="row">
+                                <div class="col-md-4"> <?= $form->field($model, 'First_Language_Read')->checkbox(['readonly'=> true, 'disabled'=>true]) ?></div>
+                                <div class="col-md-4"> <?= $form->field($model, 'First_Language_Write')->checkbox(['readonly'=> true, 'disabled'=>true]) ?></div>
+                                <div class="col-md-4"> <?= $form->field($model, 'First_Language_Speak')->checkbox(['readonly'=> true, 'disabled'=>true]) ?></div>
+
+                            </div>
+
+
+
                             <?= $form->field($model, 'Second_Language_R_W_S')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
                         </div>
                         <div class="col-md-6">
-                            <?= $form->field($model, 'Second_Language_Read')->checkbox(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Second_Language_Write')->checkbox(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Second_Language_Speak')->checkbox(['readonly'=> true, 'disabled'=>true]) ?>
+
+
+
+
+
+                            <div class="row">
+                                <div class="col-md-4">  <?= $form->field($model, 'Second_Language_Read')->checkbox(['readonly'=> true, 'disabled'=>true]) ?></div>
+                                <div class="col-md-4"> <?= $form->field($model, 'Second_Language_Write')->checkbox(['readonly'=> true, 'disabled'=>true]) ?></div>
+                                <div class="col-md-4"> <?= $form->field($model, 'Second_Language_Speak')->checkbox(['readonly'=> true, 'disabled'=>true]) ?></div>
+
+                            </div>
+
+
+
                             <?= $form->field($model, 'Additional_Language')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                             <?= $form->field($model, 'Vehicle_Registration_Number')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                             <?= $form->field($model, 'Number_Of_Dependants')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
@@ -177,7 +199,7 @@ if(Yii::$app->session->hasFlash('success')){
                             <?= $form->field($model, 'Job_ID')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                             <?= $form->field($model, 'Job_Title')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                             <?= $form->field($model, 'Salary_Grade')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Grade')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            <?php $form->field($model, 'Grade')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
 
 
@@ -250,7 +272,7 @@ if(Yii::$app->session->hasFlash('success')){
             </div>
         </div>
 
-        <div class="card">
+      <!-- <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Leave Details</h3>
             </div>
@@ -259,17 +281,17 @@ if(Yii::$app->session->hasFlash('success')){
                 <div class="row">
                     <div class=" row col-md-12">
                         <div class="col-md-6">
-                            <?= $form->field($model, 'Reimbursed_Leave_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Allocated_Leave_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Total_Leave_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Total_Leave_Taken')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            <?/*= $form->field($model, 'Reimbursed_Leave_Days')->textInput(['readonly'=> true, 'disabled'=>true]) */?>
+                            <?/*= $form->field($model, 'Allocated_Leave_Days')->textInput(['readonly'=> true, 'disabled'=>true]) */?>
+                            <?/*= $form->field($model, 'Total_Leave_Days')->textInput(['readonly'=> true, 'disabled'=>true]) */?>
+                            <?/*= $form->field($model, 'Total_Leave_Taken')->textInput(['readonly'=> true, 'disabled'=>true]) */?>
 
                         </div>
                         <div class="col-md-6">
-                            <?= $form->field($model, 'Acrued_Leave_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Leave_Bal')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Cash_Leave_Earned')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Cash_per_Leave_Day')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            <?/*= $form->field($model, 'Acrued_Leave_Days')->textInput(['readonly'=> true, 'disabled'=>true]) */?>
+                            <?/*= $form->field($model, 'Leave_Bal')->textInput(['readonly'=> true, 'disabled'=>true]) */?>
+                            <?/*= $form->field($model, 'Cash_Leave_Earned')->textInput(['readonly'=> true, 'disabled'=>true]) */?>
+                            <?/*= $form->field($model, 'Cash_per_Leave_Day')->textInput(['readonly'=> true, 'disabled'=>true]) */?>
 
                         </div>
                     </div>
@@ -287,14 +309,14 @@ if(Yii::$app->session->hasFlash('success')){
                 <div class="row">
                     <div class=" row col-md-12">
                         <div class="col-md-6">
-                            <?= $form->field($model, 'Date_Of_Leaving_the_Company')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Termination_Grounds')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Exit_Interview_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            <?/*= $form->field($model, 'Date_Of_Leaving_the_Company')->textInput(['readonly'=> true, 'disabled'=>true]) */?>
+                            <?/*= $form->field($model, 'Termination_Grounds')->textInput(['readonly'=> true, 'disabled'=>true]) */?>
+                            <?/*= $form->field($model, 'Exit_Interview_Date')->textInput(['readonly'=> true, 'disabled'=>true]) */?>
 
                         </div>
                         <div class="col-md-6">
-                            <?= $form->field($model, 'Exit_Interview_Done_by')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Activate')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            <?/*= $form->field($model, 'Exit_Interview_Done_by')->textInput(['readonly'=> true, 'disabled'=>true]) */?>
+                            <?/*= $form->field($model, 'Activate')->textInput(['readonly'=> true, 'disabled'=>true]) */?>
 
 
                         </div>
@@ -302,7 +324,7 @@ if(Yii::$app->session->hasFlash('success')){
                 </div>
 
             </div>
-        </div>
+        </div>-->
 
         <?php ActiveForm::end(); ?>
     </div>

@@ -239,11 +239,13 @@ class ApprovalsController extends Controller
                     $Rejectlink = ($app->Status == 'Open')? Html::a('Reject Request',[$Rejectaction,'app'=> $app->Document_No ],['class'=>'btn btn-warning btn-xs',
                         'rel' => $app->Document_No,
                         'rev' => $app->Record_ID_to_Approve,
+                        'type' => $app->Table_ID
                     ]): "";
                 }else{ //Leave Rejection
                     $Rejectlink = ($app->Status == 'Open')? Html::a('Reject Request',['reject-request' ],['class'=>'btn btn-warning reject btn-xs',
                         'rel' => $app->Document_No,
                         'rev' => $app->Record_ID_to_Approve,
+                        'type' => $app->Table_ID
                     ]): "";
                 }
 
@@ -302,7 +304,7 @@ class ApprovalsController extends Controller
             $Record_ID_to_Approve = Yii::$app->request->post('Record_ID_to_Approve');
 
             $Approvaldata = ['applicationNo' => $documentno];
-            (int)$tableid = 71053;
+            (int)$tableid = Yii::$app->request->post('Table_ID');
 
             //return var_dump($tableid);
             $data = [

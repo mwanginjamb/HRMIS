@@ -113,6 +113,23 @@ class Dashboard extends Component
         return count($result);
     }
 
+    /* My Pending approval*/
+
+    public function getSuperPending(){
+        $service = Yii::$app->params['ServiceName']['RequeststoApprove'];
+        $filter = [
+            'Approver_ID' => Yii::$app->user->identity->getId(),
+            'Status' => 'Open'
+        ];
+        $result = Yii::$app->navhelper->getData($service,$filter);
+
+        //Yii::$app->recruitment->printrr($result);
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the filter result to false
+            return 0;
+        }
+        return count($result);
+    }
+
 
     /*Get Number of job vacancies available*/
 

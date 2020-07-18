@@ -63,7 +63,7 @@ public $Posted;
             'Application_No' => 'Application No',
             'Application_Date' => 'Application Date',
             'User_ID' => 'User ID',
-            'Leave_Code' => 'Leave Code',
+            'Leave_Code' => 'Leave Type',
             'Start_Date' => 'Start Date',
             'End_Date' => 'End Date',
             'Days_Applied' => 'Days Applied',

@@ -173,33 +173,44 @@ class LeaverecallController extends Controller
 
     public function actionUpdate($RecallNo){
         $service = Yii::$app->params['ServiceName']['leaveRecallCard'];
-        $leaveTypes = $this->getLeaveTypes();
         $employees = $this->getEmployees();
 
 
         $filter = [
-            'Application_No' => $RecallNo
+            'Recall_No' => $RecallNo
         ];
         $result = Yii::$app->navhelper->getData($service, $filter);
 
 
 
         //load nav result to model
-        $leaveModel = new Leave();
+        $leaveModel = new LeaveRecall();
 
         $model = $this->loadtomodel($result[0],$leaveModel);
 
+        $leaves = $this->actionGetleaves($model->Employee_No);
+
+        $leavetorecall = [];
+
+        foreach($leaves as $leave){
+            $leavetorecall[] = [
+                'No' => $leave['No'],
+                'Description' => $leave['Description'],
+            ];
+        }
+        $recalls = ArrayHelper::map($leavetorecall,'No','Description');
 
 
-        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
-            $result = Yii::$app->navhelper->updateData($model);
+
+        if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()['LeaveRecall']){
+            $result = Yii::$app->navhelper->updateData($service, Yii::$app->request->post()['LeaveRecall']);
 
 
-            if(!empty($result)){
-                Yii::$app->session->setFlash('success','Leave request Updated Successfully',true);
+            if(!is_string($result)){
+                Yii::$app->session->setFlash('success','Leave Recall request Updated Successfully',true);
                 return $this->redirect(['view','ApplicationNo' => $result->Application_No]);
             }else{
-                Yii::$app->session->setFlash('error','Error Updating Leave Request : '.$result,true);
+                Yii::$app->session->setFlash('error','Error Updating Leave Recall Request : '.$result,true);
                 return $this->redirect(['index']);
             }
 
@@ -207,8 +218,8 @@ class LeaverecallController extends Controller
 
         return $this->render('update',[
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name')
+            'employees' => ArrayHelper::map($employees,'No','Full_Name'),
+            'leaves' => $recalls
         ]);
     }
 
