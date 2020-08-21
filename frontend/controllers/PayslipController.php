@@ -78,6 +78,16 @@ class PayslipController extends Controller
                 'employeeNo' => Yii::$app->user->identity->{'Employee No_'}
              ];
             $path = Yii::$app->navhelper->IanGeneratePayslip($service,$data);
+
+            if(!is_file($path['return_value'])){
+                //throw new HttpException(404,"Resouce Not Found: ".$path['return_value']);
+                return $this->render('index',[
+                    'report' => false,
+                    'message' => strlen($path['return_value'])?$path['return_value']: 'Report Cannot be Found.'
+                ]);
+            }
+
+
             $binary = file_get_contents($path['return_value']); //fopen($path['return_value'],'rb');
             $content = chunk_split(base64_encode($binary));
             //delete the file after getting it's contents --> This is some house keeping

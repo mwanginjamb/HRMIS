@@ -126,8 +126,12 @@ class LeaveController extends Controller
             if(is_object($result)){// an update request result would be a single object
 
 
-                Yii::$app->session->setFlash('success','Leave request Created Successfully',true);
-                $this->actionApprovalRequest($result->Application_No);
+                if($result->Total_No_Of_Days > 0) //If the leave request has leave days set, send it for approval
+                {
+                    $this->actionApprovalRequest($result->Application_No);
+                    return; // End code execution at this point.
+                }
+                Yii::$app->session->setFlash('success','Leave request Created Successfully but will only be sent for approval if day(s) applied are more than zero.',true);
                 return $this->redirect(['index']);
 
             }else{
@@ -153,23 +157,19 @@ class LeaveController extends Controller
         $model = new Leave();
         $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
 
-
-        $data = [
-            'Application_No' => Yii::$app->request->post('Application_No'),
-            'Leave_Code' => Yii::$app->request->post('Leave_Code'),
-            'Total_No_Of_Days' => Yii::$app->request->post('Total_No_Of_Days'),
-            'Key' => Yii::$app->request->post('Key'),
-            'Start_Date' => Yii::$app->request->post('Start_Date'),
+        $filter = [
+            'Application_No' => Yii::$app->request->post('Application_No')
         ];
-
-        $leave = Yii::$app->navhelper->getData($service,['Application_No' => Yii::$app->request->post('Application_No')]);
+        $leave = Yii::$app->navhelper->getData($service, $filter);
 
         if(is_array($leave)){
-            $data['Key'] = $leave[0]->Key;
+            Yii::$app->navhelper->loadmodel($leave[0],$model);
+            $model->Key = $leave[0]->Key;
+            $model->Total_No_Of_Days = Yii::$app->request->post('Total_No_Of_Days');
         }
 
 
-        $result = Yii::$app->navhelper->updateData($service,$data);
+        $result = Yii::$app->navhelper->updateData($service,$model);
 
         Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
 
@@ -177,11 +177,74 @@ class LeaveController extends Controller
 
     }
 
-    public function actionUpdate($ApplicationNo){
+    public function actionSetleavecode(){
+        $model = new Leave();
+        $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
+
+        $filter = [
+            'Application_No' => Yii::$app->request->post('Application_No')
+        ];
+
+        $leave = Yii::$app->navhelper->getData($service,$filter);
+
+        if(is_array($leave)){
+            $model->Key = $leave[0]->Key;
+            $model->Leave_Code = Yii::$app->request->post('Leave_Code');
+        }
+
+        //$model = Yii::$app->navhelper->loadmodel($leave[0],$model);
+
+
+        $result = Yii::$app->navhelper->updateData($service,$model);
+
+        Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
+
+        return $result;
+
+    }
+
+    public function actionSetstartdate(){
+        $model = new Leave();
+        $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
+
+        $filter = [
+            'Application_No' => Yii::$app->request->post('Application_No')
+        ];
+        $leave = Yii::$app->navhelper->getData($service, $filter);
+
+        if(is_array($leave)){
+            Yii::$app->navhelper->loadmodel($leave[0],$model);
+            $model->Key = $leave[0]->Key;
+            $model->Start_Date = Yii::$app->request->post('Start_Date');
+            Yii::$app->navhelper->updateData($service,$model);
+        }
+
+
+
+        // Fetch Again and Update days
+        $leave = Yii::$app->navhelper->getData($service, $filter);
+
+        if(is_array($leave)){
+            Yii::$app->navhelper->loadmodel($leave[0],$model);
+            $model->Total_No_Of_Days = Yii::$app->request->post('Total_No_Of_Days');
+            Yii::$app->navhelper->updateData($service,$model);
+
+        }
+
+
+        $leave = Yii::$app->navhelper->getData($service, $filter);
+        $result = $leave[0];
+
+        Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
+
+        return $result;
+
+    }
+
+    public function actionUpdate($ApplicationNo,$reliever=''){
         $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
         $leaveTypes = $this->getLeaveTypes();
         $employees = $this->getEmployees();
-
 
         $filter = [
             'Application_No' => $ApplicationNo
@@ -193,11 +256,18 @@ class LeaveController extends Controller
         //load nav result to model
         $leaveModel = new Leave();
 
-        $model = $this->loadtomodel($result[0],$leaveModel);
+        if(!empty($reliever)){
 
-
+            $model = $this->loadtomodel($result[0],$leaveModel);
+            $model->Reliever = $reliever;
+            $result = Yii::$app->navhelper->updateData($service,$model);
+            $model = $this->loadtomodel($result,$leaveModel);
+        }else{
+            $model = $this->loadtomodel($result[0],$leaveModel);
+        }
 
         if($model->load(Yii::$app->request->post()) && Yii::$app->request->post()){
+
             //Retrieve the leave again to use the new key in the model
             $leave = Yii::$app->navhelper->getData($service,['Application_No' => $model->Application_No]);
             if(is_array($leave)){
@@ -206,10 +276,14 @@ class LeaveController extends Controller
             $result = Yii::$app->navhelper->updateData($service,$model);
 
 
-            if(!empty($result)){
-                //Yii::$app->recruitment->printrr($result);
-                Yii::$app->session->setFlash('success','Leave request Updated Successfully',true);
-                $this->actionApprovalRequest($result->Application_No);
+            if(!is_string($result)){
+                if($result->Total_No_Of_Days > 0) //If the leave request has leave days set, send it for approval
+                {
+                    $this->actionApprovalRequest($result->Application_No);
+                    return; // End code execution at this point.
+                }
+
+                Yii::$app->session->setFlash('success','Leave request Updated Successfully, but will only be sent for approval if day(s) applied are more than zero.',true);
                 return $this->redirect(['index']);
             }else{
                 Yii::$app->session->setFlash('error','Error Updating Leave Request : '.$result,true);
@@ -308,8 +382,10 @@ class LeaveController extends Controller
 
             $link = $updateLink =  '';
             $Viewlink = Html::a('Details',['view','ApplicationNo'=> $leave->Application_No ],['class'=>'btn btn-outline-primary btn-xs']);
-            if($leave->Approval_Status == 'New' ){
-                $link = Html::a('Send Approval Request',['approval-request','app'=> $leave->Application_No ],['class'=>'btn btn-primary btn-xs']);
+            if($leave->Approval_Status == 'New'){
+                $link = ($leave->Days_Applied > 0 && !empty($leave->Reliever_Name)) ?
+                    Html::a('Send Approval Request',['approval-request','app'=> $leave->Application_No ],['class'=>'btn btn-primary btn-xs']):
+                '';
                 $updateLink = Html::a('Update Leave',['update','ApplicationNo'=> $leave->Application_No ],['class'=>'btn btn-info btn-xs']);
             }else if($leave->Approval_Status == 'Approval_Pending'){
                 $link = Html::a('Cancel Approval Request',['cancel-request','app'=> $leave->Application_No ],['class'=>'btn btn-warning btn-xs']);
@@ -337,8 +413,14 @@ class LeaveController extends Controller
 
     public function actionReport(){
         $service = Yii::$app->params['ServiceName']['leaveApplicationList'];
-        $leaves = \Yii::$app->navhelper->getData($service);
-        krsort( $leaves);//sort  keys in descending order
+        $filter = [
+            'Employee_No' => Yii::$app->user->identity->Employee[0]->No,
+        ];
+        $leaves = \Yii::$app->navhelper->getData($service, $filter);
+        if(is_array($leaves)){
+            krsort( $leaves);//sort  keys in descending order
+        }
+
         $content = $this->renderPartial('_historyreport',[
             'leaves' => $leaves
         ]);

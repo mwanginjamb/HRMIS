@@ -65,7 +65,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                     ,
                             ]): '' ?>
 
-                            <?= $form->field($model, 'Days_To_Recall')->textInput(['type' => 'number']) ?>
+                            <?= $form->field($model, 'Days_To_Recall')->textInput(['type' => 'number','required' => true]) ?>
 
 
 
@@ -89,11 +89,11 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                         <div class="col-md-6">
 
-                            <?= $form->field($model, 'Leave_No_To_Recall')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            <?= $form->field($model, 'Leave_No_To_Recall')->textInput(['readonly'=> true, 'disabled'=>true,'id'=> 'leave_no_to_recall']) ?>
                             <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','readonly'=> 'true','disabled'=>true]) ?>
 
                             <?= $form->field($model, 'Leave_balance')->textInput(['type' => 'number','readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Reporting_Date')->textInput(['type' => 'date','readonly'=> true, 'disabled'=>true]) ?>
+                            <?= $form->field($model, 'Reporting_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                             <?= $form->field($model, 'Days_Applied')->textInput(['type' => 'number','readonly'=> 'true','disabled'=>true]) ?>
 
 
@@ -142,8 +142,76 @@ $script = <<<JS
         $("select#leaverecall-leave_no_to_recall").on('change', function(){
            var ky = $('#leaverecall-key').val();
            var lv = $(this).find(":selected").val();
+           const Recall_No = $("#leaverecall-recall_no").val();
+                      
+                const payload = {
+                    'Recall_No' : Recall_No,
+                    'Leave_No_To_Recall': lv
+                }
            
-           window.location.href =url+'leaverecall/create/?Leave_No_To_Recall='+lv+'&Key='+ky;
+                $.post(url+'leaverecall/commitleavetorecall', payload).done(function(msg){
+                   //populate empty form fields with new data
+                    console.log(typeof msg);
+                    console.table(msg);
+                    if((typeof msg) === 'string') { // A string is an error
+                        const parent = document.querySelector('.field-leaverecall-leave_no_to_recall');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = msg;
+                        
+                    }else{ // An object represents correct details
+                        const parent = document.querySelector('.field-leaverecall-leave_no_to_recall');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = ''; 
+                       
+                    }
+                        $('#leave_no_to_recall').val(msg.Leave_No_To_Recall);
+                        $('#leaverecall-balance_after').val(msg.Balance_After);
+                        $('#leaverecall-leave_balance').val(msg.Leave_balance);
+                        $('#leaverecall-start_date').val(msg.Start_Date);
+                        $('#leaverecall-end_date').val(msg.End_Date);
+                        $('#leaverecall-leave_status').val(msg.Leave_Status);
+                        $('#leaverecall-days_applied').val(msg.Days_Applied);
+                        $('#leaverecall-reliever').val(msg.Reliever);
+                },'json');
+                        
+           //window.location.href =url+'leaverecall/create/?Leave_No_To_Recall='+lv+'&Key='+ky;
+        });
+        
+                
+        $("#leaverecall-days_to_recall").on('change', function(){
+            const Recall_No = $("#leaverecall-recall_no").val();
+            const Days_To_Recall = $(this).val();
+            var payload = {
+                Recall_No: Recall_No,
+                Days_To_Recall: Days_To_Recall
+            }
+            
+            $.post(url+'leaverecall/commitrecalldays', payload).done(function(msg){
+                   //populate empty form fields with new data
+                    console.log(typeof msg);
+                    console.table(msg);
+                    if((typeof msg) === 'string') { // A string is an error
+                        const parent = document.querySelector('.field-leaverecall-days_to_recall');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = msg;
+                        
+                    }else{ // An object represents correct details
+                        const parent = document.querySelector('.field-leaverecall-days_to_recall');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = ''; 
+                       
+                    }
+                        $('#leave_no_to_recall').val(msg.Leave_No_To_Recall);
+                        $('#leaverecall-balance_after').val(msg.Balance_After);
+                        $('#leaverecall-leave_balance').val(msg.Leave_balance);
+                        $('#leaverecall-start_date').val(msg.Start_Date);
+                        $('#leaverecall-end_date').val(msg.End_Date);
+                        $('#leaverecall-leave_status').val(msg.Leave_Status);
+                        $('#leaverecall-days_applied').val(msg.Days_Applied);
+                        $('#leaverecall-reliever').val(msg.Reliever);
+                },'json');
+            
+         
         });
     });
 JS;

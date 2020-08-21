@@ -644,6 +644,24 @@ class Navision extends Component
         }
 
     }
+
+
+    // Generate Leave Statement
+
+
+    public function IanGenerateLeaveStatementReport($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanGenerateLeaveStatementReport($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
+
     /** PERFOMANCE MANAGEMENT FUNCTIONS ON APPRAISAL WORKFLOW CODEUNIT */
     //send Appraisal for approval
 

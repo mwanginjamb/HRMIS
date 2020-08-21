@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Approvals List', 'url' => ['index'
 
                         <div class="card">
                             <div class="card-body">
-                                <textarea class="form-control" name="comment" rows="4" placeholder="Enter your approval comment here.."></textarea>
+                                <textarea class="form-control" name="comment" rows="4" placeholder="Enter your approval comment here.." required="true"></textarea>
                                 <br>
                                 <input type="hidden" name="documentNo" class="form-control">
                                 <input type="hidden" name="Record_ID_to_Approve" class="form-control">

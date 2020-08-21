@@ -10,7 +10,7 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'HRMIS - Payslip Report';
+$this->title = 'HRMIS - Leave Statement Report';
 $this->params['breadcrumbs'][] = ['label' => 'Payroll Reports', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Payslip', 'url' => ['index']];
 ?>
@@ -19,21 +19,11 @@ $this->params['breadcrumbs'][] = ['label' => 'Payslip', 'url' => ['index']];
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">My Payslip Report</h3>
+                    <h3 class="card-title">My Leave Statement Report</h3>
 
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <form method="post" action="<?= Yii::$app->recruitment->absoluteUrl().'payslip/index'?>">
-                                <?= \yii\helpers\Html::dropDownList('payperiods','',$pperiods,['prompt' =>'select PayPeriod','class' => 'form-control']) ?>
 
-                                <div class="form-group" style="margin-top: 10px">
-                                <?= \yii\helpers\Html::submitButton('Generate Payslip',['class' => 'btn btn-primary']); ?>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
                     <!--<iframe src="data:application/pdf;base64,<?/*= $content; */?>" height="950px" width="100%"></iframe>-->
                     <?php
                     if(!$report){

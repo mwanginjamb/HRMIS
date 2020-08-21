@@ -87,6 +87,7 @@ $script = <<<JS
                 { title: 'Employee Name' ,data: 'Employee_Name'},
                 { title: 'Application No' ,data: 'Leave_No_To_Recall'},
                 { title: 'Days Applied' ,data: 'Days_Applied'},
+                { title: 'Days To Recall' ,data: 'Days_To_Recall'},
                 { title: 'Application Date' ,data: 'Application_Date'},
                 { title: 'Approval Status' ,data: 'Approval_Status'},
                

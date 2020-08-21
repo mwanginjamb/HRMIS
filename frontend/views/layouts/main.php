@@ -279,6 +279,13 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                 </li>
 
                                 <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>leavestatement/index" class="nav-link <?= Yii::$app->recruitment->currentaction('leavestatement','index')?'active':'' ?>">
+                                        <i class="fa fa-file-pdf nav-icon"></i>
+                                        <p>Leave Statement  Report</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
                                     <a href="<?= $absoluteUrl ?>leaverecall/create/?create=1" class="nav-link <?= Yii::$app->recruitment->currentaction('leaverecall','create')?'active':'' ?>">
                                         <i class="fa fa-recycle nav-icon"></i>
                                         <p>Recall Leave</p>

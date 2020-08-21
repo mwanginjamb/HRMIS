@@ -54,11 +54,6 @@ class AdminlteAsset extends AssetBundle
         'plugins/chart.js/Chart.min.js',
         'dist/js/pages/dashboard2.js',
 
-
-        
-        
-        
-       
         'plugins/sparklines/sparkline.js',
         'plugins/jqvmap/jquery.vmap.min.js',
         'plugins/jqvmap/maps/jquery.vmap.usa.js',
@@ -74,8 +69,6 @@ class AdminlteAsset extends AssetBundle
         'plugins/jquery-mapael/maps/usa_states.min.js',
         'plugins/chart.js/Chart.min.js',
 
-       
-       
        
         'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.full.min.js',
         'https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js',

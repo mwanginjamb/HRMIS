@@ -38,7 +38,7 @@ class ApprovalsController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index'],
+                        'actions' => ['logout','index','approve-request','reject-request'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
