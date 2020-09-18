@@ -53,7 +53,7 @@ return [
             'destination' => Pdf::DEST_STRING, //Pdf::DEST_ BROWSER,
             'filename' => 'meeting.pdf',//needs a component returning a user name
             'methods' => [
-                'SetHeader' => ['AAS - HRMIS || '],
+                'SetHeader' => ['CIS - HRMIS || '],
                 'SetFooter' => ['|Page {PAGENO}|'],
             ],
             'cssInline' => 'h1,h2,h3,table{font-family: font-family: Cambria, Georgia, serif; text-align: center; padding:5px},

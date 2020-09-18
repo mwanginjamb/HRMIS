@@ -112,13 +112,29 @@ public $Learning_Assesment_Competenc;
 
     //get supervisor status
 
-    public function isSupervisor($Employee_User_Id,$Supervisor_User_Id)
+    public function isSupervisor($Employee_User_Id='',$Supervisor_User_Id = '')
     {
 
         $user = Yii::$app->user->identity->getId();
 
-        return ($user == $Supervisor_User_Id);
+        return ($user == $this->Supervisor_User_Id);
 
+    }
+
+    public function isPeer1(){
+        return (Yii::$app->user->identity->{'Employee No_'} == $this->Peer_1_Employee_No);
+    }
+
+    public function isPeer2(){
+        return (Yii::$app->user->identity->{'Employee No_'} == $this->Peer_2_Employee_No);
+    }
+
+    public function peer1isset(){
+        return !empty($this->Peer_1_Employee_No);
+    }
+
+    public function peer2isset(){
+        return !empty($this->Peer_2_Employee_No);
     }
 
 

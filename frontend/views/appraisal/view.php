@@ -243,7 +243,7 @@ Yii::$app->session->set('isSupervisor',false);
                                     <td><?= !empty($k->Agreed_Rating)?$k->Agreed_Rating: 'Not Set' ?></td>
                                     <td><?= !empty($k->Rating_Comments)?$k->Rating_Comments: 'Not Set' ?></td>
                                     <td><?= !empty($k->Employee_Comments)?$k->Employee_Comments: 'Not Set' ?></td>
-                                    <td><?=($model->Goal_Setting_Status == 'Approved' && $model->MY_Appraisal_Status == 'Appraisee_Level')?Html::a('Evaluate',['appraisalkra/update','Line_No'=> $k->Line_No,'Appraisal_No' => $k->Appraisal_No,'Employee_No' => $k->Employee_No ],['class' => ' evalkra btn btn-info btn-xs']):''?></td>
+                                    <td><?=(($model->Goal_Setting_Status == 'Approved' && $model->MY_Appraisal_Status == 'Appraisee_Level') || $model->EY_Appraisal_Status == 'Appraisee_Level' )?Html::a('Evaluate',['appraisalkra/update','Line_No'=> $k->Line_No,'Appraisal_No' => $k->Appraisal_No,'Employee_No' => $k->Employee_No ],['class' => ' evalkra btn btn-info btn-xs']):''?></td>
                                 </tr>
                                 <tr class="child">
                                     <td colspan="11" >
@@ -420,7 +420,7 @@ Yii::$app->session->set('isSupervisor',false);
                                                     <td><?= !empty($be->Peer_2_Remark)?$be->Peer_2_Remark:'' ?></td>
                                                     <td><?= !empty($be->Agreed_Rating)?$be->Agreed_Rating:'' ?></td>
                                                     <td><?= !empty($be->Overall_Remarks)?$be->Overall_Remarks:'' ?></td>
-                                                    <td><?= ($be->Applicable)?Html::a('<i title="Evaluate Behaviour" class="fa fa-edit"></i>',['employeeappraisalbehaviour/update','Employee_No'=>$be->Employee_No,'Line_No'=> $be->Line_No,'Appraisal_No' => $be->Appraisal_Code ],['class' => ' evalbehaviour btn btn-info btn-xs']):'' ?></td>
+                                                    <td><?= ($model->Goal_Setting_Status == 'New' || $model->MY_Appraisal_Status == 'Appraisee_Level' || $model->EY_Appraisal_Status == 'Appraisee_Level' )?Html::a('<i title="Evaluate Behaviour" class="fa fa-edit"></i>',['employeeappraisalbehaviour/update','Employee_No'=>$be->Employee_No,'Line_No'=> $be->Line_No,'Appraisal_No' => $be->Appraisal_Code ],['class' => ' evalbehaviour btn btn-info btn-xs']):'' ?></td>
                                                 </tr>
                                                 <?php
                                             endforeach;
@@ -446,7 +446,7 @@ Yii::$app->session->set('isSupervisor',false);
         <!--Learning Assessment Card -->
         <div class="card-info">
             <div class="card-header">
-                <h4 class="card-title">Learning Assessment - Competence</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <h4 class="card-title">Learning Assessment </h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                 <?= Html::a('<i class="fas fa-plus"></i> Add New',['learningassessment/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-primary add-learning-assessment']) ?>
 
@@ -481,9 +481,9 @@ Yii::$app->session->set('isSupervisor',false);
                                 <td><?= $asses->Training_Action ?></td>
                                 <td><?= $asses->Due_Date ?></td>
                                 <td><?= $asses->Learning_Hours ?></td>
-                                <td><?= $asses->Status_Mid_Year ?></td>
-                                <td><?= $asses->Status_End_Year ?></td>
-                                <td><?= $asses->Comments ?></td>
+                                <td><?= !empty($asses->Status_Mid_Year)?$asses->Status_Mid_Year:'' ?></td>
+                                <td><?= !empty($asses->Status_End_Year)?$asses->Status_End_Year:'' ?></td>
+                                <td><?= !empty($asses->Comments)?$asses->Comments:'' ?></td>
                                 <td><?= Html::a('<i class="fas fa-edit"></i> ',['learningassessment/update','Line_No'=> $asses->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?></td>
                             </tr>
                         <?php } ?>

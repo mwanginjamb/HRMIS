@@ -10,7 +10,7 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'HRMIS - AAS Leave History Report';
+$this->title = 'HRMIS - CIS Leave History Report';
 ?>
 
     <div class="row">

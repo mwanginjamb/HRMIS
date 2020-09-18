@@ -21,7 +21,7 @@ $webroot = Yii::getAlias(@$webroot);
 
                     <!--logo-->
 
-                    <img src="<?= $webroot ?>/images/30 - Logo1.png" style="width: 250px; margin-left: 40%">
+                    <img src="<?= $webroot ?>/images/cis-logo.png" style="width: 250px; margin-left: 40%">
 
 
                     <h3 class="card-title"> Leave History List</h3>

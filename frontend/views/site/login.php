@@ -35,7 +35,8 @@ if(Yii::$app->session->hasFlash('error')){
 
 
                 <?= $form->field($model, 'password',[
-                    'inputTemplate' => '<div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-lock"></i></span>{input}</div>'
+
+    'inputTemplate' => '<div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-lock"></i></span>{input}<span class="unlock"><i class="fas fa-eye"></i></span></div>'
                     ])->passwordInput([
                             'Placeholder' => 'Password'
 ])
@@ -108,6 +109,19 @@ $style = <<<CSS
         border-bottom-right-radius: 0;
         border: 1px solid #f6c844;
     }
+
+    span.unlock {
+        position: absolute;
+        right: 22px;
+        top: 32%;
+        cursor: pointer;
+
+    }
+
+    span.unlock *{
+        font-size: 20px;
+        color: #7a79e;
+    }
     
    .card {
     background-color: rgba(0,0,0,.1);
@@ -122,6 +136,23 @@ $style = <<<CSS
 CSS;
 
 $this->registerCss($style);
+
+
+$script = <<<JS
+    toggleEl = document.querySelector('.unlock');
+    const pfield = document.querySelector('#loginform-password');
+   
+    toggleEl.addEventListener('click', function() {
+         const typeAttr = pfield.getAttribute('type');
+        (typeAttr === 'password')?pfield.setAttribute('type','text'):pfield.setAttribute('type','password');
+              
+    });
+JS;
+
+$this->registerJs($script);
+
+
+
 
 
 

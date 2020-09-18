@@ -608,4 +608,34 @@ class SiteController extends Controller
         $results = Yii::$app->navhelper->getData($service,$filter);
         return $results[0]->Full_Name;
     }
+
+    // Get clearance form
+
+    public function actionClearanceform(){
+
+        $service = Yii::$app->params['ServiceName']['PortalReports'];
+
+
+        $path = Yii::$app->navhelper->IanGetClearanceFormPath($service);
+
+        if(!is_file($path['return_value'])){
+            //throw new HttpException(404,"Resouce Not Found: ".$path['return_value']);
+            return $this->render('clearanceform',[
+                'report' => false,
+                'message' => strlen($path['return_value'])?$path['return_value']: 'Report Cannot be Found.'
+            ]);
+        }
+
+        $binary = file_get_contents($path['return_value']);
+        $content = chunk_split(base64_encode($binary));
+        //delete the file after getting it's contents --> This is some house keeping
+        //unlink($path['return_value']);
+
+        // Yii::$app->recruitment->printrr($path);
+        return $this->render('clearanceform',[
+            'report' => true,
+            'content' => $content
+        ]);
+
+    }
 }

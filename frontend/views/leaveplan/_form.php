@@ -1,4 +1,4 @@
-    <?php
+<?php
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -36,16 +36,12 @@ use yii\widgets\ActiveForm;
 
 
 
-                                    <?= $form->field($model, 'Training_Action')->textarea(['rows'=>2,'max-length' => 250]) ?>
+                                    <?= $form->field($model, 'Appraisal_No')->textInput(['readonly' => true]) ?>
 
-                                    <?= $form->field($model, 'Due_Date')->textInput(['type' => 'date']) ?>
+                                    <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true]) ?>
+                                    <?= $form->field($model, 'Strength')->textInput(['placeholder' => 'Career Development Strength']) ?>
 
-                                    <?= $form->field($model, 'Learning_Hours')->textInput(['type' => 'number']) ?>
-                                    <?= $form->field($model, 'Status_Mid_Year')->dropDownList(['Incomplete' => 'Incomplete', 'Complete' => 'Complete' ],['prompt' => 'Select Status']) ?>
-                                    <?= $form->field($model, 'Status_End_Year')->textarea(['rows' => 3,'max-lenth' => 250]) ?>
-                                    <?= $form->field($model, 'Comments')->textarea(['rows'=>2,'max-length' => 250]) ?>
-
-
+                                    <?= $form->field($model, 'Goal_Line_No')->textInput(['readonly' => true]) ?>
 
 
                                     <?= $form->field($model, 'Key')->hiddenInput(['readonly'=> true])->label(false) ?>
@@ -98,7 +94,7 @@ use yii\widgets\ActiveForm;
 </div>
 
 <?php
-    $script = <<<JS
+$script = <<<JS
  //Submit Rejection form and get results in json    
         $('form').on('submit', function(e){
             e.preventDefault()

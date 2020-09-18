@@ -29,6 +29,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="https://ciskenya.co.ke/wp-content/files/2018/07/favicon-150x150.png" sizes="32x32" />
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -174,6 +175,9 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
 
                         <?= Html::a('<i class="fas fa-user"></i> Profile',['./employee'],['class'=> 'dropdown-item']); ?>
 
+                        <div class="dropdown-divider"></div>
+
+                        <?= Html::a('<i class="fas fa-user"></i> Clearance form',['site/clearanceform'],['class'=> 'dropdown-item']); ?>
 
                     </div>
                 </li>
@@ -385,6 +389,48 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                             </ul>
                         </li>
                         <!--payroll reports-->
+
+
+
+                        <!--Leave Plan -->
+                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl(['leaveplan'])?'menu-open':'' ?>">
+                            <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl(['leaveplan'])?'active':'' ?>">
+                                <i class="nav-icon fa fa-file-invoice-dollar"></i>
+                                <p>
+                                    Leave Plan
+                                    <i class="fas fa-angle-left right"></i>
+                                    <!--<span class="badge badge-info right">6</span>-->
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>leaveplan" class="nav-link <?= Yii::$app->recruitment->currentaction('leaveplan','index')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>Leave Plan List</p>
+                                    </a>
+                                </li>
+
+                               <!-- <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>p9" class="nav-link <?= Yii::$app->recruitment->currentaction('leaveplan','pendingapproval')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>Pending Approval </p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>p9" class="nav-link <?= Yii::$app->recruitment->currentaction('leaveplan','approved')?'active':'' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>Approved </p>
+                                    </a>
+                                </li>-->
+
+                            </ul>
+                        </li>
+                        <!--Leave Plan -->
+
+
+
+
 
                         <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('appraisal')?'menu-open':'' ?>">
                             <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('appraisal')?'active':'' ?>">

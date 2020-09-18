@@ -142,7 +142,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                     <div class="col-md-3">
 
-                        <?=($model->EY_Appraisal_Status == 'Supervisor_Level')?Html::a('<i class="fas fa-play"></i> Send Peer1',['sendpeer1','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                        <?=($model->EY_Appraisal_Status == 'Supervisor_Level' && $model->peer1isset())?Html::a('<i class="fas fa-play"></i> Send Peer1',['sendpeer1','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
                                 'class' => 'btn btn-app bg-warning',
                                 'title' => 'Reject Mid-Year Appraisal',
                                 'data' => [
@@ -161,7 +161,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                     <div class="col-md-3">
 
-                        <?= ($model->EY_Appraisal_Status == 'Supervisor_Level')? Html::a('<i class="fas fa-play"></i> Send Peer2',['sendpeer2','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                        <?= ($model->EY_Appraisal_Status == 'Supervisor_Level' && $model->peer2isset())? Html::a('<i class="fas fa-play"></i> Send Peer2',['sendpeer2','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
                             'class' => 'btn btn-app bg-warning pull-right',
                             'title' => 'Reject Mid-Year Appraisal',
                             'data' => [
@@ -456,7 +456,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
             <div class="card-header">
                 <h4 class="card-title">Training Plan</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-                <?= Html::a('<i class="fas fa-plus"></i> Add New',['training-plan/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-primary add-trainingplan']) ?>
+                <?= (!$model->isSupervisor())?Html::a('<i class="fas fa-plus"></i> Add New',['training-plan/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-primary add-trainingplan']):'' ?>
             </div>
             <div class="card-body">
                 <table class="table table-bordered">
@@ -483,7 +483,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             <td><?= $training->Training_Action ?></td>
                             <td><?= $training->Delivery_Method ?></td>
                             <td><?= $training->Due_Date ?></td>
-                            <td><?= Html::a('<i class="fas fa-edit"></i> ',['training-plan/update','Line_No'=> $training->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-trainingplan']) ?></td>
+                            <td><?= (!$model->isSupervisor())?Html::a('<i class="fas fa-edit"></i> ',['training-plan/update','Line_No'=> $training->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-trainingplan']):'' ?></td>
                         </tr>
                     <?php } ?>
                 <?php }  ?>
@@ -601,9 +601,9 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 <?php if(($model->EY_Appraisal_Status <> 'Peer_1_Level') && ($model->EY_Appraisal_Status <> 'Peer_2_Level' )){ ?>
         <div class="card-info">
             <div class="card-header">
-                <h4 class="card-title">Learning Assessment - Competence</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <h4 class="card-title">Learning Assessment </h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-                <?= Html::a('<i class="fas fa-plus"></i> Add New',['learningassessment/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-primary add-learning-assessment']) ?>
+                <?= (!$model->isSupervisor())?Html::a('<i class="fas fa-plus"></i> Add New',['learningassessment/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-primary add-learning-assessment']):'' ?>
 
             </div>
             <div class="card-body">

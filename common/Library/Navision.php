@@ -661,6 +661,20 @@ class Navision extends Component
 
     }
 
+    // Generate clearance form
+
+    public function IanGetClearanceFormPath($credentials, $soapWsdl, $Entry)
+    {
+        $client = $this->createClient($credentials, $soapWsdl);
+        try {
+            $result = $client->IanGetClearanceFormPath($Entry);
+            return $result;
+        } catch (\SoapFault $e) {
+            return $e->getMessage();
+        }
+
+    }
+
 
     /** PERFOMANCE MANAGEMENT FUNCTIONS ON APPRAISAL WORKFLOW CODEUNIT */
     //send Appraisal for approval

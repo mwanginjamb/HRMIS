@@ -6,8 +6,8 @@ return [
     'senderName' => 'HRMIS mailer',
     'user.passwordResetTokenExpire' => 3600,
     'powered' => 'Iansoft Ltd',
-    'NavisionUsername'=>'HP ELITEBOOK 840 G5',
-    'NavisionPassword'=>'@francis123#',
+    'NavisionUsername'=> 'iansoft',//'HP ELITEBOOK 840 G5',
+    'NavisionPassword'=>'5M@rt#r15', //@francis123#',
 
 
     'NavTestApprover' => 'Approver',
@@ -109,6 +109,14 @@ return [
         'CareerDevStrengths' => 'CareerDevStrengths', //60039 -->Not Taken to live server
         'FurtherDevAreas' => 'FurtherDevAreas', //60040 -->Not Taken to live server
         'WeeknessDevPlan' => 'WeeknessDevPlan', //60041 -->Not Taken to live server
+
+        // Leave Plan
+
+        'LeavePlanList' => 'LeavePlanList', //50025
+        'LeavePlanPendingApproval' => 'LeavePlanPendingApproval', //50026
+        'ApprovedLeavePlan' => 'ApprovedLeavePlan', // 50027
+        'LeavePlanCard' => 'LeavePlanCard', // 50028
+        'Leave__Plan__Line' => 'Leave__Plan__Line', //50029
 
 
 

@@ -97,13 +97,15 @@ class PayslipController extends Controller
             return $this->render('index',[
                 'report' => true,
                 'content' => $content,
-                'pperiods' => ArrayHelper::map($payrollperiods,'Date_Opened','desc')
+                'pperiods' => ArrayHelper::map($payrollperiods,'Date_Opened','desc'),
+                'message' => null,
             ]);
         }
 
         return $this->render('index',[
             'report' => false,
-            'pperiods' => ArrayHelper::map($payrollperiods,'Date_Opened','desc')
+            'pperiods' => ArrayHelper::map($payrollperiods,'Date_Opened','desc'),
+            'message' => null,
         ]);
 
     }

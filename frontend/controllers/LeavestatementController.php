@@ -97,8 +97,6 @@ class LeavestatementController extends Controller
                 'content' => $content
             ]);
 
-
-
     }
 
 
