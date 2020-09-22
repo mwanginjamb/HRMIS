@@ -488,7 +488,26 @@ class LeaveController extends Controller
         $service = Yii::$app->params['ServiceName']['employees'];
 
         $employees = \Yii::$app->navhelper->getData($service);
-        return $employees;
+        $data = [];
+        $i = 0;
+        if(is_array($employees)){
+
+            foreach($employees as  $emp){
+                $i++;
+                if(!empty($emp->Full_Name) && !empty($emp->No)){
+                    $data[$i] = [
+                        'No' => $emp->No,
+                        'Full_Name' => $emp->Full_Name
+                    ];
+                }
+
+            }
+
+
+
+        }
+
+        return $data;
     }
 
     /*Get Active Leaves*/
