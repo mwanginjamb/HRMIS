@@ -118,7 +118,7 @@ class EmployeeappraisalbehaviourController extends Controller
         ];
         $result = Yii::$app->navhelper->getData($service,$filter);
         $proficiencylevels = $this->getProficiencylevels();
-        $ratings = $this->getRatings();
+        //$ratings = $this->getRatings();
         if(is_array($result)){
             //load nav result to model
             $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;//$this->loadtomodeEmployee_Nol($result[0],$Expmodel);
@@ -160,7 +160,7 @@ class EmployeeappraisalbehaviourController extends Controller
             return $this->renderAjax('update', [
                 'model' => $model,
                 'proficiencylevels' => ArrayHelper::map($proficiencylevels,'Level','Level'),
-                'ratings' => ArrayHelper::map($ratings,'Rating','Rating_Description'),
+                'ratings' => $this->getRatings(),
             ]);
         }
 
@@ -351,7 +351,17 @@ class EmployeeappraisalbehaviourController extends Controller
         ];
 
         $ratings = \Yii::$app->navhelper->getData($service,$filter);
-        return $ratings;
+
+        $data = [];
+       $data = [
+           ['rating' =>1,'Rating_Description' => 'Never'],
+           ['rating' =>2,'Rating_Description' => 'Rarely'],
+           ['rating' =>3,'Rating_Description' => 'Often'],
+           ['rating' =>4,'Rating_Description' => 'Always'],
+       ];
+
+
+        return ArrayHelper::map($data,'rating','Rating_Description');
     }
 
     public function getCountries(){

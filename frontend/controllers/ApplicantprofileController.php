@@ -31,7 +31,7 @@ class ApplicantprofileController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','index'],
+                'only' => ['logout', 'signup','index','create','update','delete'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -39,7 +39,7 @@ class ApplicantprofileController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index'],
+                        'actions' => ['logout','index','create','update','delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],

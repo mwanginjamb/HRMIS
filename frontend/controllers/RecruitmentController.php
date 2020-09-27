@@ -186,7 +186,7 @@ class RecruitmentController extends Controller
            $this->layout = 'external';
            Yii::$app->session->set('mode','external');
            if(!Yii::$app->session->has('HRUSER')){
-               return $this->redirect(['login']);
+               return $this->redirect(['login']); //Should be the jobs login
            }
            //Yii::$app->recruitment->printrr(Yii::$app->session->get('HRUSER'));
        }else{

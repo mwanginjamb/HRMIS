@@ -97,6 +97,16 @@ Yii::$app->session->set('isSupervisor',false);
     </div>
 </div>
 
+<!--Appraisal Indicator Steps-->
+
+<div class="row">
+    <div class="col-md-12">
+        <?= $this->render('_steps',['model' => $model]); ?>
+    </div>
+</div>
+
+<!--/End Steps-->
+
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -193,6 +203,8 @@ Yii::$app->session->set('isSupervisor',false);
             </div>
         </div><!--end details card-->
 
+
+        <?php if($model->EY_Appraisal_Status !== 'Agreement_Level'){ ?>
         <!--KRA CARD -->
         <div class="card-info">
             <div class="card-header">
@@ -296,51 +308,8 @@ Yii::$app->session->set('isSupervisor',false);
             </div>
         </div>
 
-        <!--ENF KRA CARD -->
+        <!--END KRA CARD -->
 
-        <?php //if($model->isSupervisor($model->Employee_User_Id,$model->Supervisor_User_Id)){ ?>
-        <!--Training Plan Card -->
-        <div class="card-info">
-            <div class="card-header">
-                <h4 class="card-title">Training Plan </h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                <?= Html::a('<i class="fas fa-plus"></i> Add New',['training-plan/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-primary add-trainingplan']) ?>
-            </div>
-            <div class="card-body">
-                <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th>Line No.</th>
-                        <th>Appraisal No</th>
-                        <th>Employee No</th>
-                        <th>Training Action</th>
-                        <th>Delivery Method</th>
-                        <th>Due Date</th>
-                        <th>Action</th>
-
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                <?php if(property_exists($card->Training_Plan,'Training_Plan')){ ?>
-                    <?php foreach($card->Training_Plan->Training_Plan as $training){ ?>
-                        <tr>
-                            <td><?= $training->Line_No ?></td>
-                            <td><?= $training->Appraisal_No ?></td>
-                            <td><?= $training->Employee_No ?></td>
-                            <td><?= $training->Training_Action ?></td>
-                            <td><?= $training->Delivery_Method ?></td>
-                            <td><?= $training->Due_Date ?></td>
-                            <td><?= Html::a('<i class="fas fa-edit"></i> ',['training-plan/update','Line_No'=> $training->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-trainingplan']) ?></td>
-                        </tr>
-                    <?php } ?>
-                <?php }  ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!--/Training Plan Card -->
-        <?php //}  ?>
         <!--Employee Appraisal  Competence --->
 
         <div class="card-info">
@@ -442,7 +411,54 @@ Yii::$app->session->set('isSupervisor',false);
 
         <!--/Employee Appraisal  Competence --->
 
-<?php if($model->EY_Appraisal_Status !== 'Agreement_Level'){ ?>
+        <?php } ?>
+
+<?php //if($model->EY_Appraisal_Status !== 'Agreement_Level'){ ?>
+
+    <?php if($model->MY_Appraisal_Status == 'Closed' && $model->EY_Appraisal_Status == 'Agreement_Level'){ ?>
+
+        <!--Training Plan Card -->
+        <div class="card-info">
+            <div class="card-header">
+                <h4 class="card-title">Training Plan </h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                <?= Html::a('<i class="fas fa-plus"></i> Add New',['training-plan/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-primary add-trainingplan']) ?>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Line No.</th>
+                        <th>Appraisal No</th>
+                        <th>Employee No</th>
+                        <th>Training Action</th>
+                        <th>Delivery Method</th>
+                        <th>Due Date</th>
+                        <th>Action</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <?php if(property_exists($card->Training_Plan,'Training_Plan')){ ?>
+                        <?php foreach($card->Training_Plan->Training_Plan as $training){ ?>
+                            <tr>
+                                <td><?= $training->Line_No ?></td>
+                                <td><?= $training->Appraisal_No ?></td>
+                                <td><?= $training->Employee_No ?></td>
+                                <td><?= $training->Training_Action ?></td>
+                                <td><?= $training->Delivery_Method ?></td>
+                                <td><?= $training->Due_Date ?></td>
+                                <td><?= Html::a('<i class="fas fa-edit"></i> ',['training-plan/update','Line_No'=> $training->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-trainingplan']) ?></td>
+                            </tr>
+                        <?php } ?>
+                    <?php }  ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--/Training Plan Card -->
+
         <!--Learning Assessment Card -->
         <div class="card-info">
             <div class="card-header">
@@ -679,8 +695,8 @@ Yii::$app->session->set('isSupervisor',false);
 
     <!--/-Areas_of_Further_Development-->
 
-
-<?php }  ?>
+    <?php } //end inner condition ?>
+<?php //}  ?>
 
 
     </div>
