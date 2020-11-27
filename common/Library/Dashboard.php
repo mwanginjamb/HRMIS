@@ -7,6 +7,7 @@
  */
 
 namespace common\library;
+use frontend\models\Appraisalcard;
 use yii;
 use yii\base\Component;
 use common\models\Hruser;
@@ -199,6 +200,134 @@ class Dashboard extends Component
         return count($result);
 
     }
+
+/*Appraisal Numbers*/
+
+    public function getApprovedAppraisals()
+    {
+        $model = new Appraisalcard();
+        $service = Yii::$app->params['ServiceName']['ApprovedAppraisals'];
+        $filter = [
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+        ];
+        $result = \Yii::$app->navhelper->getData($service,$filter);
+
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the result is false
+            return 0;
+        }
+        return count($result);
+    }
+
+    /*Get Approved Mid Year Appraisals*/
+
+    public function getMyAppraisals()
+    {
+        $service = Yii::$app->params['ServiceName']['MYAppraiseeList'];
+        $filter = [
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+            'MY_Appraisal_Status' => 'Appraisee_Level'
+        ];
+        $result = \Yii::$app->navhelper->getData($service,$filter);
+
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the result is false
+            return 0;
+        }
+        return count($result);
+
+    }
+
+    /*Get End Year Appraisals */
+
+    public function getEyAppraisals()
+    {
+        $service = Yii::$app->params['ServiceName']['EYAppraiseeList'];
+        $filter = [
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+            'EY_Appraisal_Status' => 'Appraisee_Level'
+        ];
+        $result = \Yii::$app->navhelper->getData($service,$filter);
+
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the result is false
+            return 0;
+        }
+        return count($result);
+
+    }
+
+    /*Get Closed Appraisals*/
+
+    public function getClosedAppraisals()
+    {
+        $service = Yii::$app->params['ServiceName']['ClosedAppraisalsList'];
+        $filter = [
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+            'EY_Appraisal_Status' => 'Closed',
+        ];
+        $result = \Yii::$app->navhelper->getData($service,$filter);
+
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the result is false
+            return 0;
+        }
+        return count($result);
+
+    }
+
+    /*Get Peer 1 Appraisal List*/
+
+    public function getPeer1Appraisals()
+    {
+        $service = Yii::$app->params['ServiceName']['EYPeer1List'];
+        $filter = [
+            'Peer_1_Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+            'EY_Appraisal_Status' => 'Peer_1_Level'
+        ];
+        $result = \Yii::$app->navhelper->getData($service,$filter);
+
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the result is false
+            return 0;
+        }
+        return count($result);
+
+    }
+
+    /* Get Peer 2 List */
+
+    public function getPeer2Appraisals()
+    {
+        $service = Yii::$app->params['ServiceName']['EYPeer2List'];
+        $filter = [
+            'Peer_2_Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+            'EY_Appraisal_Status' => 'Peer_2_Level'
+        ];
+        $result = \Yii::$app->navhelper->getData($service,$filter);
+
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the result is false
+            return 0;
+        }
+        return count($result);
+
+    }
+
+    /*Get Agreement Level Appraisee*/
+
+    public function getAgreementlevelAppraisals()
+    {
+        $service = Yii::$app->params['ServiceName']['EYAgreementList'];
+        $filter = [
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+            'EY_Appraisal_Status' => 'Agreement_Level',
+        ];
+
+        $result = \Yii::$app->navhelper->getData($service,$filter);
+
+        if(is_object($result) || is_string($result)){//RETURNS AN EMPTY object if the result is false
+            return 0;
+        }
+        return count($result);
+
+    }
+
+
 
 
 

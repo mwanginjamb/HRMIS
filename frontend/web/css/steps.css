@@ -127,6 +127,35 @@ body {
 }
 
 
+/*Stage Sublinks style*/
+
+ul.sublinks {
+    list-style: none;
+    display:flex;
+    height: 60px;
+    padding: 20px 0;
+    font-size: 13px;
+}
+
+ul.sublinks li {
+    margin: 0 10px;
+
+}
+
+ul.sublinks li a{
+    padding: 10px 7px;
+}
+
+ul.sublinks li a:hover {
+    border-bottom: 2px solid #262626;
+}
+
+ul.sublinks li a.active{
+    background: #9EEB62;
+    color:#000;
+}
+
+
 
 
 

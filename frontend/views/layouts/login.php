@@ -14,7 +14,7 @@ use frontend\assets\AdminlteAsset;
 use common\widgets\Alert;
 
 AdminlteAsset::register($this);
-$this->title = 'Welcome to the AAS Integrated Systems Portal';
+$this->title = 'Welcome to the IANSOFT Integrated Systems Portal';
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -31,7 +31,7 @@ $this->title = 'Welcome to the AAS Integrated Systems Portal';
 <?php $this->beginBody() ?>
 
 <div class="top-logo">
-    <img src="<?= \yii\helpers\Url::to('/images/Logo.png')?>" />
+   <!-- <img src="<?/*= \yii\helpers\Url::to('/images/Logo.png')*/?>" />-->
 </div>
 
 <div class="login-logo">

@@ -5,7 +5,7 @@
  * Date: 2/24/2020
  * Time: 6:09 PM
  */
-
+// var_dump(( Yii::$app->user->identity->isAppraisalSupervisor() && $model->EY_Appraisal_Status == 'Supervisor_Level')); exit;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -197,7 +197,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                 <div class="row">
                     <div class="col-md-12">
-                        <?=($model->EY_Appraisal_Status == 'Peer_1_Level' || $model->EY_Appraisal_Status == 'Peer_2_Level')?Html::a('<i class="fas fa-play"></i> Send Back to Supervisor',['sendbacktosupervisor','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                        <?=(($model->Peer_1_Employee_No == Yii::$app->user->identity->{'Employee No_'}) || ($model->Peer_2_Employee_No == Yii::$app->user->identity->{'Employee No_'}))?Html::a('<i class="fas fa-play"></i> Send Back to Supervisor',['sendbacktosupervisor','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
                             'class' => 'btn btn-success ',
                             'title' => 'Send Peer Appraisal to Supervisor',
                             'data' => [
@@ -216,16 +216,14 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 <div class="row">
     <div class="col-md-12">
-        <div class="card">
+        <div class="card collapsed-card" >
             <div class="card-header">
 
-
-
-
                 <h3 class="card-title">Appraisal : <?= $model->Appraisal_No?></h3>
-
-
-
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                    </button>
+                </div>
                 <?php
                     if(Yii::$app->session->hasFlash('success')){
                         print ' <div class="alert alert-success alert-dismissable">
@@ -401,7 +399,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                     <td><?= !empty($k->Agreed_Rating)?$k->Agreed_Rating: 'Not Set' ?></td>
                                     <td><?= !empty($k->Rating_Comments)?$k->Rating_Comments: 'Not Set' ?></td>
                                     <td><?= !empty($k->Employee_Comments)?$k->Employee_Comments: 'Not Set' ?></td>
-                                    <td><?= ($model->EY_Appraisal_Status == 'Supervisor_Level' || $model->EY_Appraisal_Status == 'Agreement_Level')
+                                    <td><?= ($model->EY_Appraisal_Status == 'Supervisor_Level' || $model->EY_Appraisal_Status == 'Agreement_Level' || $model->MY_Appraisal_Status == 'Supervisor_Level')
                                             ?Html::a('<i class="fa fa-edit" title="Evaluate"></i>',['appraisalkra/update','Line_No'=> $k->Line_No,'Appraisal_No' => $k->Appraisal_No,'Employee_No' => $k->Employee_No ],['class' => ' evalkra btn btn-info btn-xs']):'' ?></td>
                                 </tr>
                                 <tr class="child">
@@ -451,7 +449,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
         <!--END KRA CARD -->
 
         <!--Training Plan Card -->
-<?php if(($model->EY_Appraisal_Status <> 'Peer_1_Level') && ($model->EY_Appraisal_Status <> 'Peer_2_Level' )){ ?>
+<?php if(1 == 2){ ?>
+
         <div class="card-info">
             <div class="card-header">
                 <h4 class="card-title">Training Plan</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -495,6 +494,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 <?php } ?>
         <!--/Training Plan Card -->
 
+        <?php if($model->Goal_Setting_Status == 'New' || ($model->MY_Appraisal_Status !== 'Appraisee_Level' && ($model->EY_Appraisal_Status == 'Supervisor_Level' || $model->EY_Appraisal_Status == 'Agreement_Level' || $model->EY_Appraisal_Status == 'Peer_1_Level' || $model->EY_Appraisal_Status == 'Peer_2_Level' )) ){ ?>
         <!--Employee Appraisal  Competence --->
 
         <div class="card-info">
@@ -595,13 +595,14 @@ $absoluteUrl = \yii\helpers\Url::home(true);
         </div>
 
         <!--/Employee Appraisal  Competence --->
-
+        <?php } ?>
 
         <!--Learning Assessment Card -->
-<?php if(($model->EY_Appraisal_Status <> 'Peer_1_Level') && ($model->EY_Appraisal_Status <> 'Peer_2_Level' )){ ?>
+
+<?php if( Yii::$app->user->identity->isAppraisalSupervisor() && ($model->EY_Appraisal_Status == 'Supervisor_Level' || $model->MY_Appraisal_Status == 'Supervisor_Level' )){ ?>
         <div class="card-info">
             <div class="card-header">
-                <h4 class="card-title">Learning Assessment </h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <h4 class="card-title">Training Plan </h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                 <?= (!$model->isSupervisor())?Html::a('<i class="fas fa-plus"></i> Add New',['learningassessment/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-primary add-learning-assessment']):'' ?>
 
@@ -648,13 +649,13 @@ $absoluteUrl = \yii\helpers\Url::home(true);
             </div>
         </div>
 
-
+<?php } ?>
         <!--/Learning Assessment  Card -->
         <!----Career Development Plan-->
-
+        <?php if( Yii::$app->user->identity->isAppraisalSupervisor() && ($model->EY_Appraisal_Status == 'Supervisor_Level' || $model->EY_Appraisal_Status == 'Agreement_Level' )){ ?>
         <div class="card-info">
             <div class="card-header">
-                <h4 class="card-title">Career Development Plan</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <h4 class="card-title">Career Development Goals</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                 <?= Html::a('<i class="fas fa-plus"></i> Add New',['careerdevelopmentplan/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' =>$model->Employee_No ],
                     [
@@ -668,6 +669,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <table class="table table-bordered">
                     <thead>
                     <tr>
+                        <td></td>
                         <th>Line No.</th>
                         <th>Employee No</th>
                         <th>Appraisal No</th>
@@ -676,7 +678,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         <th>Estimate End Date</th>
                         <th>Duration</th>
 
-                        <th>Action</th>
+                        <!--<th>Action</th>-->
 
 
                     </tr>
@@ -686,6 +688,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                     <?php if(property_exists($card->Career_Development_Plan,'Career_Development_Plan')){ ?>
                         <?php foreach($card->Career_Development_Plan->Career_Development_Plan as $cdp){ ?>
                             <tr class="parent">
+
                                 <td><span>+</span></td>
                                 <td><?= $cdp->Line_No ?></td>
                                 <td><?= $cdp->Employee_No ?></td>
@@ -695,10 +698,10 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                 <td><?= $cdp->Estimate_End_Date ?></td>
                                 <td><?= $cdp->Duration ?></td>
 
-                                <td>
-                                    <?= Html::a('<i class="fas fa-edit"></i> ',['careerdevelopmentplan/update','Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?>
-                                    <?= Html::a('<i class="fas fa-plus-square"></i> ',['careerdevelopmentstrength/create','Goal_Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add-cds', 'title'=>'Add Career Development Strength']) ?>
-                                </td>
+                              <!--  <td>
+                                    <?/*= Html::a('<i class="fas fa-edit"></i> ',['careerdevelopmentplan/update','Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) */?>
+                                    <?/*= Html::a('<i class="fas fa-plus-square"></i> ',['careerdevelopmentstrength/create','Goal_Line_No'=> $cdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add-cds', 'title'=>'Add Career Development Strength']) */?>
+                                </td>-->
                             </tr>
                             <!--Start displaying children-->
                             <tr class="child">
@@ -706,11 +709,12 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                     <table class="table table-hover table-borderless table-info">
                                         <thead>
                                         <tr >
+
                                             <th>Line No</th>
                                             <th>Appraisal No</th>
                                             <th>Employee No</th>
-                                            <th>Strength</th>
-                                            <th>Actions</th>
+                                            <th>Key Strength</th>
+                                            <!--<th>Actions</th>-->
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -722,10 +726,10 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                     <td><?= $cds->Appraisal_No ?></td>
                                                     <td><?= $cds->Employee_No ?></td>
                                                     <td><?= $cds->Strength ?></td>
-                                                    <td>
-                                                        <?= Html::a('<i class="fas fa-edit"></i> ',['careerdevelopmentstrength/update','Line_No'=> $cds->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning','title' => 'Update Strength']) ?>
-                                                        <?= Html::a('<i class="fas fa-trash"></i> ',['careerdevelopmentstrength/delete','Key'=> $cds->Key],['class' => 'btn btn-xs btn-outline-primary delete', 'title'=>'Delete Career Development Strength']) ?>
-                                                    </td>
+                                                   <!-- <td>
+                                                        <?/*= Html::a('<i class="fas fa-edit"></i> ',['careerdevelopmentstrength/update','Line_No'=> $cds->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning','title' => 'Update Strength']) */?>
+                                                        <?/*= Html::a('<i class="fas fa-trash"></i> ',['careerdevelopmentstrength/delete','Key'=> $cds->Key],['class' => 'btn btn-xs btn-outline-primary delete', 'title'=>'Delete Career Development Strength']) */?>
+                                                    </td>-->
                                                 </tr>
                                                 <?php
                                             endforeach;
@@ -755,7 +759,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
         <div class="card-info">
             <div class="card-header">
-                <h4 class="card-title">Areas of Further Development</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <h4 class="card-title">Development Plan</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                 <?= Html::a('<i class="fas fa-plus"></i> Add New',['furtherdevelopmentarea/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-primary add-fda']) ?>
 
@@ -765,11 +769,12 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <table class="table table-bordered">
                     <thead>
                     <tr>
+                        <td></td>
                         <th>Line No.</th>
                         <th>Employee No</th>
                         <th>Appraisal No</th>
-                        <th>Weakness</th>
-                        <th>Action</th>
+                        <th>Development Area</th>
+                        <!--<th>Action</th>-->
 
 
                     </tr>
@@ -785,10 +790,10 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                 <td><?= $fda->Appraisal_No ?></td>
                                 <td><?= $fda->Weakness ?></td>
 
-                                <td>
-                                    <?= Html::a('<i class="fas fa-edit"></i> ',['furtherdevelopmentarea/update','Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) ?>
-                                    <?= Html::a('<i class="fas fa-plus-square"></i> ',['weeknessdevelopmentplan/create','Wekaness_Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add-wdp','Add a Weakness Development Plan.']) ?>
-                                </td>
+                               <!-- <td>
+                                    <?/*= Html::a('<i class="fas fa-edit"></i> ',['furtherdevelopmentarea/update','Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']) */?>
+                                    <?/*= Html::a('<i class="fas fa-plus-square"></i> ',['weeknessdevelopmentplan/create','Wekaness_Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add-wdp','Add a Weakness Development Plan.']) */?>
+                                </td>-->
                             </tr>
                             <!--Start displaying children-->
                             <tr class="child">
@@ -800,7 +805,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                             <th>Appraisal No</th>
                                             <th>Employee No</th>
                                             <th>Development Plan</th>
-                                            <th>Actions</th>
+                                            <!--<th>Actions</th>-->
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -812,10 +817,10 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                     <td><?= $wdp->Appraisal_No ?></td>
                                                     <td><?= $wdp->Employee_No ?></td>
                                                     <td><?= $wdp->Development_Plan ?></td>
-                                                    <td>
-                                                        <?= Html::a('<i class="fas fa-edit"></i> ',['weeknessdevelopmentplan/update','Line_No'=> $wdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning','title'=> 'Update Weakness Development Plan']) ?>
-                                                        <?= Html::a('<i class="fas fa-trash"></i> ',['weeknessdevelopmentplan/delete','Key'=> $wdp->Key],['class' => 'btn btn-xs btn-outline-primary delete', 'title'=>'Delete Weakness Development Plan']) ?>
-                                                    </td>
+                                                   <!-- <td>
+                                                        <?/*= Html::a('<i class="fas fa-edit"></i> ',['weeknessdevelopmentplan/update','Line_No'=> $wdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning','title'=> 'Update Weakness Development Plan']) */?>
+                                                        <?/*= Html::a('<i class="fas fa-trash"></i> ',['weeknessdevelopmentplan/delete','Key'=> $wdp->Key],['class' => 'btn btn-xs btn-outline-primary delete', 'title'=>'Delete Weakness Development Plan']) */?>
+                                                    </td>-->
                                                 </tr>
                                                 <?php
                                             endforeach;

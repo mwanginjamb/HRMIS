@@ -299,17 +299,129 @@ exit;*/
                 </div>
                 <!-- /.row -->
 
+
+<!--                Appraisal Stuff -->
                 <div class="row">
 
+                    <div class="col-12 col-sm-6 col-md-3">
+
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'appraisal/approvedappraisals' ?>" target="_blank">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-check"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Approved Goals</span>
+                                    <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getApprovedAppraisals())?></span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </a>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-12 col-sm-6 col-md-3">
+
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'appraisal/myappraiseelist' ?>" target="_blank">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-balance-scale"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Mid Year Appraisals</span>
+                                    <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getMyAppraisals())?></span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </a>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-12 col-sm-6 col-md-3">
+
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'appraisal/eyappraiseelist' ?>" target="_blank">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-balance-scale"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">End Year Appraisals</span>
+                                    <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getEyAppraisals())?></span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </a>
+                    </div>
                     <!-- /.col -->
 
+                    <div class="col-12 col-sm-6 col-md-3">
+
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'appraisal/eyappraiseeclosedlist' ?>" target="_blank">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-balance-scale"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Closed Appraisal</span>
+                                    <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getClosedAppraisals())?></span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </a>
+                    </div>
                     <!-- /.col -->
 
+
+                </div>
+
+<!--                Peer Evals Row-->
+
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-3">
+
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'appraisal/eypeer1list' ?>" target="_blank">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Peer 1 Evaluations</span>
+                                    <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getPeer1Appraisals())?></span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </a>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-12 col-sm-6 col-md-3">
+
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'appraisal/eypeer2list' ?>" target="_blank">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Peer 2 Evaluations</span>
+                                    <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getPeer2Appraisals())?></span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </a>
+                    </div>
                     <!-- /.col -->
 
-                    <!-- /.col -->
+                    <div class="col-12 col-sm-6 col-md-3">
+
+                        <a href="<?= Yii::$app->recruitment->absoluteUrl().'appraisal/eyagreementappraiseelist' ?>" target="_blank">
+                            <div class="info-box mb-3">
+                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-handshake"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Agreement Level</span>
+                                    <span class="info-box-number"><?= number_format(Yii::$app->dashboard->getAgreementlevelAppraisals())?></span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </a>
+
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-md-3">
 
 
+                    </div>
                 </div>
 
 

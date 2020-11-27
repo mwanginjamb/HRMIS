@@ -36,7 +36,7 @@ class AppraisalController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','vacancies'],
+                'only' => ['index','vacancies','submitted','viewsubmitted'],
                 'rules' => [
                     [
                         'actions' => ['vacancies'],
@@ -44,7 +44,7 @@ class AppraisalController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index','vacancies'],
+                        'actions' => ['index','submitted','viewsubmitted'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -74,7 +74,8 @@ class AppraisalController extends Controller
                     'geteypeer2list',
                     'geteyagreementlist',
                     'geteyappraiseeclosedlist',
-                    'geteysupervisorclosedlist'
+                    'geteysupervisorclosedlist',
+                    'geteyagreementappraiseelist',
 
                     ],
                 'formatParam' => '_format',
@@ -161,6 +162,12 @@ class AppraisalController extends Controller
     public function actionEyagreementlist(){
 
         return $this->render('eyagreementlist');
+
+    }
+
+    public function actionEyagreementappraiseelist(){
+
+        return $this->render('eyagreementappraiseelist');
 
     }
 
@@ -665,7 +672,40 @@ class AppraisalController extends Controller
 
 
 
-    /*Get Mid Year Appraisals - Supervisor List*/
+    public function actionGeteyagreementappraiseelist(){
+        // $model = new Appraisalcard();
+        $service = Yii::$app->params['ServiceName']['EYAgreementList'];
+        $filter = [
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+            'EY_Appraisal_Status' => 'Agreement_Level',
+        ];
+        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+
+        $result = [];
+
+        if(is_array($appraisals)){
+            foreach($appraisals as $req){
+
+                $Viewlink = Html::a('views', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+
+                $result['data'][] = [
+                    'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
+                    'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
+                    'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
+                    'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
+                    'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
+                    'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
+                    'Appraisal_Period' =>  !empty($req->Appraisal_Period) ?$req->Appraisal_Period : '',
+                    'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+
+                ];
+
+            }
+        }
+
+        return $result;
+    }
 
     public function actionGeteyagreementlist(){
         // $model = new Appraisalcard();
@@ -795,10 +835,10 @@ class AppraisalController extends Controller
             $model = Yii::$app->navhelper->loadmodel($appraisal[0],$model);
         }
 
-        //echo property_exists($appraisal[0]->Employee_Appraisal_KRAs,'Employee_Appraisal_KRAs')?'Exists':'Haina any';
 
-        // Yii::$app->recruitment->printrr($appraisal[0]);
+        //Set Employee User ID so as to Identify an appraisee emp no globally --Maintaining Appraisee State
 
+        Yii::$app->session->set('Appraisee_ID', $model->Employee_User_Id);
 
         return $this->render('view',[
             'model' => $model,
@@ -807,6 +847,7 @@ class AppraisalController extends Controller
     }
 
     public function actionViewsubmitted($Appraisal_No,$Employee_No){
+
         $service = Yii::$app->params['ServiceName']['AppraisalCard'];
         $model = new Appraisalcard();
 
@@ -821,10 +862,16 @@ class AppraisalController extends Controller
             $model = Yii::$app->navhelper->loadmodel($appraisal[0],$model);
         }
 
-        //echo property_exists($appraisal[0]->Employee_Appraisal_KRAs,'Employee_Appraisal_KRAs')?'Exists':'Haina any';
+        // Check Own Appraisee Access Situation and Deny entry
 
-        // Yii::$app->recruitment->printrr($appraisal[0]);
+       if($model->Employee_User_Id == Yii::$app->user->identity->id)
+        {
+            return $this->goHome();
+        }
 
+        //Set Employee User ID so as to Identify an appraisee emp no globally --Maintaining Appraisee State
+
+        Yii::$app->session->set('Appraisee_ID', $model->Employee_User_Id);
 
         return $this->render('viewsubmitted',[
             'model' => $model,

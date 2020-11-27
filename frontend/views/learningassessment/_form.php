@@ -42,7 +42,7 @@ use yii\widgets\ActiveForm;
 
                                     <?= $form->field($model, 'Learning_Hours')->textInput(['type' => 'number']) ?>
                                     <?= $form->field($model, 'Status_Mid_Year')->dropDownList(['Incomplete' => 'Incomplete', 'Complete' => 'Complete' ],['prompt' => 'Select Status']) ?>
-                                    <?= $form->field($model, 'Status_End_Year')->textarea(['rows' => 3,'max-lenth' => 250]) ?>
+                                    <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Closed' && Yii::$app->session->get('EY_Appraisal_Status') == 'Appraisee_Level' && !Yii::$app->session->get('isSupervisor'))?$form->field($model, 'Status_End_Year')->dropDownList(['Incomplete' => 'Incomplete', 'Complete' => 'Complete' ],['prompt' => 'Select Status']):'' ?>
                                     <?= $form->field($model, 'Comments')->textarea(['rows'=>2,'max-length' => 250]) ?>
 
 

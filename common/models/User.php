@@ -1,6 +1,7 @@
 <?php
 namespace common\models;
 
+use frontend\models\Appraisalheader;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -244,13 +245,77 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function isSupervisor($AppraiseeNo = ''){
         //loop through user setup check if current identity appears in approvers column
-        $super = $this::find()->where(['Approver ID ' => $this->getId()])->count();
+        $super = Employee::find()->where(['Supervisor Code ' => $this->getId()])->count();
 
-        if($super){
+        if($super > 0){
             return true;
         }else{
             return false;
         }
     }
+
+    public function isAppraisalSupervisor($AppraiseeNo = ''){
+
+        if(Yii::$app->session->has('Appraisee_ID'))
+        {
+            $Appraisee_ID = Yii::$app->session->get('Appraisee_ID');
+            //check if current identity appears as supervisor with corresponsing Employee_User_Id
+            $super = \common\models\AppraisalHeader::find()->where([
+                'Supervisor User Id ' => $this->getId(),
+                'Employee User Id ' => $Appraisee_ID
+                ])->count();
+
+            if($super > 0){
+                return true;
+            }else{
+                return false;
+            }
+        }else {
+            Yii::$app->session->setFlash('error', 'Appraisee Employee_User_ID state is missing.');
+            return false;
+
+        }
+    }
+
+    // Loggedin User is designated as an appraisal Supervisor
+
+    public function isAppraisalSupervisorDesignate($AppraiseeNo = ''){
+
+            //check if current identity is designated as supervisor for any employee
+            $super = \common\models\AppraisalHeader::find()->where([
+                'Supervisor User Id ' => $this->getId()
+            ])->count();
+
+            if($super > 0){
+                return true;
+            }else{
+                return false;
+            }
+
+    }
+
+    public function isPeer1(){
+        //loop through user setup check if current identity appears in approvers column
+        $super = Appraisalheader::find()->where(['Peer 1 Employee No ' => $this->{'Employee No_'}])->count();
+
+        if($super > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function isPeer2(){
+        //loop through user setup check if current identity appears in approvers column
+        $super = Appraisalheader::find()->where(['Peer 2 Employee No ' => $this->{'Employee No_'}])->count();
+
+        if($super > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
 
 }
